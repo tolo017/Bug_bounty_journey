@@ -28,7 +28,7 @@ export const useLMSState = () => {
   const [stats, setStats] = useState<UserStats>({
     xp: 0,
     level: 1,
-    streak: 1, // Start streak from 1
+    streak: 3, // Mock a 3-day starting streak
     avatar: "ghost",
     name: "Viper_0x"
   });
@@ -46,59 +46,22 @@ export const useLMSState = () => {
     const savedWeeks = localStorage.getItem("bbm_weeks");
     const savedStats = localStorage.getItem("bbm_stats");
     const savedGitHub = localStorage.getItem("bbm_github");
-    const savedLastActive = localStorage.getItem("bbm_last_active_time");
 
-    let initialWeeks = generateDefaultCurriculum();
     if (savedWeeks) {
       try {
-        initialWeeks = JSON.parse(savedWeeks);
-      } catch (e) {}
+        setWeeks(JSON.parse(savedWeeks));
+      } catch (e) {
+        setWeeks(generateDefaultCurriculum());
+      }
+    } else {
+      setWeeks(generateDefaultCurriculum());
     }
-    setWeeks(initialWeeks);
-
-    let initialStats: UserStats = {
-      xp: 0,
-      level: 1,
-      streak: 1, // Start streak from 1
-      avatar: "ghost",
-      name: "Viper_0x"
-    };
 
     if (savedStats) {
       try {
-        initialStats = JSON.parse(savedStats);
+        setStats(JSON.parse(savedStats));
       } catch (e) {}
     }
-
-    // Daily 24-Hour Streak Logic
-    const now = new Date();
-    const todayStr = now.toDateString(); // e.g. "Wed Aug 05 2026"
-
-    if (savedLastActive) {
-      const lastActiveDate = new Date(savedLastActive);
-      const lastActiveStr = lastActiveDate.toDateString();
-
-      if (todayStr !== lastActiveStr) {
-        // Calculate difference in milliseconds
-        const diffTime = Math.abs(now.getTime() - lastActiveDate.getTime());
-        const diffHours = diffTime / (1000 * 60 * 60);
-
-        if (diffHours <= 36) {
-          // If active within 36 hours (yesterday), streak increases!
-          initialStats.streak = (initialStats.streak || 1) + 1;
-        } else if (diffHours > 36) {
-          // Reset streak to 1 if user missed a day (over 36 hours elapsed)
-          initialStats.streak = 1;
-        }
-      }
-    } else {
-      // First time using the app
-      initialStats.streak = 1;
-    }
-
-    // Save current active timestamp
-    localStorage.setItem("bbm_last_active_time", now.toISOString());
-    setStats(initialStats);
 
     if (savedGitHub) {
       try {
@@ -112,7 +75,6 @@ export const useLMSState = () => {
     localStorage.setItem("bbm_weeks", JSON.stringify(newWeeks));
     localStorage.setItem("bbm_stats", JSON.stringify(newStats));
     localStorage.setItem("bbm_github", JSON.stringify(newGitHub));
-    localStorage.setItem("bbm_last_active_time", new Date().toISOString());
   };
 
   const updateStats = (updater: Partial<UserStats>) => {
@@ -165,7 +127,7 @@ export const useLMSState = () => {
       let updatedStats = stats;
       if (completedStateChanged) {
         updatedStats = addXP(300, updatedStats); // +300 XP for full day completion
-        updatedStats.streak = (updatedStats.streak || 1) + 1;
+        updatedStats.streak += 1;
       } else {
         updatedStats = addXP(100, updatedStats); // +100 XP for flag verify
       }
@@ -216,7 +178,7 @@ export const useLMSState = () => {
     let updatedStats = stats;
     if (completedStateChanged) {
       updatedStats = addXP(200, updatedStats); // Completion reward
-      updatedStats.streak = (updatedStats.streak || 1) + 1;
+      updatedStats.streak += 1;
 
       // Unlock next day
       const currentDayIndex = updatedWeeks[weekIndex].days.findIndex(d => d.id === dayId);
@@ -314,7 +276,7 @@ export const useLMSState = () => {
     const defaultStats: UserStats = {
       xp: 0,
       level: 1,
-      streak: 1, // Reset to 1
+      streak: 0,
       avatar: "ghost",
       name: "Viper_0x"
     };
@@ -325,7 +287,6 @@ export const useLMSState = () => {
     setViewingBossLab(false);
     localStorage.removeItem("bbm_weeks");
     localStorage.removeItem("bbm_stats");
-    localStorage.removeItem("bbm_last_active_time");
   };
 
   // Calculate dynamic Job Readiness progress
