@@ -14,6 +14,14 @@ export const InteractiveArena: React.FC<InteractiveArenaProps> = ({ day, onVerif
   const [simulatorOutput, setSimulatorOutput] = useState<string[]>([]);
   const [loadingSim, setLoadingSim] = useState(false);
 
+  // Clear output and input on lesson change
+  useEffect(() => {
+    setSimulatorOutput([]);
+    setFlagInput("");
+    setSelectedExploitPayload("");
+    setVerificationMsg({ text: "", isError: false });
+  }, [day.id]);
+
   // Simulated live environment details depending on the lesson content
   const targetHost = `secure-app-${day.dayName.toLowerCase()}.local`;
 
@@ -85,18 +93,20 @@ export const InteractiveArena: React.FC<InteractiveArenaProps> = ({ day, onVerif
     }
   };
 
-  const activePayload = payloadMap[day.title] || {
+  const activePayload = (day && payloadMap[day.title]) ? payloadMap[day.title] : {
     desc: "Default payload scanner configuration.",
-    payload: `{"exploit": "fuzz_payload_0x"}`,
+    payload: `{"exploit": "fuzz_payload_0x", "target": "${day?.digitalArena?.correctFlag || 'FLAG_DEFAULT'}"}`,
     log: [
       "[*] Targeting host...",
       "[*] Query variables parsed successfully.",
-      "[+] Session trace parsed."
+      "[*] Analyzing authentication endpoints and parameter structures...",
+      "[+] Session trace parsed successfully. Payload logic matches."
     ],
-    flag: day.digitalArena.correctFlag
+    flag: day?.digitalArena?.correctFlag || "FLAG_DEFAULT"
   };
 
-  const handleRunSimulation = () => {
+  const handleRunSimulation = (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
     if (!selectedExploitPayload) {
       setVerificationMsg({ text: "Please input or select an exploit payload vector.", isError: true });
       return;
@@ -105,21 +115,24 @@ export const InteractiveArena: React.FC<InteractiveArenaProps> = ({ day, onVerif
     setSimulatorOutput(["[*] Starting exploit runtime simulator on target..."]);
 
     let counter = 0;
+    const logs = activePayload.log || [];
+    const flag = activePayload.flag || "FLAG_DEFAULT";
+
     const interval = setInterval(() => {
-      if (counter < activePayload.log.length) {
-        setSimulatorOutput((prev) => [...prev, activePayload.log[counter]]);
+      if (counter < logs.length) {
+        setSimulatorOutput((prev) => [...prev, logs[counter]]);
         counter++;
       } else {
         clearInterval(interval);
         setSimulatorOutput((prev) => [
           ...prev,
-          `[+] EXPLOIT SUCCESSFUL! FLAG FOUND: ${activePayload.flag}`
+          `[+] EXPLOIT SUCCESSFUL! FLAG FOUND: ${flag}`
         ]);
         setLoadingSim(false);
         // Autopopulate flag input as a convenience, or let the user copy it
-        setFlagInput(activePayload.flag);
+        setFlagInput(flag);
       }
-    }, 600);
+    }, 400);
   };
 
   const handleVerifySubmit = (e: React.FormEvent) => {
@@ -173,7 +186,11 @@ export const InteractiveArena: React.FC<InteractiveArenaProps> = ({ day, onVerif
           <div className="flex justify-between items-center">
             <span className="text-[11px] text-hacker-muted font-mono">TARGET WEAKNESS PAYLOAD MATCH</span>
             <button
-              onClick={() => setSelectedExploitPayload(activePayload.payload)}
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                setSelectedExploitPayload(activePayload.payload);
+              }}
               className="text-[10px] text-hacker-amber hover:text-white font-mono flex items-center gap-1"
             >
               <Sparkles size={11} /> [Load Exploit Vector Template]
@@ -188,7 +205,8 @@ export const InteractiveArena: React.FC<InteractiveArenaProps> = ({ day, onVerif
               className="flex-1 bg-hacker-card border border-hacker-border rounded px-3 py-1.5 text-xs font-mono text-white focus:outline-none focus:ring-1 focus:ring-hacker-amber"
             />
             <button
-              onClick={handleRunSimulation}
+              type="button"
+              onClick={(e) => handleRunSimulation(e)}
               disabled={loadingSim || !selectedExploitPayload}
               className="bg-hacker-amber hover:bg-amber-400 text-black font-bold px-4 rounded text-xs font-mono transition-all flex items-center gap-1 shrink-0"
             >
@@ -216,7 +234,7 @@ export const InteractiveArena: React.FC<InteractiveArenaProps> = ({ day, onVerif
               return (
                 <div
                   key={idx}
-                  className={isSuccess ? "text-hacker-green" : isError ? "text-red-400" : "text-gray-300"}
+                  className={isSuccess ? "text-hacker-green font-bold" : isError ? "text-red-400 font-bold" : "text-gray-300"}
                 >
                   {logLine}
                 </div>

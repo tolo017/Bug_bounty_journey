@@ -23,12 +23,20 @@ export const AVATARS = [
   { id: "specter", name: "API Specter", desc: "Bolas, IDORs, and GraphQL schema reverse-engineering.", emoji: "👁️" }
 ];
 
+export interface AccessState {
+  isPaid: boolean;
+  isAdmin: boolean;
+  trialStartMs: number;
+  trialDaysLeft: number;
+  isTrialExpired: boolean;
+}
+
 export const useLMSState = () => {
   const [weeks, setWeeks] = useState<Week[]>([]);
   const [stats, setStats] = useState<UserStats>({
     xp: 0,
     level: 1,
-    streak: 3, // Mock a 3-day starting streak
+    streak: 1, // Start streak from 1
     avatar: "ghost",
     name: "Viper_0x"
   });
@@ -41,27 +49,106 @@ export const useLMSState = () => {
   const [selectedDayId, setSelectedDayId] = useState<string>("week-1-monday");
   const [viewingBossLab, setViewingBossLab] = useState<boolean>(false);
 
+  // 4-Day Trial & Monetization Access State
+  const [access, setAccess] = useState<AccessState>({
+    isPaid: false,
+    isAdmin: false,
+    trialStartMs: Date.now(),
+    trialDaysLeft: 4,
+    isTrialExpired: false
+  });
+
   // Load from LocalStorage on mount
   useEffect(() => {
+    // Check URL parameters for Admin Access Key (?admin=master_key_0x or ?admin=root)
+    const urlParams = new URLSearchParams(window.location.search);
+    const adminParam = urlParams.get("admin");
+    let isAdminUser = adminParam === "master_key_0x" || adminParam === "root" || localStorage.getItem("bbm_admin_bypass") === "true";
+
+    if (isAdminUser) {
+      localStorage.setItem("bbm_admin_bypass", "true");
+    }
+
+    const savedPaid = localStorage.getItem("bbm_is_paid") === "true";
+    let savedTrialStart = Number(localStorage.getItem("bbm_trial_start"));
+
+    if (!savedTrialStart) {
+      savedTrialStart = Date.now();
+      localStorage.setItem("bbm_trial_start", savedTrialStart.toString());
+    }
+
+    const FOUR_DAYS_MS = 4 * 24 * 60 * 60 * 1000;
+    const elapsedMs = Date.now() - savedTrialStart;
+    const remainingMs = Math.max(0, FOUR_DAYS_MS - elapsedMs);
+    const remainingDays = Math.ceil(remainingMs / (1000 * 60 * 60 * 24));
+    const trialExpired = elapsedMs >= FOUR_DAYS_MS && !savedPaid && !isAdminUser;
+
+    setAccess({
+      isPaid: savedPaid,
+      isAdmin: isAdminUser,
+      trialStartMs: savedTrialStart,
+      trialDaysLeft: remainingDays,
+      isTrialExpired: trialExpired
+    });
     const savedWeeks = localStorage.getItem("bbm_weeks");
     const savedStats = localStorage.getItem("bbm_stats");
     const savedGitHub = localStorage.getItem("bbm_github");
+    const savedLastActive = localStorage.getItem("bbm_last_active_time");
 
+    let initialWeeks = generateDefaultCurriculum();
     if (savedWeeks) {
       try {
-        setWeeks(JSON.parse(savedWeeks));
-      } catch (e) {
-        setWeeks(generateDefaultCurriculum());
-      }
-    } else {
-      setWeeks(generateDefaultCurriculum());
+        initialWeeks = JSON.parse(savedWeeks);
+      } catch (e) {}
     }
+    setWeeks(initialWeeks);
+
+    let initialStats: UserStats = {
+      xp: 0,
+      level: 1,
+      streak: 1, // Start streak from 1
+      avatar: "ghost",
+      name: "Viper_0x"
+    };
 
     if (savedStats) {
       try {
-        setStats(JSON.parse(savedStats));
+        initialStats = JSON.parse(savedStats);
       } catch (e) {}
     }
+
+    // Daily 24-Hour Streak Logic
+    const now = new Date();
+    const todayStr = now.toDateString(); // e.g. "Wed Aug 05 2026"
+
+    if (savedLastActive) {
+      const lastActiveDate = new Date(savedLastActive);
+      const lastActiveStr = lastActiveDate.toDateString();
+
+      if (todayStr !== lastActiveStr) {
+        // Calculate difference in milliseconds
+        const diffTime = Math.abs(now.getTime() - lastActiveDate.getTime());
+        const diffHours = diffTime / (1000 * 60 * 60);
+
+        if (diffHours <= 36) {
+          // If active within 36 hours (yesterday), streak increases!
+          initialStats.streak = (initialStats.streak || 1) + 1;
+          localStorage.setItem("bbm_last_streak_increment_date", todayStr);
+        } else if (diffHours > 36) {
+          // Reset streak to 1 if user missed a day (over 36 hours elapsed)
+          initialStats.streak = 1;
+          localStorage.setItem("bbm_last_streak_increment_date", todayStr);
+        }
+      }
+    } else {
+      // First time using the app
+      initialStats.streak = 1;
+      localStorage.setItem("bbm_last_streak_increment_date", todayStr);
+    }
+
+    // Save current active timestamp
+    localStorage.setItem("bbm_last_active_time", now.toISOString());
+    setStats(initialStats);
 
     if (savedGitHub) {
       try {
@@ -75,6 +162,7 @@ export const useLMSState = () => {
     localStorage.setItem("bbm_weeks", JSON.stringify(newWeeks));
     localStorage.setItem("bbm_stats", JSON.stringify(newStats));
     localStorage.setItem("bbm_github", JSON.stringify(newGitHub));
+    localStorage.setItem("bbm_last_active_time", new Date().toISOString());
   };
 
   const updateStats = (updater: Partial<UserStats>) => {
@@ -99,6 +187,21 @@ export const useLMSState = () => {
       xp: totalXP,
       level: newLevel
     };
+  };
+
+  // Prevent streak inflation by only incrementing once per unique calendar day
+  const maybeIncrementStreak = (currentStats: UserStats): UserStats => {
+    const todayStr = new Date().toDateString();
+    const lastStreakIncrement = localStorage.getItem("bbm_last_streak_increment_date");
+
+    if (lastStreakIncrement !== todayStr) {
+      localStorage.setItem("bbm_last_streak_increment_date", todayStr);
+      return {
+        ...currentStats,
+        streak: (currentStats.streak || 0) + 1
+      };
+    }
+    return currentStats;
   };
 
   // Check if a day's checklist is completed
@@ -127,7 +230,7 @@ export const useLMSState = () => {
       let updatedStats = stats;
       if (completedStateChanged) {
         updatedStats = addXP(300, updatedStats); // +300 XP for full day completion
-        updatedStats.streak += 1;
+        updatedStats = maybeIncrementStreak(updatedStats);
       } else {
         updatedStats = addXP(100, updatedStats); // +100 XP for flag verify
       }
@@ -178,7 +281,7 @@ export const useLMSState = () => {
     let updatedStats = stats;
     if (completedStateChanged) {
       updatedStats = addXP(200, updatedStats); // Completion reward
-      updatedStats.streak += 1;
+      updatedStats = maybeIncrementStreak(updatedStats);
 
       // Unlock next day
       const currentDayIndex = updatedWeeks[weekIndex].days.findIndex(d => d.id === dayId);
@@ -270,13 +373,29 @@ export const useLMSState = () => {
     return { success: true, message: "VDP Report Submitted successfully!" };
   };
 
+  // Unlock Full Access after PayPal payment
+  const handleUnlockPayment = () => {
+    localStorage.setItem("bbm_is_paid", "true");
+    setAccess((prev) => ({ ...prev, isPaid: true, isTrialExpired: false }));
+  };
+
+  // Toggle Admin Bypass Access Mode
+  const handleToggleAdminAccess = (keyInput: string) => {
+    if (keyInput.trim() === "master_key_0x" || keyInput.trim() === "root") {
+      localStorage.setItem("bbm_admin_bypass", "true");
+      setAccess((prev) => ({ ...prev, isAdmin: true, isTrialExpired: false }));
+      return { success: true, message: "Developer Admin Override Access Granted." };
+    }
+    return { success: false, message: "Invalid Admin Security Key." };
+  };
+
   // Reset Progress completely
   const handleResetProgress = () => {
     const defaultWeeks = generateDefaultCurriculum();
     const defaultStats: UserStats = {
       xp: 0,
       level: 1,
-      streak: 0,
+      streak: 1, // Reset to 1
       avatar: "ghost",
       name: "Viper_0x"
     };
@@ -287,6 +406,7 @@ export const useLMSState = () => {
     setViewingBossLab(false);
     localStorage.removeItem("bbm_weeks");
     localStorage.removeItem("bbm_stats");
+    localStorage.removeItem("bbm_last_active_time");
   };
 
   // Calculate dynamic Job Readiness progress
@@ -371,6 +491,7 @@ export const useLMSState = () => {
     selectedWeekIndex,
     selectedDayId,
     viewingBossLab,
+    access,
     setWeeks,
     setStats,
     setGitHubSettings,
@@ -384,6 +505,8 @@ export const useLMSState = () => {
     handleMarkAsCommitted,
     handleVerifyBossFlag,
     handleSubmitVDPReport,
+    handleUnlockPayment,
+    handleToggleAdminAccess,
     handleResetProgress,
     getJobReadinessStats,
   };

@@ -4,6 +4,8 @@ import { Sidebar } from "./components/Sidebar";
 import { ProfilePanel } from "./components/ProfilePanel";
 import { JobReadinessPanel } from "./components/JobReadinessPanel";
 import { InteractiveArena } from "./components/InteractiveArena";
+import { MonetizationModal } from "./components/MonetizationModal";
+import { ProgramDirectory } from "./components/ProgramDirectory";
 import { BossLabSimulator } from "./components/BossLabSimulator";
 import { ScreenRecorder } from "./components/ScreenRecorder";
 import { SocialIntegrator } from "./components/SocialIntegrator";
@@ -20,6 +22,7 @@ function App() {
     selectedWeekIndex,
     selectedDayId,
     viewingBossLab,
+    access,
     setSelectedWeekIndex,
     setSelectedDayId,
     setViewingBossLab,
@@ -30,6 +33,8 @@ function App() {
     handleMarkAsCommitted,
     handleVerifyBossFlag,
     handleSubmitVDPReport,
+    handleUnlockPayment,
+    handleToggleAdminAccess,
     handleResetProgress,
     getJobReadinessStats,
   } = useLMSState();
@@ -90,14 +95,21 @@ function App() {
             Reset Progress
           </button>
 
-          <span className="text-xs bg-hacker-card border border-hacker-border px-3 py-1.5 rounded font-mono text-gray-300">
-            Engineered for <span className="text-hacker-green font-bold">8GB RAM NATIVE</span>
+          <span className="text-xs bg-hacker-card border border-hacker-amber/40 px-3 py-1.5 rounded font-mono text-hacker-amber font-bold flex items-center gap-1.5">
+            <Sparkles size={13} /> {access.isPaid ? "PRO LICENSE ACTIVE" : access.isAdmin ? "ADMIN BYPASS" : `4-DAY TRIAL (${access.trialDaysLeft} DAYS LEFT)`}
           </span>
         </div>
       </header>
 
       {/* Main Container */}
       <main className="max-w-7xl mx-auto px-4 md:px-6 mt-6 flex flex-col gap-6">
+
+        {/* Trial & Monetization Banner / Modal */}
+        <MonetizationModal
+          access={access}
+          onUnlockPayment={handleUnlockPayment}
+          onToggleAdminAccess={handleToggleAdminAccess}
+        />
 
         {/* Profile Details RPG panel */}
         <ProfilePanel stats={stats} onUpdateStats={updateStats} />
@@ -110,6 +122,9 @@ function App() {
           reports={readiness.reports}
           competencies={readiness.competencies}
         />
+
+        {/* Bug Bounty Freelance Opportunities Directory */}
+        <ProgramDirectory />
 
         {/* Workspace and Syllabus Grid */}
         <div className="flex flex-col lg:flex-row gap-6">

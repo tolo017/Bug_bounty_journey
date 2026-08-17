@@ -134,7 +134,11 @@ export const BossLabSimulator: React.FC<BossLabSimulatorProps> = ({
             <Activity size={14} className="text-red-500" /> SYSTEM ATTACK TERMINAL
           </span>
           <button
-            onClick={handleLaunchBossExploit}
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              handleLaunchBossExploit();
+            }}
             disabled={isRunningExploit}
             className="bg-red-600 hover:bg-red-500 text-white font-bold px-4 py-1.5 rounded text-xs font-mono transition-all flex items-center gap-2 shadow-md"
           >
