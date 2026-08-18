@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { UserStats, AVATARS } from "../hooks/useLMSState";
-import { Shield, Sparkles, Flame, Trophy, Check, Award, ExternalLink } from "lucide-react";
+import { Shield, Sparkles, Flame, Trophy, Check, Award, ExternalLink, UserPlus, Users, Copy } from "lucide-react";
 
 interface ProfilePanelProps {
   stats: UserStats;
@@ -21,10 +21,26 @@ export const ProfilePanel: React.FC<ProfilePanelProps> = ({ stats, onUpdateStats
   const [showAvatarSelector, setShowAvatarSelector] = useState(false);
   const [showBadges, setShowBadges] = useState(false);
 
+  // Multi-user Profile Switcher
+  const [profiles, setProfiles] = useState<string[]>([]);
+  const [showProfileSwitcher, setShowProfileSwitcher] = useState(false);
+  const [newProfileName, setNewProfileName] = useState("");
+
   // Profile Links
   const [h1Profile, setH1Profile] = useState(localStorage.getItem("bbm_h1_profile") || "");
   const [bugcrowdProfile, setBugcrowdProfile] = useState(localStorage.getItem("bbm_bugcrowd_profile") || "");
   const [editingProfiles, setEditingProfiles] = useState(false);
+  const [copyMsg, setCopyMsg] = useState("");
+
+  useEffect(() => {
+    const savedProfiles = JSON.parse(localStorage.getItem("bbm_profiles_list") || "[]");
+    if (savedProfiles.length === 0) {
+      localStorage.setItem("bbm_profiles_list", JSON.stringify([stats.name]));
+      setProfiles([stats.name]);
+    } else {
+      setProfiles(savedProfiles);
+    }
+  }, [stats.name]);
 
   const currentAvatar = AVATARS.find((a) => a.id === stats.avatar) || AVATARS[0];
   const levelProgress = stats.xp % 1000;
@@ -32,15 +48,43 @@ export const ProfilePanel: React.FC<ProfilePanelProps> = ({ stats, onUpdateStats
 
   const handleSaveName = () => {
     if (nameInput.trim()) {
+      const updatedList = Array.from(new Set([...profiles, nameInput.trim()]));
+      setProfiles(updatedList);
+      localStorage.setItem("bbm_profiles_list", JSON.stringify(updatedList));
       onUpdateStats({ name: nameInput.trim() });
       setEditingName(false);
     }
+  };
+
+  const handleCreateNewProfile = () => {
+    if (!newProfileName.trim()) return;
+    const name = newProfileName.trim();
+    const updatedList = Array.from(new Set([...profiles, name]));
+    setProfiles(updatedList);
+    localStorage.setItem("bbm_profiles_list", JSON.stringify(updatedList));
+    onUpdateStats({ name, xp: 0, level: 1, streak: 1, avatar: "ghost" });
+    setNewProfileName("");
+    setShowProfileSwitcher(false);
+  };
+
+  const handleSwitchProfile = (profileName: string) => {
+    onUpdateStats({ name: profileName });
+    setShowProfileSwitcher(false);
   };
 
   const handleSaveProfiles = () => {
     localStorage.setItem("bbm_h1_profile", h1Profile);
     localStorage.setItem("bbm_bugcrowd_profile", bugcrowdProfile);
     setEditingProfiles(false);
+  };
+
+  const handleCopyCVBadges = () => {
+    const unlockedBadges = BADGES.filter((b) => stats.level >= b.minLevel).map((b) => `• ${b.name}: ${b.desc}`).join("\n");
+    const summaryText = `🛡️ CYBERSECURITY CERTIFICATIONS & BADGES (${stats.name})\nRank: ${stats.level >= 10 ? "ELITE" : stats.level >= 5 ? "PRO" : "ROOKIE"} (Level ${stats.level})\n\nEarned Badges:\n${unlockedBadges || "• Apprentice Security Researcher"}\n\nProfiles:\n- HackerOne: ${h1Profile || "Active"}\n- Bugcrowd: ${bugcrowdProfile || "Active"}`;
+
+    navigator.clipboard.writeText(summaryText);
+    setCopyMsg("Badges & Certifications summary copied for your Resume / LinkedIn Bio!");
+    setTimeout(() => setCopyMsg(""), 3000);
   };
 
   return (
@@ -81,14 +125,19 @@ export const ProfilePanel: React.FC<ProfilePanelProps> = ({ stats, onUpdateStats
                 <h3
                   onClick={() => setEditingName(true)}
                   className="font-bold text-lg text-white hover:text-hacker-amber cursor-pointer flex items-center gap-1"
-                  title="Click to rename"
+                  title="Click to rename profile"
                 >
                   {stats.name} <span className="text-xs text-hacker-muted">(edit)</span>
                 </h3>
               )}
-              <span className="text-xs bg-hacker-border border border-hacker-border text-hacker-green px-2 py-0.5 rounded font-mono">
-                {currentAvatar.name}
-              </span>
+
+              <button
+                onClick={() => setShowProfileSwitcher(!showProfileSwitcher)}
+                className="text-xs bg-hacker-dark hover:bg-hacker-border border border-hacker-border text-hacker-green px-2 py-0.5 rounded font-mono flex items-center gap-1"
+                title="Switch or Add Learner Profile"
+              >
+                <Users size={12} /> Profiles ({profiles.length})
+              </button>
             </div>
             <p className="text-xs text-hacker-muted mt-1 max-w-sm">{currentAvatar.desc}</p>
           </div>
@@ -141,20 +190,83 @@ export const ProfilePanel: React.FC<ProfilePanelProps> = ({ stats, onUpdateStats
 
       </div>
 
-      {/* Badges & Profile Links Showcase */}
-      {showBadges && (
-        <div className="mt-4 p-4 bg-hacker-dark border border-hacker-border rounded-xl flex flex-col gap-4">
+      {/* Profile Switcher & Multi-User Panel */}
+      {showProfileSwitcher && (
+        <div className="mt-4 p-4 bg-hacker-dark border border-hacker-border rounded-xl flex flex-col gap-3">
           <div className="flex justify-between items-center border-b border-hacker-border pb-2">
-            <h4 className="text-xs font-bold text-hacker-amber font-mono flex items-center gap-1.5">
-              <Award size={14} /> EARNED CYBERSECURITY BADGES & PUBLIC PROFILES
+            <h4 className="text-xs font-bold text-hacker-green font-mono flex items-center gap-1.5">
+              <Users size={14} /> MULTI-USER LOCAL PROFILES & PATHWAY TRACKING
             </h4>
             <button
-              onClick={() => setShowBadges(false)}
+              onClick={() => setShowProfileSwitcher(false)}
               className="text-xs text-hacker-muted hover:text-white font-mono"
             >
               [Close]
             </button>
           </div>
+
+          <div className="flex flex-wrap gap-2">
+            {profiles.map((p) => (
+              <button
+                key={p}
+                onClick={() => handleSwitchProfile(p)}
+                className={`text-xs font-mono px-3 py-1.5 rounded-lg border transition-all ${
+                  stats.name === p
+                    ? "bg-hacker-green text-black border-hacker-green font-bold"
+                    : "bg-hacker-card text-gray-300 border-hacker-border hover:border-hacker-green/40"
+                }`}
+              >
+                {stats.name === p ? "✓ Active: " : ""}{p}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex gap-2 border-t border-hacker-border/40 pt-2.5">
+            <input
+              type="text"
+              value={newProfileName}
+              onChange={(e) => setNewProfileName(e.target.value)}
+              placeholder="Enter new profile / hunter persona name..."
+              className="bg-hacker-card border border-hacker-border rounded px-3 py-1.5 text-xs font-mono text-white focus:outline-none flex-1"
+            />
+            <button
+              onClick={handleCreateNewProfile}
+              className="bg-hacker-amber text-black font-mono font-bold text-xs px-4 py-1.5 rounded flex items-center gap-1"
+            >
+              <UserPlus size={13} /> Add New Profile
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Badges & Profile Links Showcase */}
+      {showBadges && (
+        <div className="mt-4 p-4 bg-hacker-dark border border-hacker-border rounded-xl flex flex-col gap-4">
+          <div className="flex justify-between items-center border-b border-hacker-border pb-2">
+            <h4 className="text-xs font-bold text-hacker-amber font-mono flex items-center gap-1.5">
+              <Award size={14} /> EARNED CYBERSECURITY BADGES & RESUME CERTIFICATIONS
+            </h4>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleCopyCVBadges}
+                className="text-xs text-hacker-green border border-hacker-green/40 hover:bg-hacker-green/10 px-2.5 py-1 rounded font-mono flex items-center gap-1"
+              >
+                <Copy size={12} /> Export for CV / LinkedIn
+              </button>
+              <button
+                onClick={() => setShowBadges(false)}
+                className="text-xs text-hacker-muted hover:text-white font-mono"
+              >
+                [Close]
+              </button>
+            </div>
+          </div>
+
+          {copyMsg && (
+            <div className="text-xs text-hacker-green font-mono bg-hacker-green/10 border border-hacker-green/30 p-2 rounded">
+              {copyMsg}
+            </div>
+          )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
             {BADGES.map((b) => {
@@ -254,10 +366,10 @@ export const ProfilePanel: React.FC<ProfilePanelProps> = ({ stats, onUpdateStats
       {showAvatarSelector && (
         <div className="mt-4 p-4 bg-hacker-dark border border-hacker-border rounded-xl">
           <div className="flex justify-between items-center mb-3">
-            <h4 className="text-sm font-bold text-hacker-amber">SELECT SPECIALIST CLASS</h4>
+            <h4 className="text-sm font-bold text-hacker-amber font-mono">SELECT SPECIALIST CLASS</h4>
             <button
               onClick={() => setShowAvatarSelector(false)}
-              className="text-xs text-hacker-muted hover:text-white"
+              className="text-xs text-hacker-muted hover:text-white font-mono"
             >
               [Close]
             </button>
@@ -279,7 +391,7 @@ export const ProfilePanel: React.FC<ProfilePanelProps> = ({ stats, onUpdateStats
                 <div className="flex items-center gap-2">
                   <span className="text-2xl">{av.emoji}</span>
                   <div>
-                    <div className="text-xs font-bold text-white leading-none">{av.name}</div>
+                    <div className="text-xs font-bold text-white leading-none font-mono">{av.name}</div>
                     <div className="text-[10px] text-hacker-muted mt-1 line-clamp-2">{av.desc}</div>
                   </div>
                 </div>
@@ -291,3 +403,5 @@ export const ProfilePanel: React.FC<ProfilePanelProps> = ({ stats, onUpdateStats
     </div>
   );
 };
+
+export default ProfilePanel;

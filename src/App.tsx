@@ -7,7 +7,6 @@ import { InteractiveArena } from "./components/InteractiveArena";
 import { MonetizationModal } from "./components/MonetizationModal";
 import { ProgramDirectory } from "./components/ProgramDirectory";
 import { BossLabSimulator } from "./components/BossLabSimulator";
-import { ScreenRecorder } from "./components/ScreenRecorder";
 import { SocialIntegrator } from "./components/SocialIntegrator";
 import {
   ShieldAlert, BookOpen, Cpu, FileText, ChevronRight, RefreshCw, Sparkles, Terminal, Info
@@ -339,9 +338,6 @@ function App() {
 
                 </div>
 
-                {/* Sub-panels for Screen Recording and reels content editing */}
-                <ScreenRecorder lessonTitle={currentDay.title} />
-
               </div>
             ) : bossLab ? (
               // Active Boss Lab Workspace
@@ -363,8 +359,6 @@ function App() {
                     return res;
                   }}
                 />
-
-                <ScreenRecorder lessonTitle={`Boss Lab - ${bossLab.title}`} />
               </div>
             ) : (
               <div className="bg-hacker-card border border-hacker-border p-8 rounded-xl text-center font-mono text-sm text-hacker-muted">
