@@ -14,13 +14,14 @@ export const InteractiveArena: React.FC<InteractiveArenaProps> = ({ day, onVerif
   const [simulatorOutput, setSimulatorOutput] = useState<string[]>([]);
   const [loadingSim, setLoadingSim] = useState(false);
 
-  // Clear output and input on lesson change
+  // Automatically populate suggested payload template on lesson change so execution is instant
   useEffect(() => {
     setSimulatorOutput([]);
     setFlagInput("");
-    setSelectedExploitPayload("");
+    const initialPayload = activePayload?.payload || `<iframe name="config" srcdoc="<a id='apiEndpoint' href='javascript:alert(1)'></a>"></iframe>`;
+    setSelectedExploitPayload(initialPayload);
     setVerificationMsg({ text: "", isError: false });
-  }, [day.id]);
+  }, [day.id, day.title]);
 
   // Simulated live environment details depending on the lesson content
   const targetHost = `secure-app-${day.dayName.toLowerCase()}.local`;
@@ -106,17 +107,25 @@ export const InteractiveArena: React.FC<InteractiveArenaProps> = ({ day, onVerif
   };
 
   const handleRunSimulation = (e?: React.MouseEvent) => {
-    if (e) e.preventDefault();
-    if (!selectedExploitPayload) {
-      setVerificationMsg({ text: "Please input or select an exploit payload vector.", isError: true });
-      return;
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
     }
+
+    const payloadToRun = selectedExploitPayload.trim() || activePayload.payload;
+    if (!selectedExploitPayload) {
+      setSelectedExploitPayload(payloadToRun);
+    }
+
     setLoadingSim(true);
-    setSimulatorOutput(["[*] Starting exploit runtime simulator on target..."]);
+    setSimulatorOutput([
+      `[*] Connecting to local container sandbox target (${targetHost})...`,
+      `[*] Injecting exploit payload vector: ${payloadToRun}`
+    ]);
 
     let counter = 0;
     const logs = activePayload.log || [];
-    const flag = activePayload.flag || "FLAG_DEFAULT";
+    const flag = activePayload.flag || day?.digitalArena?.correctFlag || "FLAG_DEFAULT";
 
     const interval = setInterval(() => {
       if (counter < logs.length) {
@@ -126,13 +135,14 @@ export const InteractiveArena: React.FC<InteractiveArenaProps> = ({ day, onVerif
         clearInterval(interval);
         setSimulatorOutput((prev) => [
           ...prev,
-          `[+] EXPLOIT SUCCESSFUL! FLAG FOUND: ${flag}`
+          `[+] EXPLOIT EXECUTED SUCCESSFULLY!`,
+          `[+] CAPTURED SYSTEM FLAG: ${flag}`
         ]);
         setLoadingSim(false);
-        // Autopopulate flag input as a convenience, or let the user copy it
+        // Autopopulate flag input box directly so the user can verify immediately
         setFlagInput(flag);
       }
-    }, 400);
+    }, 350);
   };
 
   const handleVerifySubmit = (e: React.FormEvent) => {
