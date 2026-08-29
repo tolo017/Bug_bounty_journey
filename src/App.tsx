@@ -95,7 +95,7 @@ function App() {
           </button>
 
           <span className="text-xs bg-hacker-card border border-hacker-amber/40 px-3 py-1.5 rounded font-mono text-hacker-amber font-bold flex items-center gap-1.5">
-            <Sparkles size={13} /> {access.isPaid ? "PRO LICENSE ACTIVE" : access.isAdmin ? "ADMIN BYPASS" : `4-DAY TRIAL (${access.trialDaysLeft} DAYS LEFT)`}
+            <Sparkles size={13} /> {access.isPaid || access.isAdmin ? "PRO LICENSE ACTIVE" : `4-DAY TRIAL (${access.trialDaysLeft} DAYS LEFT)`}
           </span>
         </div>
       </header>

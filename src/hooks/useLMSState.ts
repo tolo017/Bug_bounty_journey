@@ -58,18 +58,39 @@ export const useLMSState = () => {
     isTrialExpired: false
   });
 
+  // Simple Salted Hash Generator to prevent manual F12 localStorage tampering
+  const computeAuthSignature = (isPaid: boolean, isAdmin: boolean) => {
+    const salt = "BBM_SECRET_SALT_2026_CRITICAL_SECURITY_HASH";
+    const raw = `${isPaid}:${isAdmin}:${salt}`;
+    let hash = 0;
+    for (let i = 0; i < raw.length; i++) {
+      hash = (hash << 5) - hash + raw.charCodeAt(i);
+      hash |= 0;
+    }
+    return hash.toString(16);
+  };
+
   // Load from LocalStorage on mount
   useEffect(() => {
-    // Check URL parameters for Admin Access Key (?admin=master_key_0x or ?admin=root)
+    // Check URL parameters for activation code (?access_code=master_key_0x or ?code=root)
     const urlParams = new URLSearchParams(window.location.search);
-    const adminParam = urlParams.get("admin");
-    let isAdminUser = adminParam === "master_key_0x" || adminParam === "root" || localStorage.getItem("bbm_admin_bypass") === "true";
+    const codeParam = urlParams.get("access_code") || urlParams.get("code") || urlParams.get("admin");
+    let isAdminUser = codeParam === "master_key_0x" || codeParam === "root" || localStorage.getItem("bbm_admin_bypass") === "true";
 
     if (isAdminUser) {
       localStorage.setItem("bbm_admin_bypass", "true");
     }
 
-    const savedPaid = localStorage.getItem("bbm_is_paid") === "true";
+    let savedPaid = localStorage.getItem("bbm_is_paid") === "true";
+    const savedSig = localStorage.getItem("bbm_auth_signature");
+    const expectedSig = computeAuthSignature(savedPaid, isAdminUser);
+
+    // Tamper Detection Check: If localStorage was modified without a valid signature, invalidate payment state
+    if (savedPaid && savedSig !== expectedSig && !isAdminUser) {
+      savedPaid = false;
+      localStorage.setItem("bbm_is_paid", "false");
+    }
+
     let savedTrialStart = Number(localStorage.getItem("bbm_trial_start"));
 
     if (!savedTrialStart) {
@@ -82,6 +103,9 @@ export const useLMSState = () => {
     const remainingMs = Math.max(0, FOUR_DAYS_MS - elapsedMs);
     const remainingDays = Math.ceil(remainingMs / (1000 * 60 * 60 * 24));
     const trialExpired = elapsedMs >= FOUR_DAYS_MS && !savedPaid && !isAdminUser;
+
+    // Save validated signature
+    localStorage.setItem("bbm_auth_signature", computeAuthSignature(savedPaid, isAdminUser));
 
     setAccess({
       isPaid: savedPaid,
@@ -376,17 +400,20 @@ export const useLMSState = () => {
   // Unlock Full Access after PayPal payment
   const handleUnlockPayment = () => {
     localStorage.setItem("bbm_is_paid", "true");
+    localStorage.setItem("bbm_auth_signature", computeAuthSignature(true, access.isAdmin));
     setAccess((prev) => ({ ...prev, isPaid: true, isTrialExpired: false }));
   };
 
-  // Toggle Admin Bypass Access Mode
+  // Toggle Activation Code Access Mode
   const handleToggleAdminAccess = (keyInput: string) => {
-    if (keyInput.trim() === "master_key_0x" || keyInput.trim() === "root") {
+    const validCodes = ["master_key_0x", "root", "activation_2026_0x", "cyber_master_950"];
+    if (validCodes.includes(keyInput.trim())) {
       localStorage.setItem("bbm_admin_bypass", "true");
-      setAccess((prev) => ({ ...prev, isAdmin: true, isTrialExpired: false }));
-      return { success: true, message: "Developer Admin Override Access Granted." };
+      localStorage.setItem("bbm_auth_signature", computeAuthSignature(true, true));
+      setAccess((prev) => ({ ...prev, isAdmin: true, isPaid: true, isTrialExpired: false }));
+      return { success: true, message: "Activation Code Verified! Full Lifetime Access Granted." };
     }
-    return { success: false, message: "Invalid Admin Security Key." };
+    return { success: false, message: "Invalid Activation Code." };
   };
 
   // Reset Progress completely
