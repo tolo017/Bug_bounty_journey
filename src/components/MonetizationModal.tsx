@@ -1,34 +1,21 @@
 import React, { useState } from "react";
 import { AccessState } from "../hooks/useLMSState";
-import { ShieldCheck, CreditCard, Lock, Sparkles, CheckCircle, KeyRound } from "lucide-react";
+import { ShieldCheck, CreditCard, Lock, Sparkles, CheckCircle, KeyRound, ArrowRight } from "lucide-react";
 
 interface MonetizationModalProps {
   access: AccessState;
-  onUnlockPayment: () => void;
+  onOpenCheckout: () => void;
   onToggleAdminAccess: (key: string) => { success: boolean; message: string };
 }
 
 export const MonetizationModal: React.FC<MonetizationModalProps> = ({
   access,
-  onUnlockPayment,
+  onOpenCheckout,
   onToggleAdminAccess
 }) => {
   const [accessCode, setAccessCode] = useState("");
   const [codeMsg, setCodeMsg] = useState({ text: "", isError: false });
   const [showCodeInput, setShowCodeInput] = useState(false);
-  const [isSimulatingPayment, setIsSimulatingPayment] = useState(false);
-  const [paymentSuccess, setPaymentSuccess] = useState(false);
-
-  const handleSimulatePayPal = () => {
-    setIsSimulatingPayment(true);
-    setTimeout(() => {
-      setIsSimulatingPayment(false);
-      setPaymentSuccess(true);
-      setTimeout(() => {
-        onUnlockPayment();
-      }, 1200);
-    }, 1500);
-  };
 
   const handleCodeSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,7 +24,7 @@ export const MonetizationModal: React.FC<MonetizationModalProps> = ({
     setCodeMsg({ text: res.message, isError: !res.success });
   };
 
-  // If user is unlocked (paid or via activation code)
+  // If user is unlocked
   if (access.isPaid || access.isAdmin) {
     return (
       <div className="bg-hacker-card border border-hacker-green/40 rounded-xl p-3.5 shadow-lg flex flex-col sm:flex-row justify-between items-center gap-3">
@@ -62,7 +49,7 @@ export const MonetizationModal: React.FC<MonetizationModalProps> = ({
             type="button"
             onClick={() => setShowCodeInput(!showCodeInput)}
             className="w-10 h-10 rounded-lg bg-hacker-amber/10 border border-hacker-amber/30 flex items-center justify-center shrink-0 hover:border-hacker-amber transition-all"
-            title="Activation Code"
+            title="Activation Code Slot"
           >
             <Sparkles size={20} className="text-hacker-amber animate-pulse" />
           </button>
@@ -74,17 +61,17 @@ export const MonetizationModal: React.FC<MonetizationModalProps> = ({
               </span>
             </div>
             <p className="text-xs text-hacker-muted mt-0.5">
-              Enjoy access to initial modules. Upgrade for <span className="text-white font-bold">$9.50 (PayPal)</span> for lifetime access to all 12 Weeks.
+              Enjoy free access to initial modules. Upgrade for <span className="text-white font-bold">$9.50 (PayPal)</span> for lifetime access to all 12 Weeks.
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
           <button
-            onClick={handleSimulatePayPal}
+            onClick={onOpenCheckout}
             className="bg-hacker-amber hover:bg-amber-400 text-black font-mono font-bold text-xs px-5 py-2.5 rounded-lg flex items-center gap-2 transition-all shadow-md"
           >
-            <CreditCard size={15} /> Upgrade for $9.50
+            <CreditCard size={15} /> Upgrade to Pro ($9.50) <ArrowRight size={14} />
           </button>
         </div>
 
@@ -151,21 +138,11 @@ export const MonetizationModal: React.FC<MonetizationModalProps> = ({
 
         {/* PayPal Payment Section */}
         <div className="flex flex-col gap-3">
-          <div className="text-xs font-bold text-white font-mono uppercase">Pay via PayPal</div>
           <button
-            onClick={handleSimulatePayPal}
-            disabled={isSimulatingPayment || paymentSuccess}
+            onClick={onOpenCheckout}
             className="w-full bg-hacker-amber hover:bg-amber-400 text-black font-mono font-bold text-sm py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg"
           >
-            {isSimulatingPayment ? (
-              <span>Connecting to PayPal...</span>
-            ) : paymentSuccess ? (
-              <span className="text-black flex items-center gap-1"><CheckCircle size={16} /> Payment Verified! Unlocking...</span>
-            ) : (
-              <>
-                <CreditCard size={18} /> Pay $9.50 via PayPal & Unlock
-              </>
-            )}
+            <CreditCard size={18} /> Open Payment Screen ($9.50) <ArrowRight size={16} />
           </button>
 
           <button

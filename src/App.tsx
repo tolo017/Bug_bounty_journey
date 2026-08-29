@@ -5,6 +5,7 @@ import { ProfilePanel } from "./components/ProfilePanel";
 import { JobReadinessPanel } from "./components/JobReadinessPanel";
 import { InteractiveArena } from "./components/InteractiveArena";
 import { MonetizationModal } from "./components/MonetizationModal";
+import { PaymentCheckoutModal } from "./components/PaymentCheckoutModal";
 import { ProgramDirectory } from "./components/ProgramDirectory";
 import { BossLabSimulator } from "./components/BossLabSimulator";
 import { SocialIntegrator } from "./components/SocialIntegrator";
@@ -44,6 +45,7 @@ function App() {
 
   // Track active sub-section tab inside Lesson page
   const [activeTab, setActiveTab] = useState<"theory" | "arena" | "automation">("theory");
+  const [showCheckoutModal, setShowCheckoutModal] = useState(false);
 
   // Job readiness scores
   const readiness = getJobReadinessStats();
@@ -106,6 +108,15 @@ function App() {
         {/* Trial & Monetization Banner / Modal */}
         <MonetizationModal
           access={access}
+          onOpenCheckout={() => setShowCheckoutModal(true)}
+          onToggleAdminAccess={handleToggleAdminAccess}
+        />
+
+        {/* Dedicated Payment Checkout Screen Modal */}
+        <PaymentCheckoutModal
+          access={access}
+          isOpen={showCheckoutModal}
+          onClose={() => setShowCheckoutModal(false)}
           onUnlockPayment={handleUnlockPayment}
           onToggleAdminAccess={handleToggleAdminAccess}
         />
