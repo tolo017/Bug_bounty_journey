@@ -240,36 +240,57 @@ function App() {
                         </div>
                       </div>
 
-                      {/* Main Theory & Concept Explanation */}
-                      <div className="bg-hacker-dark/40 border border-hacker-border p-4 rounded-lg flex flex-col gap-3">
-                        <h3 className="text-sm font-bold text-white font-mono flex items-center gap-2">
-                          <BookOpen size={16} className="text-hacker-amber" /> VULNERABILITY CONCEPTS & AUDITING METHODOLOGY
+                      {/* How The Vulnerability Comes About (Root Cause) */}
+                      <div className="bg-hacker-dark/50 border border-hacker-border p-4 rounded-lg flex flex-col gap-2.5">
+                        <h3 className="text-xs font-bold text-hacker-amber font-mono uppercase tracking-wider">
+                          HOW THE VULNERABILITY COMES ABOUT (ROOT CAUSE)
                         </h3>
                         <p className="text-xs text-gray-300 leading-relaxed font-sans whitespace-pre-wrap">
-                          {currentDay.theory.content}
+                          {currentDay.theory.vulnerabilityOrigin}
                         </p>
                       </div>
 
-                      {/* Step-by-Step Practical Walkthrough Tutorial */}
-                      {currentDay.theory.stepByStepTutorial && (
-                        <div className="bg-hacker-dark/60 border border-hacker-amber/40 p-4.5 rounded-xl flex flex-col gap-3">
-                          <h4 className="text-xs font-bold text-hacker-amber font-mono uppercase flex items-center gap-1.5">
-                            <Sparkles size={15} /> STEP-BY-STEP PRACTICAL GUIDED WALKTHROUGH
-                          </h4>
-                          <div className="flex flex-col gap-2 font-sans text-xs text-gray-200">
-                            {currentDay.theory.stepByStepTutorial.map((step, idx) => (
-                              <div key={idx} className="flex items-start gap-2.5 bg-black/40 p-2.5 rounded-lg border border-hacker-border/40">
-                                <span className="bg-hacker-amber/20 text-hacker-amber font-mono font-bold px-2 py-0.5 rounded text-[10px]">
-                                  {idx + 1}
-                                </span>
-                                <span className="leading-snug">{step}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
+                      {/* Pentester Focus & What To Look For */}
+                      <div className="bg-hacker-dark/50 border border-hacker-border p-4 rounded-lg flex flex-col gap-2.5">
+                        <h3 className="text-xs font-bold text-hacker-amber font-mono uppercase tracking-wider">
+                          PENTESTER FOCUS: WHAT TO LOOK FOR DURING CODE AUDITS
+                        </h3>
+                        <p className="text-xs text-gray-300 leading-relaxed font-sans whitespace-pre-wrap">
+                          {currentDay.theory.pentesterFocus}
+                        </p>
+                      </div>
 
-                      {/* Useful Resources, Cheat Sheets & RFC Specs */}
+                      {/* How To Come Up With & Construct Payloads */}
+                      <div className="bg-hacker-dark/50 border border-hacker-border p-4 rounded-lg flex flex-col gap-2.5">
+                        <h3 className="text-xs font-bold text-hacker-amber font-mono uppercase tracking-wider">
+                          PAYLOAD CRAFTING LOGIC & CONSTRUCTION
+                        </h3>
+                        <p className="text-xs text-gray-300 leading-relaxed font-mono bg-black/60 p-3 rounded border border-hacker-border/40 whitespace-pre-wrap">
+                          {currentDay.theory.payloadCrafting}
+                        </p>
+                      </div>
+
+                      {/* Burp Suite Setup & Proxy Configurations */}
+                      <div className="bg-hacker-dark/50 border border-hacker-border p-4 rounded-lg flex flex-col gap-2.5">
+                        <h3 className="text-xs font-bold text-sky-400 font-mono uppercase tracking-wider flex items-center gap-1.5">
+                          <Cpu size={14} /> BURP SUITE SETUP & PROXY REPEATER CONFIGURATION
+                        </h3>
+                        <p className="text-xs text-gray-300 leading-relaxed font-sans whitespace-pre-wrap">
+                          {currentDay.theory.burpSuiteSetup}
+                        </p>
+                      </div>
+
+                      {/* Blue Team Defense & Secure Coding Practices */}
+                      <div className="bg-hacker-dark/50 border border-hacker-green/40 p-4 rounded-lg flex flex-col gap-2.5">
+                        <h3 className="text-xs font-bold text-hacker-green font-mono uppercase tracking-wider flex items-center gap-1.5">
+                          <ShieldAlert size={14} /> BLUE TEAM DEFENSE & SECURE CODING PRACTICES
+                        </h3>
+                        <p className="text-xs text-gray-300 leading-relaxed font-sans whitespace-pre-wrap">
+                          {currentDay.theory.blueTeamDefense}
+                        </p>
+                      </div>
+
+                      {/* Useful Resources, Cheat Sheets & Specs */}
                       {currentDay.theory.usefulResources && currentDay.theory.usefulResources.length > 0 && (
                         <div className="bg-hacker-dark/40 border border-hacker-border p-4 rounded-lg flex flex-col gap-2.5">
                           <h4 className="text-xs font-bold text-white font-mono uppercase tracking-wider flex items-center gap-1.5">
@@ -348,21 +369,59 @@ function App() {
                     </div>
                   )}
 
-                  {/* Automation & Output */}
+                  {/* Automation & VDP Report Writing Tab */}
                   {activeTab === "automation" && (
                     <div className="flex flex-col gap-5">
 
-                      {/* Code Script View */}
+                      {/* Python Automation Script Suite */}
                       <div className="bg-hacker-dark/40 border border-hacker-border p-4 rounded-lg flex flex-col gap-3">
                         <div className="flex justify-between items-center text-xs text-hacker-muted font-mono border-b border-hacker-border/30 pb-2">
-                          <span>SCRIPT TEMPLATE (AUTOPARSING PROTOTYPE)</span>
-                          <span className="text-hacker-amber font-bold">{currentDay.automation.language.toUpperCase()}</span>
+                          <span className="flex items-center gap-1.5"><Terminal size={14} className="text-hacker-amber" /> PYTHON EXPLOIT AUTOMATION FRAMEWORK</span>
+                          <span className="text-hacker-amber font-bold">PYTHON 3.11</span>
                         </div>
-                        <pre className="bg-black/80 border border-hacker-border rounded p-3 text-xs text-hacker-green font-mono overflow-x-auto">
-                          <code>{currentDay.automation.scriptTemplate}</code>
+                        <pre className="bg-black/90 border border-hacker-border rounded p-3 text-xs text-hacker-green font-mono overflow-x-auto">
+                          <code>{currentDay.automation.pythonScript}</code>
                         </pre>
-                        <p className="text-xs text-gray-300 leading-relaxed">{currentDay.automation.explanation}</p>
+                        <p className="text-xs text-gray-300 leading-relaxed font-sans">{currentDay.automation.pythonExplanation}</p>
                       </div>
+
+                      {/* Bash CLI Command Automation Script Suite */}
+                      <div className="bg-hacker-dark/40 border border-hacker-border p-4 rounded-lg flex flex-col gap-3">
+                        <div className="flex justify-between items-center text-xs text-hacker-muted font-mono border-b border-hacker-border/30 pb-2">
+                          <span className="flex items-center gap-1.5"><Terminal size={14} className="text-sky-400" /> BASH COMMAND-LINE AUTOMATION SUITE</span>
+                          <span className="text-sky-400 font-bold">BASH 5.0</span>
+                        </div>
+                        <pre className="bg-black/90 border border-hacker-border rounded p-3 text-xs text-sky-300 font-mono overflow-x-auto">
+                          <code>{currentDay.automation.bashScript || `#!/usr/bin/env bash\n# Command Line Scan\ncurl -s "http://target.local"`}</code>
+                        </pre>
+                        <p className="text-xs text-gray-300 leading-relaxed font-sans">{currentDay.automation.bashExplanation}</p>
+                      </div>
+
+                      {/* HackerOne / Bugcrowd VDP Vulnerability Report Template */}
+                      {currentDay.automation.vdpReportTemplate && (
+                        <div className="bg-hacker-dark/60 border border-sky-400/40 p-4.5 rounded-xl flex flex-col gap-3">
+                          <div className="flex justify-between items-center border-b border-hacker-border/40 pb-2">
+                            <h4 className="text-xs font-bold text-sky-400 font-mono uppercase flex items-center gap-1.5">
+                              <FileText size={15} /> HACKERONE / BUGCROWD REPORT TEMPLATE
+                            </h4>
+                            <span className="text-[10px] bg-red-500/20 text-red-400 border border-red-500/30 px-2 py-0.5 rounded font-mono font-bold">
+                              {currentDay.automation.vdpReportTemplate.cvssVector} ({currentDay.automation.vdpReportTemplate.cvssScore})
+                            </span>
+                          </div>
+
+                          <div className="flex flex-col gap-2.5 font-mono text-xs text-gray-200">
+                            <div>
+                              <span className="text-hacker-amber font-bold">REPORT TITLE:</span> {currentDay.automation.vdpReportTemplate.title}
+                            </div>
+                            <div className="bg-black/60 p-3 rounded border border-hacker-border/40 font-sans text-xs flex flex-col gap-2">
+                              <div><span className="font-bold text-sky-400 font-mono">DESCRIPTION:</span> {currentDay.automation.vdpReportTemplate.description}</div>
+                              <div><span className="font-bold text-hacker-green font-mono">STEPS TO REPRODUCE:</span></div>
+                              <pre className="font-mono text-[11px] text-gray-300 whitespace-pre-wrap leading-relaxed">{currentDay.automation.vdpReportTemplate.stepsToReproduce}</pre>
+                              <div><span className="font-bold text-hacker-amber font-mono">DEVELOPER REMEDIATION:</span> {currentDay.automation.vdpReportTemplate.remediation}</div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
 
                       {/* Lesson Checklist */}
                       <div className="bg-hacker-dark/40 border border-hacker-border p-4 rounded-lg flex flex-col gap-3">
@@ -394,7 +453,7 @@ function App() {
                       {/* Social ledger sharing & GitHub pushes triggers */}
                       <SocialIntegrator
                         lessonTitle={currentDay.title}
-                        scriptContent={currentDay.automation.scriptTemplate}
+                        scriptContent={currentDay.automation.pythonScript}
                         gitHubSettings={gitHubSettings}
                         onUpdateGitHub={updateGitHubSettings}
                         onMarkCommitted={() => {

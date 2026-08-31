@@ -18,19 +18,23 @@ export interface DayLesson {
   theory: {
     title: string;
     duration: string; // e.g. "30 Mins"
-    whatYouAreDoing: string; // Detailed breakdown of the exact hacker/auditor actions
-    content: string; // PortSwigger-aligned comprehensive theory explanation
-    stepByStepTutorial: string[]; // Step-by-step practical tutorial guide
-    developerMindset: string;
-    psychologicalError: string;
-    attackVectors: string;
-    usefulResources: { name: string; url: string; category: string }[]; // Cheat sheets, RFCs, tool docs
+    whatYouAreDoing: string; // Detailed breakdown of researcher actions
+    vulnerabilityOrigin: string; // How the vulnerability comes about (Root Cause)
+    pentesterFocus: string; // What to look for as a pentester
+    payloadCrafting: string; // How to come up with and construct payloads
+    burpSuiteSetup: string; // How to set up Burp Suite (Proxy, Match/Replace, Extensions)
+    blueTeamDefense: string; // What defenders look for, prevention & secure coding
+    developerMindset: string; // Developer mindset assumption
+    psychologicalError: string; // Cognitive bias / error
+    attackVectors: string; // Attack vector execution chain
+    usefulResources: { name: string; url: string; category: string }[]; // External specs & cheat sheets
     industryInsight: string; // Industry insight & fun fact placed at the bottom
   };
   digitalArena: {
     title: string;
     duration: string; // "90 Mins"
-    labLink: string; // e.g. PortSwigger lab URL
+    stepByStepTutorial: string[]; // Step-by-step tutorial inside the Playground Area
+    labLink: string; // PortSwigger lab reference
     instructions: string;
     interactiveConsolePlaceholder: string;
     correctFlag: string;
@@ -40,9 +44,18 @@ export interface DayLesson {
   automation: {
     title: string;
     duration: string; // "30 Mins"
-    language: "python" | "bash";
-    scriptTemplate: string;
-    explanation: string;
+    pythonScript: string; // Complete Python automation framework
+    bashScript: string; // Complete Bash automation script
+    pythonExplanation: string;
+    bashExplanation: string;
+    vdpReportTemplate: {
+      title: string;
+      cvssVector: string;
+      cvssScore: number;
+      description: string;
+      stepsToReproduce: string;
+      remediation: string;
+    };
     checklist: ChecklistItem[];
     committed: boolean;
     reported: boolean;

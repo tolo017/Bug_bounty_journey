@@ -147,13 +147,32 @@ export const InteractiveArena: React.FC<InteractiveArenaProps> = ({ day, onVerif
         </span>
       </div>
 
+      {/* Playground Area Step-by-Step Practical Tutorial Guide */}
+      {day.digitalArena.stepByStepTutorial && (
+        <div className="bg-hacker-dark/70 border border-hacker-green/40 p-4.5 rounded-xl flex flex-col gap-3 shadow-md">
+          <div className="text-xs font-bold text-hacker-green font-mono flex items-center gap-1.5 uppercase tracking-wider">
+            <Sparkles size={16} /> PLAYGROUND AREA: STEP-BY-STEP PRACTICAL TUTORIAL
+          </div>
+          <div className="flex flex-col gap-2 font-sans text-xs text-gray-200">
+            {day.digitalArena.stepByStepTutorial.map((step, idx) => (
+              <div key={idx} className="flex items-start gap-2.5 bg-black/50 p-2.5 rounded-lg border border-hacker-border/40">
+                <span className="bg-hacker-green/20 text-hacker-green font-mono font-bold px-2 py-0.5 rounded text-[10px]">
+                  {idx + 1}
+                </span>
+                <span className="leading-snug">{step}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Target Source Code & Vulnerability Inspection Panel ("What to look for") */}
       <div className="bg-hacker-dark border border-hacker-border p-4 rounded-xl flex flex-col gap-3">
         <div className="flex items-center gap-2 text-xs font-bold text-hacker-amber font-mono">
-          <Code2 size={16} /> WHAT TO LOOK FOR IN THE SOURCE CODE
+          <Code2 size={16} /> TARGET CODE INSPECTION & WEAKNESS LOCATION
         </div>
         <p className="text-xs text-gray-300 leading-relaxed font-sans">
-          {knowledge.whatToLookFor}
+          {day.theory.pentesterFocus || knowledge.whatToLookFor}
         </p>
 
         {/* Vulnerable Code Snippet Display */}
