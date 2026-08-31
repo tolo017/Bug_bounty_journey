@@ -19,6 +19,8 @@ export interface DayLesson {
     title: string;
     duration: string; // e.g. "30 Mins"
     content: string; // Markdown / Rich Text for theory explanation
+    funAnalogy: string; // Beginner-friendly real-world fun analogy
+    stepByStepTutorial: string[]; // Step-by-step practical tutorial guide
     developerMindset: string;
     psychologicalError: string;
     attackVectors: string;
