@@ -226,23 +226,24 @@ function App() {
                 {/* Tab content renderer */}
                 <div className="min-h-[300px]">
 
-                  {/* Theoretical Theory (30 Mins) */}
+                  {/* Theoretical Principles & Auditing (30 Mins) */}
                   {activeTab === "theory" && (
                     <div className="flex flex-col gap-5">
-                      {/* Simple Explanation & Fun Analogy Card */}
-                      <div className="bg-gradient-to-r from-amber-950/30 via-hacker-card to-hacker-dark border border-hacker-amber/40 p-4.5 rounded-xl flex flex-col gap-3 shadow-md">
-                        <div className="text-xs font-bold text-hacker-amber font-mono flex items-center gap-1.5 uppercase tracking-wider">
-                          <Sparkles size={16} /> BEGINNER-FRIENDLY EXPLANATION & FUN ANALOGY
+
+                      {/* What You Are Doing In This Lesson Card */}
+                      <div className="bg-gradient-to-r from-emerald-950/30 via-hacker-card to-hacker-dark border border-hacker-green/40 p-4.5 rounded-xl flex flex-col gap-2.5 shadow-md">
+                        <div className="text-xs font-bold text-hacker-green font-mono flex items-center gap-1.5 uppercase tracking-wider">
+                          <Terminal size={16} /> WHAT YOU ARE DOING IN THIS LESSON
                         </div>
-                        <div className="text-xs text-white leading-relaxed font-sans font-medium whitespace-pre-wrap">
-                          {currentDay.theory.funAnalogy || `Imagine an unchecked VIP gate...`}
+                        <div className="text-xs text-white leading-relaxed font-sans whitespace-pre-wrap">
+                          {currentDay.theory.whatYouAreDoing}
                         </div>
                       </div>
 
-                      {/* Main Theory Explanation */}
+                      {/* Main Theory & Concept Explanation */}
                       <div className="bg-hacker-dark/40 border border-hacker-border p-4 rounded-lg flex flex-col gap-3">
                         <h3 className="text-sm font-bold text-white font-mono flex items-center gap-2">
-                          <BookOpen size={16} className="text-hacker-amber" /> UNDERSTANDING THE CONCEPT & WHAT TO LOOK FOR
+                          <BookOpen size={16} className="text-hacker-amber" /> VULNERABILITY CONCEPTS & AUDITING METHODOLOGY
                         </h3>
                         <p className="text-xs text-gray-300 leading-relaxed font-sans whitespace-pre-wrap">
                           {currentDay.theory.content}
@@ -251,18 +252,41 @@ function App() {
 
                       {/* Step-by-Step Practical Walkthrough Tutorial */}
                       {currentDay.theory.stepByStepTutorial && (
-                        <div className="bg-hacker-dark/60 border border-hacker-green/40 p-4.5 rounded-xl flex flex-col gap-3">
-                          <h4 className="text-xs font-bold text-hacker-green font-mono uppercase flex items-center gap-1.5">
-                            <Terminal size={15} /> STEP-BY-STEP PRACTICAL TUTORIAL GUIDE
+                        <div className="bg-hacker-dark/60 border border-hacker-amber/40 p-4.5 rounded-xl flex flex-col gap-3">
+                          <h4 className="text-xs font-bold text-hacker-amber font-mono uppercase flex items-center gap-1.5">
+                            <Sparkles size={15} /> STEP-BY-STEP PRACTICAL GUIDED WALKTHROUGH
                           </h4>
                           <div className="flex flex-col gap-2 font-sans text-xs text-gray-200">
                             {currentDay.theory.stepByStepTutorial.map((step, idx) => (
                               <div key={idx} className="flex items-start gap-2.5 bg-black/40 p-2.5 rounded-lg border border-hacker-border/40">
-                                <span className="bg-hacker-green/20 text-hacker-green font-mono font-bold px-2 py-0.5 rounded text-[10px]">
+                                <span className="bg-hacker-amber/20 text-hacker-amber font-mono font-bold px-2 py-0.5 rounded text-[10px]">
                                   {idx + 1}
                                 </span>
                                 <span className="leading-snug">{step}</span>
                               </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Useful Resources, Cheat Sheets & RFC Specs */}
+                      {currentDay.theory.usefulResources && currentDay.theory.usefulResources.length > 0 && (
+                        <div className="bg-hacker-dark/40 border border-hacker-border p-4 rounded-lg flex flex-col gap-2.5">
+                          <h4 className="text-xs font-bold text-white font-mono uppercase tracking-wider flex items-center gap-1.5">
+                            <Info size={14} className="text-sky-400" /> USEFUL RESOURCES, CHEAT SHEETS & SPECS
+                          </h4>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-1">
+                            {currentDay.theory.usefulResources.map((res, idx) => (
+                              <a
+                                key={idx}
+                                href={res.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="bg-hacker-dark border border-hacker-border/70 hover:border-sky-400 p-2.5 rounded-lg text-xs font-mono text-gray-200 flex items-center justify-between transition-all group"
+                              >
+                                <span className="group-hover:text-sky-400 transition-colors font-medium">{res.name}</span>
+                                <span className="text-[10px] bg-hacker-card px-2 py-0.5 rounded text-hacker-muted">{res.category}</span>
+                              </a>
                             ))}
                           </div>
                         </div>
@@ -279,10 +303,14 @@ function App() {
                         </div>
                       </div>
 
-                      <div className="bg-hacker-dark/40 border border-hacker-border p-4 rounded-lg flex flex-col gap-2">
-                        <h4 className="text-xs font-bold text-hacker-amber font-mono">REAL-WORLD ATTACK VECTOR CHAIN</h4>
-                        <p className="text-xs text-gray-300 leading-relaxed">{currentDay.theory.attackVectors}</p>
-                      </div>
+                      {/* Industry Insight & Statistic (Positioned at Bottom) */}
+                      {currentDay.theory.industryInsight && (
+                        <div className="bg-hacker-dark/90 border border-hacker-amber/40 p-4 rounded-xl flex flex-col gap-2 mt-1">
+                          <div className="text-xs text-white leading-relaxed font-sans font-medium whitespace-pre-wrap">
+                            {currentDay.theory.industryInsight}
+                          </div>
+                        </div>
+                      )}
 
                       <div className="flex justify-end mt-2">
                         <button

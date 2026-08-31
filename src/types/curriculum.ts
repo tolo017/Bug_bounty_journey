@@ -18,12 +18,14 @@ export interface DayLesson {
   theory: {
     title: string;
     duration: string; // e.g. "30 Mins"
-    content: string; // Markdown / Rich Text for theory explanation
-    funAnalogy: string; // Beginner-friendly real-world fun analogy
+    whatYouAreDoing: string; // Detailed breakdown of the exact hacker/auditor actions
+    content: string; // PortSwigger-aligned comprehensive theory explanation
     stepByStepTutorial: string[]; // Step-by-step practical tutorial guide
     developerMindset: string;
     psychologicalError: string;
     attackVectors: string;
+    usefulResources: { name: string; url: string; category: string }[]; // Cheat sheets, RFCs, tool docs
+    industryInsight: string; // Industry insight & fun fact placed at the bottom
   };
   digitalArena: {
     title: string;
