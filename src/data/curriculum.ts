@@ -1,23 +1,134 @@
 import { Week, DayLesson, BossLab } from "../types/curriculum";
 
+// Helper to generate beginner-friendly lesson content for all 12 weeks
+const getLessonDetails = (weekIndex: number, dayIndex: number, dayTitle: string, competency: string) => {
+  const analogies: Record<number, string> = {
+    0: `💡 FUN ANALOGY (Client-Side Security):\nImagine a coat-check attendant at a party. Instead of checking your physical ticket, they ask "What jacket is yours?" If you say "The expensive leather jacket," they hand it to you! DOM & Prototype Pollution happen when the browser trusts input from the URL or DOM without checking if you own or control it.`,
+    1: `💡 FUN ANALOGY (Secret Hunting):\nImagine a developer moving into a new apartment and hiding their spare house key under the doormat. Even after painting the front door, the key is still sitting under the mat! Developers accidentally leave API keys, cloud secrets, and database passwords inside compiled JS files or Git commit histories.`,
+    2: `💡 FUN ANALOGY (IDOR Bypasses):\nImagine a hotel where every room keycard has the room number printed in marker on the back. If your keycard says "Room 101", and you scribble "102" over it with a pen, the door unlocks! IDOR happens when an app trusts a user ID in the request header or URL without checking if you belong to that account.`,
+    3: `💡 FUN ANALOGY (Business Logic Flaws):\nImagine a vending machine that sells sodas for $2.00. If you enter "-5 sodas", the machine gives you $10.00 cash back instead of charging you! Business logic flaws happen when developers forget to check if numbers make sense in real life (like negative prices or race conditions).`,
+    4: `💡 FUN ANALOGY (JWT & Session Exploits):\nImagine a VIP concert wristband stamped with ink. If you erase the security stamp using alcohol and write "STAGE PASS - NONE" in sharpie, the bouncer lets you backstage without verifying who signed it! JWT 'None' algorithm attacks happen when servers accept unsigned security tokens.`,
+    5: `💡 FUN ANALOGY (Asset Mapping & Recon):\nImagine a detective trying to locate every entrance to a giant skyscraper. Instead of knocking on the front glass door, they check the emergency exits, basement loading docks, and rooftop helicopter pads. Subdomain recon finds forgotten internal servers that lack security patches.`,
+    6: `💡 FUN ANALOGY (API Security & BOLA):\nImagine an online food delivery app. When you order Burger #5, the app sends \`GET /api/orders/5\`. If you change it to \`GET /api/orders/6\`, you can view another customer's full home address and credit card details! BOLA occurs when APIs fail to verify resource ownership.`,
+    7: `💡 FUN ANALOGY (Parameter Mining):\nImagine a secret club door with no doorknob. If you whisper "debug=true" or "admin=1" through the keyhole, the door swings wide open! Parameter mining tools (like Arjun) test thousands of secret parameter names to find hidden developer backdoors.`,
+    8: `💡 FUN ANALOGY (Corporate VDP Reporting):\nImagine calling 911 to report a building fire. You don't just say "Fire!"; you give the exact address, floor number, room, and how to put it out. A great VDP report provides clear step-by-step reproduction steps so engineering teams can fix the bug immediately.`,
+    9: `💡 FUN ANALOGY (Network & Port Recon):\nImagine walking down a quiet neighborhood street at night, gently tapping on front doors, back windows, and side gates to see which ones are unlocked. Nmap port scanning checks every network port to identify running services.`,
+    10: `💡 FUN ANALOGY (Cloud Infrastructure Auditing):\nImagine an office receptionist who trusts anyone wearing a high-vis vest. If you ask her, "Please print out the master safe password from the internal cloud server," she prints it out and hands it to you! SSRF attacks trick cloud servers into exfiltrating private AWS/GCP metadata credentials.`,
+    11: `💡 FUN ANALOGY (Advanced Exploit Chains):\nImagine a row of dominoes. Knocking over the first tiny domino (a small file upload flaw) triggers a medium domino (path traversal), which knocks down the giant domino (Remote Code Execution)! Exploit chaining connects small bugs into a high-impact takeover.`
+  };
+
+  const tutorials: Record<number, string[]> = {
+    0: [
+      `Step 1: Inspect the target code snippet in the Digital Arena panel below to locate un-sanitized dynamic variables.`,
+      `Step 2: Identify where user input (query strings or DOM properties) flows without sanitization.`,
+      `Step 3: Construct your exploit payload (e.g., __proto__.isAdmin=true or clobbering iframe IDs).`,
+      `Step 4: Click 'Run Exploit' to execute your payload in the terminal shell and retrieve the flag!`,
+      `Step 5: Copy the captured flag into the verification box and click 'Verify & Complete'.`
+    ],
+    1: [
+      `Step 1: Audit compiled JavaScript bundles or source files looking for API key signatures (AWS, Firebase, GCP).`,
+      `Step 2: Search for regex patterns matching secret strings (e.g., AKIA..., AIza..., or secret_key).`,
+      `Step 3: Type your secret extraction command or regex payload in the payload workspace.`,
+      `Step 4: Execute the script in the terminal shell to extract leaked credentials and system flags.`,
+      `Step 5: Submit the verified flag to complete the lesson and record your research log.`
+    ],
+    2: [
+      `Step 1: Examine the API endpoint structure (e.g., /api/user/101 or X-User-ID: 101).`,
+      `Step 2: Test modifying numeric IDs, substituting UUIDs, or using HTTP Parameter Pollution (HPP).`,
+      `Step 3: Type your header override or parameter injection string in the exploit box.`,
+      `Step 4: Run the exploit in the terminal shell to bypass authorization checks and capture the flag.`,
+      `Step 5: Copy the flag into the submission box to earn XP and unlock the next lesson!`
+    ],
+    3: [
+      `Step 1: Review the business workflow order (e.g. Item Select -> Discount -> Payment -> Disbursement).`,
+      `Step 2: Identify parameter logic flaws such as negative amounts, fractional quantities, or step-skipping.`,
+      `Step 3: Type your business logic payload (e.g. {"quantity": -5} or out-of-order execution steps).`,
+      `Step 4: Run the exploit to trigger state collision and retrieve the challenge flag.`,
+      `Step 5: Paste the flag into the submission box and confirm completion.`
+    ],
+    4: [
+      `Step 1: Inspect the JWT session token structure (Header.Payload.Signature).`,
+      `Step 2: Identify vulnerabilities like 'alg': 'none', weak secret keys, or JWK header injections.`,
+      `Step 3: Write your forged token payload specifying administrative roles.`,
+      `Step 4: Execute the payload in the terminal shell to bypass authentication barriers.`,
+      `Step 5: Submit the extracted flag to claim your JWT Forger badge!`
+    ],
+    5: [
+      `Step 1: Use automated subdomain enumeration techniques (Subfinder, Amass, Massdns).`,
+      `Step 2: Probe for live HTTP endpoints and virtual host (VHost) configurations using ffuf.`,
+      `Step 3: Type your recon command or VHost target parameter in the payload workspace.`,
+      `Step 4: Run the scan in the terminal shell to discover hidden admin subdomains and flags.`,
+      `Step 5: Verify the flag to record your Recon Specialist achievement.`
+    ],
+    6: [
+      `Step 1: Reverse-engineer exposed Swagger / OpenAPI endpoints to map schema objects.`,
+      `Step 2: Test for Broken Object Level Authorization (BOLA) by changing object resource IDs.`,
+      `Step 3: Type your API method override or BOLA payload string in the terminal prompt.`,
+      `Step 4: Execute the exploit to mutate administrative API configurations and grab the flag.`,
+      `Step 5: Complete verification and log your daily research progress.`
+    ],
+    7: [
+      `Step 1: Scan target web endpoints for un-linked parameters using Arjun or Param Miner logic.`,
+      `Step 2: Look for hidden administrative flags like debug=true, admin=1, or X-HTTP-Method-Override.`,
+      `Step 3: Type your parameter mining string in the payload workspace.`,
+      `Step 4: Run the exploit in the shell to discover secret caching parameters and flags.`,
+      `Step 5: Verify the flag to complete the parameter mining module.`
+    ],
+    8: [
+      `Step 1: Organize your vulnerability findings into Executive Summary, Impact, and PoC steps.`,
+      `Step 2: Calculate accurate CVSS v3.1 / v4.0 severity vector strings.`,
+      `Step 3: Type your report summary and remediation guidance in the structured fields.`,
+      `Step 4: Run verification to submit your corporate security assessment.`,
+      `Step 5: Submit the report to earn corporate reporting credentials.`
+    ],
+    9: [
+      `Step 1: Optimize Nmap scan timing parameters to avoid firewall rate-limiting (-T3/T4).`,
+      `Step 2: Probe service banners and cryptographic SSL/TLS cipher suites on target ports.`,
+      `Step 3: Type your firewall-evading scan string in the payload workspace.`,
+      `Step 4: Run the network scan in the shell to locate un-filtered administration ports.`,
+      `Step 5: Submit the verified network flag.`
+    ],
+    10: [
+      `Step 1: Identify Server-Side Request Forgery (SSRF) endpoints targeting AWS/GCP metadata.`,
+      `Step 2: Test bypassing IMDSv2 token headers using Open Redirects or local headers.`,
+      `Step 3: Type your SSRF metadata query string (e.g., http://169.254.169.254/latest/meta-data/).`,
+      `Step 4: Execute the SSRF exploit to exfiltrate cloud service tokens and flags.`,
+      `Step 5: Paste the flag to unlock the Cloud Exfiltrator badge!`
+    ],
+    11: [
+      `Step 1: Identify initial entry points (e.g. path traversal during SVG file upload).`,
+      `Step 2: Chain local file inclusion (LFI) with SSRF query parameters targeting internal nodes.`,
+      `Step 3: Write your multi-stage exploit chain payload string in the workspace.`,
+      `Step 4: Run the exploit chain in the terminal shell to achieve Remote Code Execution (RCE).`,
+      `Step 5: Copy the grandmaster flag and submit to complete the 12-week program!`
+    ]
+  };
+
+  const simpleExplanations: Record<number, string> = {
+    0: `Mastering ${dayTitle} (${competency}) is beginner-friendly! You are learning how browser JavaScript variables can be modified by manipulating the HTML DOM tree or query string.`,
+    1: `Mastering ${dayTitle} (${competency}) is beginner-friendly! You are learning how to scan code files and server configurations to find accidentally published API keys and passwords.`,
+    2: `Mastering ${dayTitle} (${competency}) is beginner-friendly! You are learning how web apps check user permissions, and how changing an ID number lets you view another person's account.`,
+    3: `Mastering ${dayTitle} (${competency}) is beginner-friendly! You are learning how apps process workflows like shopping carts and payments, and how unexpected inputs break logic.`,
+    4: `Mastering ${dayTitle} (${competency}) is beginner-friendly! You are learning how web sessions use security tokens (JWTs) to remember logins, and how modifying token signatures grants admin rights.`,
+    5: `Mastering ${dayTitle} (${competency}) is beginner-friendly! You are learning how to map out a company's entire digital presence across subdomains, IP ranges, and open ports.`,
+    6: `Mastering ${dayTitle} (${competency}) is beginner-friendly! You are learning how modern mobile apps and web frontends communicate with backend APIs, and how to find hidden API endpoints.`,
+    7: `Mastering ${dayTitle} (${competency}) is beginner-friendly! You are learning how to discover hidden URL parameters that developers used during testing but forgot to remove.`,
+    8: `Mastering ${dayTitle} (${competency}) is beginner-friendly! You are learning how to translate technical hacking findings into clear, high-impact security reports for companies.`,
+    9: `Mastering ${dayTitle} (${competency}) is beginner-friendly! You are learning how network packets travel across firewalls and how port scanners fingerprint active servers.`,
+    10: `Mastering ${dayTitle} (${competency}) is beginner-friendly! You are learning how cloud servers (AWS, Azure, GCP) store access keys and how SSRF tricks servers into leaking them.`,
+    11: `Mastering ${dayTitle} (${competency}) is beginner-friendly! You are learning how expert researchers combine small, low-severity bugs into complete server takeovers.`
+  };
+
+  return {
+    content: simpleExplanations[weekIndex],
+    funAnalogy: analogies[weekIndex],
+    stepByStepTutorial: tutorials[weekIndex]
+  };
+};
+
 // Helper to generate weeks data
 export const generateDefaultCurriculum = (): Week[] => {
   const weeks: Week[] = [];
-
-  const competencies = [
-    "Client-Side Security",
-    "Secret Hunting & Recon",
-    "Access Control (IDOR)",
-    "Business Logic Security",
-    "Session & Token Management",
-    "Asset Mapping (Go/Linux)",
-    "API Security Auditing",
-    "Parameter & Logic Mining",
-    "Corporate Reporting & VDP",
-    "Network & Port Recon",
-    "Cloud Infrastructure Auditing",
-    "Advanced Chain Vulnerabilities"
-  ];
 
   const topics = [
     {
@@ -212,6 +323,8 @@ export const generateDefaultCurriculum = (): Week[] => {
       const labLink = topicInfo.days[d].lab;
       const dayId = `week-${w + 1}-${dayName.toLowerCase()}`;
 
+      const details = getLessonDetails(w, d, dayTitle, topicInfo.competency);
+
       days.push({
         id: dayId,
         weekIndex: w,
@@ -224,17 +337,11 @@ export const generateDefaultCurriculum = (): Week[] => {
         theory: {
           title: "Theoretical Theory & Logic",
           duration: "30 Mins",
-          content: `Mastering ${dayTitle} (${topicInfo.competency}) is easier than it sounds! Beginners can break this down into three simple concepts: What the code is doing, where the developer made an assumption, and how we test it.\n\nWHAT TO LOOK FOR IN THE CODE:\n1. Open your browser Developer Tools (F12) or inspect JavaScript bundles for variable names receiving un-sanitized input.\n2. Look for parameters in request headers or body structures that lack server-side authorization checks.\n3. Test input variations (such as adding special characters, custom header keys, or nested JSON parameters).\n\nHOW TO EXPLAIN THIS TO OTHERS:\nWhen explaining ${dayTitle} to a colleague or triager, describe it as: 'The application trusted input from the user browser without verifying ownership or sanitizing key names, allowing an attacker to manipulate application state.'`,
-          funAnalogy: `💡 FUN ANALOGY:\nImagine a VIP coat-check room. Normally, you hand the attendant a coat ticket number, and they bring your jacket. But instead of checking your ticket, the attendant just asks, "What's your jacket color?" If you say "Red leather," they hand you the expensive red leather jacket belonging to someone else! The app trusted your word without checking if you actually owned the item.`,
-          stepByStepTutorial: [
-            `Step 1: Read the target code snippet in the inspection box below to find the un-sanitized parameter name.`,
-            `Step 2: Note how the application receives data (e.g., query params, headers, or DOM properties).`,
-            `Step 3: Construct your exploit payload string in the payload workspace (e.g., adding __proto__, custom headers, or parameter overrides).`,
-            `Step 4: Click 'Run Exploit' to execute your payload in the terminal shell and extract the system flag!`,
-            `Step 5: Copy the captured flag into the verification box below and click 'Verify & Complete' to earn XP!`
-          ],
-          developerMindset: `The developer wanted the app to be fast and user-friendly. They assumed that because standard users interact through buttons, no one would manually tamper with HTTP parameters or DOM objects.`,
-          psychologicalError: `Convenience Over Validation: Relying on front-end UI restrictions rather than enforcing strict server-side validation.`,
+          content: details.content,
+          funAnalogy: details.funAnalogy,
+          stepByStepTutorial: details.stepByStepTutorial,
+          developerMindset: `The engineering team prioritizes rapid feature deployment and positive user experience paths. Under deadline pressure, developers assume that parameters originating from their own front-end app or client environment are inherently safe, failing to validate data structures on the server or browser runtime.`,
+          psychologicalError: `Implicit Trust Bias & Perimeter Blindness: Assuming that because an interface control (like an input field) limits user actions in standard browsers, malicious actors cannot bypass constraints using proxy tools, cURL, or custom script payloads.`,
           attackVectors: `Audit Code -> Identify Weak Input -> Craft Payload -> Run Terminal Exploit -> Capture & Submit Flag.`
         },
         digitalArena: {
