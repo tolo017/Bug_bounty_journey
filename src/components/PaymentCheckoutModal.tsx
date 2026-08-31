@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AccessState } from "../hooks/useLMSState";
-import { CreditCard, ExternalLink, ShieldCheck, Lock, Sparkles, CheckCircle, KeyRound, Settings, ArrowRight } from "lucide-react";
+import { CreditCard, ShieldCheck, Sparkles, KeyRound, Settings, ArrowRight } from "lucide-react";
 
 interface PaymentCheckoutModalProps {
   access: AccessState;
@@ -17,7 +17,7 @@ export const PaymentCheckoutModal: React.FC<PaymentCheckoutModalProps> = ({
   onUnlockPayment,
   onToggleAdminAccess
 }) => {
-  // Configurable Payment Link Slot
+  // Configurable Payment Link Slot (Only editable by builder)
   const [paymentLinkSlot, setPaymentLinkSlot] = useState(
     localStorage.getItem("bbm_payment_link_slot") || "https://www.paypal.com/paypalme/yourusername/9.50"
   );
@@ -34,21 +34,26 @@ export const PaymentCheckoutModal: React.FC<PaymentCheckoutModalProps> = ({
   const handleSavePaymentSlot = () => {
     localStorage.setItem("bbm_payment_link_slot", paymentLinkSlot.trim());
     setShowLinkConfig(false);
-    setStatusMsg({ text: "Payment Gateway Slot URL updated successfully!", isError: false });
+    setStatusMsg({ text: "Payment Gateway Slot URL locked and updated!", isError: false });
   };
 
   const handleProceedToGateway = () => {
-    window.open(paymentLinkSlot, "_blank");
+    const activeSlot = localStorage.getItem("bbm_payment_link_slot") || paymentLinkSlot;
+    window.open(activeSlot, "_blank");
     setStatusMsg({
-      text: "Redirected to Payment Gateway! After completing payment, enter your Transaction ID below or confirm completion.",
+      text: "Redirecting to your payment checkout screen! Enter your transaction reference below after completion.",
       isError: false
     });
   };
 
   const handleConfirmPaid = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!txnId.trim()) {
+      setStatusMsg({ text: "Please enter your transaction ID / reference email.", isError: true });
+      return;
+    }
     onUnlockPayment();
-    setStatusMsg({ text: "Payment Verified! Full Lifetime Access Unlocked.", isError: false });
+    setStatusMsg({ text: "Payment Confirmed! Lifetime Pro Access Unlocked.", isError: false });
     setTimeout(() => {
       onClose();
     }, 1000);
@@ -105,20 +110,24 @@ export const PaymentCheckoutModal: React.FC<PaymentCheckoutModalProps> = ({
         {/* Gateway Redirect Trigger */}
         <div className="flex flex-col gap-3">
           <div className="flex justify-between items-center text-xs font-mono">
-            <span className="font-bold text-white uppercase">PAYMENT GATEWAY SLOT</span>
-            <button
-              type="button"
-              onClick={() => setShowLinkConfig(!showLinkConfig)}
-              className="text-[10px] text-hacker-amber hover:text-white flex items-center gap-1"
-            >
-              <Settings size={11} /> [Configure Payment Link Slot]
-            </button>
+            <span className="font-bold text-white uppercase">SECURE PAYMENT GATEWAY</span>
+
+            {/* Payment link configuration button ONLY visible to Builder/Admin */}
+            {access.isAdmin && (
+              <button
+                type="button"
+                onClick={() => setShowLinkConfig(!showLinkConfig)}
+                className="text-[10px] text-hacker-amber hover:text-white flex items-center gap-1"
+              >
+                <Settings size={11} /> [Admin: Edit Payment Slot Link]
+              </button>
+            )}
           </div>
 
-          {/* Configurable Payment Slot Input for Website Builder */}
-          {showLinkConfig && (
+          {/* Builder Payment Slot Configurator */}
+          {access.isAdmin && showLinkConfig && (
             <div className="bg-hacker-dark p-3 rounded-lg border border-hacker-border flex flex-col gap-2">
-              <label className="text-[10px] text-hacker-muted font-mono">Your PayPal / Payment Gateway Slot URL:</label>
+              <label className="text-[10px] text-hacker-amber font-mono">Builder Slot Payment URL:</label>
               <div className="flex gap-2">
                 <input
                   type="text"
@@ -132,7 +141,7 @@ export const PaymentCheckoutModal: React.FC<PaymentCheckoutModalProps> = ({
                   onClick={handleSavePaymentSlot}
                   className="bg-hacker-green text-black font-mono font-bold text-xs px-3 py-1 rounded"
                 >
-                  Save Slot
+                  Save Link
                 </button>
               </div>
             </div>
@@ -146,7 +155,7 @@ export const PaymentCheckoutModal: React.FC<PaymentCheckoutModalProps> = ({
             <CreditCard size={18} /> Proceed to Payment Screen ($9.50) <ArrowRight size={16} />
           </button>
           <span className="text-[10px] text-center text-hacker-muted font-mono">
-            Clicking redirects to your payment provider slot in a new tab.
+            Directs to the official payment checkout provider in a secure window.
           </span>
         </div>
 
@@ -177,7 +186,7 @@ export const PaymentCheckoutModal: React.FC<PaymentCheckoutModalProps> = ({
             onClick={() => setShowBuilderSlot(!showBuilderSlot)}
             className="text-[11px] text-hacker-muted hover:text-white font-mono flex items-center gap-1"
           >
-            <KeyRound size={12} /> Website Builder / Admin Access Slot
+            <KeyRound size={12} /> Website Builder Access Slot
           </button>
 
           {showBuilderSlot && (
@@ -195,7 +204,7 @@ export const PaymentCheckoutModal: React.FC<PaymentCheckoutModalProps> = ({
                   type="submit"
                   className="bg-hacker-amber text-black font-mono font-bold text-xs px-3 rounded"
                 >
-                  Bypass Payment
+                  Bypass
                 </button>
               </div>
             </form>
