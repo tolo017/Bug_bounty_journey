@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AccessState } from "../hooks/useLMSState";
-import { CreditCard, Sparkles, ArrowRight, ShieldCheck } from "lucide-react";
+import { CreditCard, Sparkles, ShieldCheck } from "lucide-react";
 
 interface PaymentCheckoutModalProps {
   access: AccessState;
@@ -14,22 +14,11 @@ export const PaymentCheckoutModal: React.FC<PaymentCheckoutModalProps> = ({
   onClose,
   onUnlockPayment
 }) => {
-  // Official Production PayPal Link for merchant tolootieno@hotmail.com
-  const PRODUCTION_PAYPAL_LINK = "https://www.paypal.com/paypalme/tolootieno/9.50";
-
   // Verification State
   const [txnId, setTxnId] = useState("");
   const [statusMsg, setStatusMsg] = useState({ text: "", isError: false });
 
   if (!isOpen) return null;
-
-  const handleProceedToGateway = () => {
-    window.open(PRODUCTION_PAYPAL_LINK, "_blank");
-    setStatusMsg({
-      text: "Opening secure PayPal checkout window for tolootieno@hotmail.com ($9.50 USD). Enter your PayPal transaction ID below after completion to unlock full platform access.",
-      isError: false
-    });
-  };
 
   const handleConfirmPaid = (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,7 +45,7 @@ export const PaymentCheckoutModal: React.FC<PaymentCheckoutModalProps> = ({
             </div>
             <div>
               <h2 className="text-lg font-bold text-white font-mono">Bug Bounty Mastery - Official Payment Gateway</h2>
-              <p className="text-xs text-hacker-muted">Merchant: tolootieno@hotmail.com ($9.50 USD)</p>
+              <p className="text-xs text-hacker-muted">Lifetime Pro Bootcamp License ($9.50 USD)</p>
             </div>
           </div>
           <button
@@ -73,30 +62,36 @@ export const PaymentCheckoutModal: React.FC<PaymentCheckoutModalProps> = ({
             <Sparkles size={14} /> PRO BOOTCAMP LIFETIME ACCESS ($9.50 USD)
           </div>
           <ul className="text-gray-300 flex flex-col gap-1.5 leading-relaxed">
-            <li className="flex items-center gap-2">✓ Full 12-Week (72 Unique Daily Lessons) Curriculum</li>
+            <li className="flex items-center gap-2">✓ Full 12-Week (72 Broad Daily Lessons) Curriculum</li>
             <li className="flex items-center gap-2">✓ AI Research Log Generator for LinkedIn & CV Badges</li>
             <li className="flex items-center gap-2">✓ GitHub REST API Integration & Real Repository Script Pushes</li>
             <li className="flex items-center gap-2">✓ Live Bug Bounty Program Directory & VDP Report Templates</li>
           </ul>
         </div>
 
-        {/* Official PayPal Redirect Trigger */}
-        <div className="flex flex-col gap-3">
-          <div className="flex justify-between items-center text-xs font-mono">
+        {/* Official PayPal Form Integration */}
+        <div className="flex flex-col items-center gap-3 bg-hacker-dark/80 p-5 rounded-xl border border-hacker-amber/30 text-center">
+          <div className="flex justify-between items-center w-full text-xs font-mono mb-2">
             <span className="font-bold text-white uppercase flex items-center gap-1.5">
-              <ShieldCheck size={15} className="text-hacker-green" /> OFFICIAL PAYPAL CHECKOUT GATEWAY
+              <ShieldCheck size={15} className="text-hacker-green" /> SECURE PAYPAL PAYMENT
             </span>
             <span className="text-hacker-amber font-bold">$9.50 ONE-TIME</span>
           </div>
 
-          <button
-            onClick={handleProceedToGateway}
-            className="w-full bg-hacker-amber hover:bg-amber-400 text-black font-mono font-bold text-sm py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg"
-          >
-            <CreditCard size={18} /> Pay $9.50 via PayPal (tolootieno@hotmail.com) <ArrowRight size={16} />
-          </button>
-          <span className="text-[10px] text-center text-hacker-muted font-mono">
-            Secured via PayPal. Opens merchant payment endpoint directly.
+          {/* Embedded Official PayPal Form Code */}
+          <div className="my-2">
+            <style>{`.pp-4CVL9L9G2QEGY{text-align:center;border:none;border-radius:0.25rem;min-width:11.625rem;padding:0 2rem;height:2.625rem;font-weight:bold;background-color:#FFD140;color:#000000;font-family:"Helvetica Neue",Arial,sans-serif;font-size:1rem;line-height:1.25rem;cursor:pointer;}`}</style>
+            <form action="https://www.paypal.com/ncp/payment/4CVL9L9G2QEGY" method="post" target="_blank" style={{ display: "inline-grid", justifyItems: "center", alignContent: "start", gap: "0.5rem" }}>
+              <input className="pp-4CVL9L9G2QEGY" type="submit" value="Pay Now ($9.50)" />
+              <img src="https://www.paypalobjects.com/images/Debit_Credit.svg" alt="cards" />
+              <section style={{ fontSize: "0.75rem", color: "#9ca3af" }}>
+                Powered by <img src="https://www.paypalobjects.com/paypal-ui/logos/svg/paypal-wordmark-color.svg" alt="paypal" style={{ height: "0.875rem", verticalAlign: "middle" }} />
+              </section>
+            </form>
+          </div>
+
+          <span className="text-[10px] text-hacker-muted font-mono">
+            Clicking "Pay Now" opens PayPal's encrypted payment portal in a secure window.
           </span>
         </div>
 

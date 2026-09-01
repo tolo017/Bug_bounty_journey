@@ -1,6 +1,6 @@
 import { Week, DayLesson, BossLab } from "../types/curriculum";
 
-// Helper generator creating 72 unique, distinct Red/Blue Team lesson content entries across all 12 weeks (6 days/week = 72 daily lessons)
+// Helper generator creating 72 unique, distinct, enterprise-grade Red/Blue Team lesson content entries across all 12 weeks
 const getComprehensiveLessonContent = (
   weekIndex: number,
   dayIndex: number,

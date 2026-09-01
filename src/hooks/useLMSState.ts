@@ -31,7 +31,7 @@ export interface AccessState {
   isTrialExpired: boolean;
 }
 
-const CURRICULUM_VERSION = "v3_production_72_deep_lessons_2026";
+const CURRICULUM_VERSION = "v4_broad_professional_academy_2026";
 
 export const useLMSState = () => {
   const [weeks, setWeeks] = useState<Week[]>([]);
