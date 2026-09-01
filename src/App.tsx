@@ -300,14 +300,20 @@ function App() {
                   {activeTab === "theory" && (
                     <div className="flex flex-col gap-5">
 
-                      {/* Expert Interactive Video Methodology Breakdown Player */}
+                      {/* AI Dedicated Video Walkthrough Suite Player */}
                       {currentDay.theory.videoBreakdown && (
                         <VideoPlayer
                           title={currentDay.theory.videoBreakdown.title}
                           duration={currentDay.theory.videoBreakdown.duration}
                           methodologySummary={currentDay.theory.videoBreakdown.methodologySummary}
                           competency={currentDay.competency}
-                          embedId={currentDay.theory.videoBreakdown.embedId}
+                          whatYouAreDoing={currentDay.theory.whatYouAreDoing}
+                          vulnerabilityOrigin={currentDay.theory.vulnerabilityOrigin}
+                          pentesterFocus={currentDay.theory.pentesterFocus}
+                          payloadCrafting={currentDay.theory.payloadCrafting}
+                          burpSuiteSetup={currentDay.theory.burpSuiteSetup}
+                          blueTeamDefense={currentDay.theory.blueTeamDefense}
+                          labLink={currentDay.digitalArena.labLink}
                         />
                       )}
 
