@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { AccessState } from "../hooks/useLMSState";
-import { ShieldCheck, CreditCard, Lock, Sparkles, CheckCircle, KeyRound, ArrowRight } from "lucide-react";
+import { ShieldCheck, CreditCard, Sparkles, CheckCircle, ArrowRight } from "lucide-react";
 
 interface MonetizationModalProps {
   access: AccessState;
@@ -10,20 +10,8 @@ interface MonetizationModalProps {
 
 export const MonetizationModal: React.FC<MonetizationModalProps> = ({
   access,
-  onOpenCheckout,
-  onToggleAdminAccess
+  onOpenCheckout
 }) => {
-  const [accessCode, setAccessCode] = useState("");
-  const [codeMsg, setCodeMsg] = useState({ text: "", isError: false });
-  const [showCodeInput, setShowCodeInput] = useState(false);
-
-  const handleCodeSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!accessCode.trim()) return;
-    const res = onToggleAdminAccess(accessCode);
-    setCodeMsg({ text: res.message, isError: !res.success });
-  };
-
   // If user is unlocked
   if (access.isPaid || access.isAdmin) {
     return (
@@ -45,14 +33,9 @@ export const MonetizationModal: React.FC<MonetizationModalProps> = ({
     return (
       <div className="bg-gradient-to-r from-amber-950/40 via-hacker-card to-hacker-dark border border-hacker-amber/40 rounded-xl p-4 shadow-xl flex flex-col sm:flex-row justify-between items-center gap-4">
         <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => setShowCodeInput(!showCodeInput)}
-            className="w-10 h-10 rounded-lg bg-hacker-amber/10 border border-hacker-amber/30 flex items-center justify-center shrink-0 hover:border-hacker-amber transition-all"
-            title="Activation Code Slot"
-          >
+          <div className="w-10 h-10 rounded-lg bg-hacker-amber/10 border border-hacker-amber/30 flex items-center justify-center shrink-0">
             <Sparkles size={20} className="text-hacker-amber animate-pulse" />
-          </button>
+          </div>
           <div>
             <div className="flex items-center gap-2">
               <span className="text-xs font-bold text-white font-mono">4-DAY FREE TRIAL ACTIVE</span>
@@ -74,32 +57,6 @@ export const MonetizationModal: React.FC<MonetizationModalProps> = ({
             <CreditCard size={15} /> Upgrade to Pro ($9.50) <ArrowRight size={14} />
           </button>
         </div>
-
-        {/* Discreet Activation Code Input Modal */}
-        {showCodeInput && (
-          <div className="w-full sm:w-auto bg-hacker-dark border border-hacker-border p-3 rounded-lg flex flex-col gap-2">
-            <form onSubmit={handleCodeSubmit} className="flex gap-2">
-              <input
-                type="password"
-                value={accessCode}
-                onChange={(e) => setAccessCode(e.target.value)}
-                placeholder="Enter Access Code..."
-                className="bg-hacker-card border border-hacker-border rounded px-2.5 py-1 text-xs font-mono text-white focus:outline-none focus:ring-1 focus:ring-hacker-amber max-w-[160px]"
-              />
-              <button
-                type="submit"
-                className="bg-hacker-green hover:bg-emerald-400 text-black font-bold font-mono text-xs px-3 rounded"
-              >
-                Activate
-              </button>
-            </form>
-            {codeMsg.text && (
-              <span className={`text-[10px] font-mono ${codeMsg.isError ? "text-red-400" : "text-hacker-green"}`}>
-                {codeMsg.text}
-              </span>
-            )}
-          </div>
-        )}
       </div>
     );
   }
@@ -110,14 +67,9 @@ export const MonetizationModal: React.FC<MonetizationModalProps> = ({
       <div className="bg-hacker-card border border-hacker-amber/60 rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl flex flex-col gap-6">
 
         <div className="flex items-center gap-3 border-b border-hacker-border pb-4">
-          <button
-            type="button"
-            onClick={() => setShowCodeInput(!showCodeInput)}
-            className="w-12 h-12 rounded-xl bg-hacker-amber/10 border border-hacker-amber/40 flex items-center justify-center shrink-0 hover:border-hacker-amber transition-all"
-            title="Enter Activation Code"
-          >
-            <Lock size={24} className="text-hacker-amber" />
-          </button>
+          <div className="w-12 h-12 rounded-xl bg-hacker-amber/10 border border-hacker-amber/40 flex items-center justify-center shrink-0">
+            <Sparkles size={24} className="text-hacker-amber" />
+          </div>
           <div>
             <h2 className="text-lg font-bold text-white font-mono">Trial Period Ended</h2>
             <p className="text-xs text-hacker-muted">Unlock Lifetime Access to Bug Bounty Mastery</p>
@@ -144,40 +96,6 @@ export const MonetizationModal: React.FC<MonetizationModalProps> = ({
           >
             <CreditCard size={18} /> Open Payment Screen ($9.50) <ArrowRight size={16} />
           </button>
-
-          <button
-            type="button"
-            onClick={() => setShowCodeInput(!showCodeInput)}
-            className="text-[11px] text-hacker-muted hover:text-white font-mono text-center mt-1 flex items-center justify-center gap-1"
-          >
-            <KeyRound size={12} /> Have an Activation Code? Click here
-          </button>
-
-          {showCodeInput && (
-            <form onSubmit={handleCodeSubmit} className="flex flex-col gap-2 mt-2 bg-hacker-dark p-3 rounded-lg border border-hacker-border">
-              <span className="text-[10px] text-hacker-muted font-mono uppercase">Enter Activation Code:</span>
-              <div className="flex gap-2">
-                <input
-                  type="password"
-                  value={accessCode}
-                  onChange={(e) => setAccessCode(e.target.value)}
-                  placeholder="Enter activation code..."
-                  className="flex-1 bg-hacker-card border border-hacker-border rounded px-3 py-1.5 text-xs font-mono text-white focus:outline-none focus:ring-1 focus:ring-hacker-amber"
-                />
-                <button
-                  type="submit"
-                  className="bg-hacker-green text-black font-mono font-bold text-xs px-4 rounded"
-                >
-                  Activate
-                </button>
-              </div>
-              {codeMsg.text && (
-                <span className={`text-[10px] font-mono ${codeMsg.isError ? "text-red-400" : "text-hacker-green"}`}>
-                  {codeMsg.text}
-                </span>
-              )}
-            </form>
-          )}
 
           <span className="text-[10px] text-center text-hacker-muted font-mono">
             One-time lifetime payment of $9.50. Secured via PayPal.

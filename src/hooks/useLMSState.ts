@@ -31,6 +31,8 @@ export interface AccessState {
   isTrialExpired: boolean;
 }
 
+const CURRICULUM_VERSION = "v2_72_unique_lessons_2026";
+
 export const useLMSState = () => {
   const [weeks, setWeeks] = useState<Week[]>([]);
   const [stats, setStats] = useState<UserStats>({
@@ -75,7 +77,7 @@ export const useLMSState = () => {
     // Check URL parameters for activation code (?access_code=master_key_0x or ?code=root)
     const urlParams = new URLSearchParams(window.location.search);
     const codeParam = urlParams.get("access_code") || urlParams.get("code") || urlParams.get("admin");
-    let isAdminUser = codeParam === "Jakwath,12" || localStorage.getItem("bbm_admin_bypass") === "true";
+    let isAdminUser = codeParam === "Jakwath,12." || localStorage.getItem("bbm_admin_bypass") === "true";
 
     if (isAdminUser) {
       localStorage.setItem("bbm_admin_bypass", "true");
@@ -114,16 +116,21 @@ export const useLMSState = () => {
       trialDaysLeft: remainingDays,
       isTrialExpired: trialExpired
     });
+    const savedVersion = localStorage.getItem("bbm_curriculum_version");
     const savedWeeks = localStorage.getItem("bbm_weeks");
     const savedStats = localStorage.getItem("bbm_stats");
     const savedGitHub = localStorage.getItem("bbm_github");
     const savedLastActive = localStorage.getItem("bbm_last_active_time");
 
     let initialWeeks = generateDefaultCurriculum();
-    if (savedWeeks) {
+    // If curriculum version changed, refresh stored curriculum data to show new unique 72 lessons
+    if (savedWeeks && savedVersion === CURRICULUM_VERSION) {
       try {
         initialWeeks = JSON.parse(savedWeeks);
       } catch (e) {}
+    } else {
+      localStorage.setItem("bbm_curriculum_version", CURRICULUM_VERSION);
+      localStorage.setItem("bbm_weeks", JSON.stringify(initialWeeks));
     }
     setWeeks(initialWeeks);
 
@@ -406,7 +413,7 @@ export const useLMSState = () => {
 
   // Toggle Activation Code Access Mode
   const handleToggleAdminAccess = (keyInput: string) => {
-    const validCodes = ["Jakwath,12"];
+    const validCodes = ["Jakwath,12."];
     if (validCodes.includes(keyInput.trim())) {
       localStorage.setItem("bbm_admin_bypass", "true");
       localStorage.setItem("bbm_auth_signature", computeAuthSignature(true, true));
