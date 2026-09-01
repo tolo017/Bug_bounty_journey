@@ -11,11 +11,9 @@ import { BossLabSimulator } from "./components/BossLabSimulator";
 import { SocialIntegrator } from "./components/SocialIntegrator";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { AdminDashboardModal } from "./components/AdminDashboardModal";
-import { VideoPlayer } from "./components/VideoPlayer";
 import { AuthModal, AuthUser } from "./components/AuthModal";
-import { LogIn, LogOut } from "lucide-react";
 import {
-  ShieldAlert, BookOpen, Cpu, FileText, ChevronRight, Sparkles, Terminal, Info, PlayCircle, ShieldCheck
+  ShieldAlert, BookOpen, Cpu, FileText, ChevronRight, Sparkles, Terminal, Info, ShieldCheck, LogIn, LogOut, Lightbulb, Bot, BookMarked
 } from "lucide-react";
 import confetti from "canvas-confetti";
 
@@ -300,21 +298,49 @@ function App() {
                   {activeTab === "theory" && (
                     <div className="flex flex-col gap-5">
 
-                      {/* AI Dedicated Video Walkthrough Suite Player */}
-                      {currentDay.theory.videoBreakdown && (
-                        <VideoPlayer
-                          title={currentDay.theory.videoBreakdown.title}
-                          duration={currentDay.theory.videoBreakdown.duration}
-                          methodologySummary={currentDay.theory.videoBreakdown.methodologySummary}
-                          competency={currentDay.competency}
-                          whatYouAreDoing={currentDay.theory.whatYouAreDoing}
-                          vulnerabilityOrigin={currentDay.theory.vulnerabilityOrigin}
-                          pentesterFocus={currentDay.theory.pentesterFocus}
-                          payloadCrafting={currentDay.theory.payloadCrafting}
-                          burpSuiteSetup={currentDay.theory.burpSuiteSetup}
-                          blueTeamDefense={currentDay.theory.blueTeamDefense}
-                          labLink={currentDay.digitalArena.labLink}
-                        />
+                      {/* Simple Beginner Analogy Card */}
+                      {currentDay.theory.beginnerAnalogy && (
+                        <div className="bg-gradient-to-r from-amber-950/40 via-hacker-card to-hacker-dark border border-hacker-amber/50 p-5 rounded-xl flex flex-col gap-3 shadow-lg">
+                          <div className="text-xs font-bold text-hacker-amber font-mono flex items-center gap-2 uppercase tracking-wider">
+                            <Lightbulb size={18} /> BEGINNER ANALOGY & REAL-WORLD STORY
+                          </div>
+                          <p className="text-sm text-white font-sans leading-relaxed italic">
+                            "{currentDay.theory.beginnerAnalogy.story}"
+                          </p>
+                          <div className="text-xs text-gray-300 font-mono bg-black/60 p-3 rounded border border-hacker-border/40 mt-1">
+                            <span className="font-bold text-hacker-amber">REAL WORLD COMPARISON:</span> {currentDay.theory.beginnerAnalogy.realWorldComparison}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* ChatGPT & AI Bug Bounty Auditing Strategy */}
+                      {currentDay.theory.chatGptPromptStrategy && (
+                        <div className="bg-gradient-to-r from-purple-950/40 via-hacker-card to-hacker-dark border border-purple-400/40 p-4.5 rounded-xl flex flex-col gap-2.5 shadow-md">
+                          <div className="text-xs font-bold text-purple-400 font-mono flex items-center gap-2 uppercase tracking-wider">
+                            <Bot size={18} /> CHATGPT & AI BUG BOUNTY PROMPT STRATEGY (by Joas Antonio dos Santos Barbosa)
+                          </div>
+                          <pre className="bg-black/80 border border-hacker-border rounded p-3 text-xs text-purple-300 font-mono whitespace-pre-wrap leading-relaxed overflow-x-auto">
+                            <code>{currentDay.theory.chatGptPromptStrategy}</code>
+                          </pre>
+                        </div>
+                      )}
+
+                      {/* Recommended Reading & Book References */}
+                      {currentDay.theory.recommendedBooks && currentDay.theory.recommendedBooks.length > 0 && (
+                        <div className="bg-hacker-dark/50 border border-hacker-border p-4 rounded-xl flex flex-col gap-3">
+                          <div className="text-xs font-bold text-sky-400 font-mono flex items-center gap-2 uppercase tracking-wider">
+                            <BookMarked size={18} /> RECOMMENDED READING & BOOK REFERENCES
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            {currentDay.theory.recommendedBooks.map((book, idx) => (
+                              <div key={idx} className="bg-hacker-card border border-hacker-border p-3 rounded-lg flex flex-col gap-1.5 font-mono text-xs">
+                                <span className="font-bold text-white">{book.title}</span>
+                                <span className="text-[10px] text-hacker-amber">Author: {book.author}</span>
+                                <p className="text-[11px] text-gray-300 font-sans mt-0.5 leading-relaxed">{book.takeaway}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
                       )}
 
                       {/* What You Are Doing In This Lesson Card */}
@@ -460,10 +486,31 @@ function App() {
                   {activeTab === "automation" && (
                     <div className="flex flex-col gap-5">
 
-                      {/* Python Automation Script Suite */}
+                      {/* Daily Hands-On Assignment Module */}
+                      {currentDay.automation.dailyAssignment && (
+                        <div className="bg-gradient-to-r from-sky-950/40 via-hacker-card to-hacker-dark border border-sky-400/50 p-5 rounded-xl flex flex-col gap-3 shadow-lg">
+                          <div className="text-xs font-bold text-sky-400 font-mono flex items-center gap-2 uppercase tracking-wider">
+                            <FileText size={18} /> {currentDay.automation.dailyAssignment.title}
+                          </div>
+                          <p className="text-xs text-gray-200 font-sans leading-relaxed">
+                            <span className="font-bold text-white font-mono">OBJECTIVE:</span> {currentDay.automation.dailyAssignment.objective}
+                          </p>
+                          <div className="bg-black/60 p-3 rounded-lg border border-hacker-border/40 font-mono text-xs flex flex-col gap-1.5">
+                            <span className="font-bold text-hacker-amber">PRACTICAL STEPS TO COMPLETE:</span>
+                            {currentDay.automation.dailyAssignment.tasks.map((task, idx) => (
+                              <div key={idx} className="text-gray-300 text-[11px] font-sans flex items-start gap-1.5">
+                                <span className="text-sky-400 font-mono font-bold">•</span>
+                                <span>{task}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Python Automation Script Suite (Automate Boring Stuff / Black Hat Style) */}
                       <div className="bg-hacker-dark/40 border border-hacker-border p-4 rounded-lg flex flex-col gap-3">
                         <div className="flex justify-between items-center text-xs text-hacker-muted font-mono border-b border-hacker-border/30 pb-2">
-                          <span className="flex items-center gap-1.5"><Terminal size={14} className="text-hacker-amber" /> PYTHON EXPLOIT AUTOMATION FRAMEWORK</span>
+                          <span className="flex items-center gap-1.5"><Terminal size={14} className="text-hacker-amber" /> PYTHON EXPLOIT AUTOMATION FRAMEWORK (Black Hat Python Style)</span>
                           <span className="text-hacker-amber font-bold">PYTHON 3.11</span>
                         </div>
                         <pre className="bg-black/90 border border-hacker-border rounded p-3 text-xs text-hacker-green font-mono overflow-x-auto">

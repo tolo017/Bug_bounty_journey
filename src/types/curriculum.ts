@@ -8,17 +8,19 @@ export interface DayLesson {
   id: string; // e.g. "week-1-monday"
   weekIndex: number; // 0 to 11 (Week 1 to 12)
   dayName: string; // e.g. "Monday"
-  title: string; // e.g. "DOM Clobbering & JS Deconstruction"
+  title: string; // e.g. "DOM Clobbering & Document Object Manipulation"
   durationMinutes: number;
   unlocked: boolean;
   completed: boolean;
   competency: string; // e.g. "Client-Side Security"
 
-  // Sections
+  // Expanded Beginner-Friendly Sections
   theory: {
     title: string;
     duration: string; // e.g. "30 Mins"
-    videoBreakdown: { title: string; duration: string; methodologySummary: string; embedId?: string }; // Expert video methodology breakdown with curated cybersecurity walkthrough ID
+    beginnerAnalogy: { story: string; realWorldComparison: string }; // Simple real-world story
+    chatGptPromptStrategy: string; // ChatGPT & AI prompt strategy for bug bounty
+    recommendedBooks: { title: string; author: string; takeaway: string }[]; // Book references
     whatYouAreDoing: string; // Detailed breakdown of researcher actions
     vulnerabilityOrigin: string; // How the vulnerability comes about (Root Cause)
     pentesterFocus: string; // What to look for as a pentester
@@ -45,8 +47,8 @@ export interface DayLesson {
   automation: {
     title: string;
     duration: string; // "30 Mins"
-    pythonScript: string; // Complete Python automation framework
-    bashScript: string; // Complete Bash automation script
+    pythonScript: string; // Python script (Automate Boring Stuff / Black Hat Python style)
+    bashScript: string; // Bash script
     pythonExplanation: string;
     bashExplanation: string;
     vdpReportTemplate: {
@@ -56,6 +58,12 @@ export interface DayLesson {
       description: string;
       stepsToReproduce: string;
       remediation: string;
+    };
+    dailyAssignment: {
+      title: string;
+      objective: string;
+      tasks: string[];
+      deliverable: string;
     };
     checklist: ChecklistItem[];
     committed: boolean;
