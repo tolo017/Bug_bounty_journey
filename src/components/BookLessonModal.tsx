@@ -1,6 +1,6 @@
 import React from "react";
 import { BookLesson } from "../types/curriculum";
-import { BookOpen, X, Sparkles, CheckCircle, Terminal, Code2 } from "lucide-react";
+import { BookOpen, X, Sparkles, CheckCircle, Code2, Wrench, Target } from "lucide-react";
 
 interface BookLessonModalProps {
   book: BookLesson | null;
@@ -46,7 +46,17 @@ export const BookLessonModal: React.FC<BookLessonModalProps> = ({
         {/* Chapter Title Badge */}
         <div className="bg-sky-400/10 border border-sky-400/30 p-3.5 rounded-xl font-mono text-xs flex items-center justify-between">
           <span className="font-bold text-sky-300">{book.chapterLesson}</span>
-          <span className="text-[10px] bg-sky-400/20 text-sky-200 px-2.5 py-0.5 rounded">ACTIVE TOPIC LESSON</span>
+          <span className="text-[10px] bg-sky-400/20 text-sky-200 px-2.5 py-0.5 rounded font-bold">ACTIVE BOOK LESSON</span>
+        </div>
+
+        {/* What They Are Doing */}
+        <div className="bg-gradient-to-r from-emerald-950/40 via-hacker-card to-hacker-dark border border-hacker-green/40 p-4.5 rounded-xl flex flex-col gap-2 font-sans shadow-md">
+          <div className="text-xs font-bold text-hacker-green font-mono flex items-center gap-1.5 uppercase">
+            <Target size={16} /> WHAT THEY ARE DOING IN THIS CHAPTER
+          </div>
+          <p className="text-xs text-gray-200 leading-relaxed">
+            {book.whatTheyAreDoing}
+          </p>
         </div>
 
         {/* Detailed Chapter Explanation */}
@@ -59,7 +69,7 @@ export const BookLessonModal: React.FC<BookLessonModalProps> = ({
           </p>
         </div>
 
-        {/* Practical Example Snippet */}
+        {/* Practical Code / Command Example */}
         <div className="bg-black/80 border border-hacker-border p-4 rounded-xl flex flex-col gap-2 font-mono">
           <div className="text-xs font-bold text-hacker-green flex items-center gap-1.5">
             <Code2 size={15} /> PRACTICAL CODE / COMMAND EXAMPLE
@@ -67,6 +77,16 @@ export const BookLessonModal: React.FC<BookLessonModalProps> = ({
           <pre className="bg-slate-950 p-3 rounded border border-hacker-border/40 text-xs text-hacker-green overflow-x-auto whitespace-pre-wrap">
             <code>{book.practicalExample}</code>
           </pre>
+        </div>
+
+        {/* How to Adapt to Real Targets */}
+        <div className="bg-hacker-dark/90 border border-purple-400/40 p-4.5 rounded-xl flex flex-col gap-2 font-sans">
+          <div className="text-xs font-bold text-purple-400 font-mono flex items-center gap-1.5 uppercase">
+            <Wrench size={16} /> HOW TO ADAPT THIS LESSON TO REAL TARGETS
+          </div>
+          <p className="text-xs text-gray-200 leading-relaxed whitespace-pre-wrap font-mono">
+            {book.howToAdapt}
+          </p>
         </div>
 
         {/* Key Lesson Takeaway */}
@@ -83,7 +103,7 @@ export const BookLessonModal: React.FC<BookLessonModalProps> = ({
             onClick={onClose}
             className="bg-sky-400 hover:bg-sky-300 text-black font-mono font-bold text-xs px-6 py-2 rounded-lg transition-all"
           >
-            Return to Lesson
+            Return to Lesson Workspace
           </button>
         </div>
 

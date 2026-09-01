@@ -1,6 +1,6 @@
 import React from "react";
 import { CreatorLesson } from "../types/curriculum";
-import { PlayCircle, X, ExternalLink, ShieldCheck, Terminal, Code2 } from "lucide-react";
+import { PlayCircle, X, ExternalLink, ShieldCheck, Terminal, Code2, BookOpen } from "lucide-react";
 
 interface YouTubeLessonModalProps {
   lesson: CreatorLesson | null;
@@ -29,7 +29,7 @@ export const YouTubeLessonModal: React.FC<YouTubeLessonModalProps> = ({
             </div>
             <div>
               <div className="text-[10px] text-sky-400 font-mono font-bold uppercase tracking-wider">
-                EXPERT CREATOR LESSON • {dayTitle}
+                EXPERT CREATOR WALKTHROUGH • {dayTitle}
               </div>
               <h2 className="text-lg font-bold text-white font-mono mt-0.5">{lesson.lessonTitle}</h2>
               <p className="text-xs text-hacker-amber font-mono">{lesson.creatorName} ({lesson.channelOrWebsite})</p>
@@ -43,10 +43,35 @@ export const YouTubeLessonModal: React.FC<YouTubeLessonModalProps> = ({
           </button>
         </div>
 
-        {/* Methodology Overview */}
+        {/* Direct Specific Video Link Header */}
+        <div className="bg-sky-400/10 border border-sky-400/30 p-4 rounded-xl flex items-center justify-between">
+          <div className="flex items-center gap-2 font-mono text-xs text-sky-300 font-bold">
+            <PlayCircle size={18} /> SPECIFIC TUTORIAL VIDEO LESSON
+          </div>
+          <a
+            href={lesson.specificVideoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-sky-400 hover:bg-sky-300 text-black font-mono font-bold text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all shadow"
+          >
+            <ExternalLink size={14} /> Watch Full Video ({lesson.creatorName}) →
+          </a>
+        </div>
+
+        {/* Broad Lesson & Attack Vector Explanation */}
         <div className="bg-hacker-dark border border-hacker-border p-4.5 rounded-xl flex flex-col gap-2 font-sans">
+          <div className="text-xs font-bold text-hacker-amber font-mono flex items-center gap-1.5 uppercase">
+            <BookOpen size={16} /> BROAD LESSON & ATTACK VECTOR EXPLANATION
+          </div>
+          <p className="text-xs text-gray-200 leading-relaxed font-sans whitespace-pre-wrap">
+            {lesson.broadExplanation}
+          </p>
+        </div>
+
+        {/* Methodology Overview */}
+        <div className="bg-hacker-dark/90 border border-hacker-border p-4.5 rounded-xl flex flex-col gap-2 font-sans">
           <div className="text-xs font-bold text-sky-400 font-mono flex items-center gap-1.5 uppercase">
-            <ShieldCheck size={15} /> METHODOLOGY OVERVIEW
+            <ShieldCheck size={15} /> AUDITING METHODOLOGY OVERVIEW
           </div>
           <p className="text-xs text-gray-200 leading-relaxed font-sans">
             {lesson.methodologyOverview}
@@ -78,22 +103,13 @@ export const YouTubeLessonModal: React.FC<YouTubeLessonModalProps> = ({
           </pre>
         </div>
 
-        {/* External Channel Link Trigger */}
-        <div className="flex justify-between items-center border-t border-hacker-border pt-4 font-mono text-xs">
-          <a
-            href={lesson.directUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sky-400 hover:text-sky-300 font-bold flex items-center gap-1.5 bg-sky-400/10 border border-sky-400/30 px-4 py-2 rounded-lg transition-all"
-          >
-            <ExternalLink size={14} /> Visit Official Channel / Website ({lesson.creatorName})
-          </a>
-
+        {/* Footer */}
+        <div className="flex justify-end border-t border-hacker-border pt-4">
           <button
             onClick={onClose}
-            className="bg-hacker-amber hover:bg-amber-400 text-black font-bold px-6 py-2 rounded-lg transition-all"
+            className="bg-sky-400 hover:bg-sky-300 text-black font-mono font-bold text-xs px-6 py-2 rounded-lg transition-all"
           >
-            Return to Lesson
+            Return to Lesson Workspace
           </button>
         </div>
 

@@ -51,49 +51,58 @@ Analyze the following code snippet for ${dayTitle} vulnerabilities:
 3. Explain step-by-step how a penetration tester can verify this flaw in Burp Suite Repeater.
 4. Provide secure refactored code using modern defense-in-depth principles."`;
 
-  // Detailed Book Chapter Lessons for the active topic
+  // Detailed Book Chapter Lessons with Practical Examples & Real-Target Adaptations
   const recommendedBooks: BookLesson[] = [
     {
       title: "Bug Bounty Tips & Tricks using ChatGPT",
       author: "Joas Antonio dos Santos Barbosa",
       chapterLesson: `Chapter 3: AI Code Auditing & Prompt Engineering for ${competency}`,
-      detailedExplanation: `In this chapter, Joas Antonio demonstrates how bug bounty hunters use AI language models to deconstruct complex source code and identify ${dayTitle}. By feeding un-minified code blocks into structured prompt templates, researchers spot missing validation sinks in seconds.\n\nThe author emphasizes that AI models excel at pattern matching against dangerous DOM sinks, missing object-level authorization checks, and un-sanitized parameter assignments. By instructing ChatGPT to act as a senior triager, you receive instant vulnerability hypotheses and tailored cURL commands to verify the finding in Burp Suite.`,
-      practicalExample: `Prompt: "Analyze this code snippet for ${dayTitle} in ${competency}. Identify the dangerous input sink and write 3 cURL command line payloads."`,
+      whatTheyAreDoing: `The author is using AI models as an automated assistant to analyze complex backend code blocks, locate un-sanitized parameter sinks, and generate proof-of-concept exploit strings for ${dayTitle}.`,
+      detailedExplanation: `In this chapter, Joas Antonio demonstrates how bug bounty hunters feed un-minified client scripts and API handler functions into ChatGPT. By using structured prompts specifying security roles, the AI model pinpoints missing validation sinks and crafts payload variations tailored for ${competency}.\n\nThe technique relies on instructing the AI to act as a senior triage engineer, evaluating edge cases and generating exact cURL requests to verify the finding in Burp Suite.`,
+      practicalExample: `Prompt: "Analyze this handler function for ${dayTitle} in ${competency}. Identify the dangerous input sink and write 3 cURL command line payloads."`,
+      howToAdapt: `To adapt this technique to real targets:\n1. Copy target endpoints or JS functions from Burp Suite Target Site Map.\n2. Paste code into ChatGPT with the prompt template above.\n3. Test the generated cURL payloads against staging environment endpoints.`,
       takeaway: "Use structured AI prompts to automate static code analysis and generate targeted payload variations."
     },
     {
       title: "Bug Bounty from Scratch",
       author: "Santiago Vazquez & Francisco Javier",
       chapterLesson: `Chapter 5: Practical Exploitation & VDP Submission for ${dayTitle}`,
-      detailedExplanation: `Santiago Vazquez and Francisco Javier walk through real-world bug bounty submissions from HackerOne and Bugcrowd. They explain that finding ${dayTitle} requires mapping parameter data flows, testing boundary conditions, and documenting cURL reproduction commands for triage officers.\n\nThey detail how to construct a professional, high-impact report that calculates the exact CVSS vector string, details business risk, and provides engineering remediation guidance so corporate security teams triage your submission rapidly.`,
+      whatTheyAreDoing: `The authors are demonstrating how to transition from discovering a parameter weakness to drafting a high-impact, professional vulnerability disclosure report for HackerOne or Bugcrowd.`,
+      detailedExplanation: `Santiago Vazquez and Francisco Javier analyze real-world bug bounty submissions. They explain that finding ${dayTitle} requires mapping parameter data flows, testing boundary conditions, and documenting minimal cURL reproduction commands for triage officers.\n\nThey detail how to construct a professional report that calculates the exact CVSS v3.1 vector string, details business risk, and provides engineering remediation guidance so corporate security teams triage your submission rapidly.`,
       practicalExample: `curl -v -X POST "https://target.corp/api/v1/resource" -H "Content-Type: application/json" -H "X-Audit-Skill: ${competency}" -d '{"param": "test_payload"}'`,
+      howToAdapt: `To adapt this technique to real targets:\n1. Replace 'target.corp' with your target's authorized bug bounty scope URL.\n2. Intercept authenticated headers in Burp Suite and paste bearer tokens into the cURL command.\n3. Run the cURL in terminal to verify the bug reproduces outside Burp.`,
       takeaway: "Always document clean, minimal cURL reproduction commands to ensure fast report triage and maximum bounty payouts."
     },
     {
       title: "Automate the Boring Stuff with Python",
       author: "Al Sweigart",
       chapterLesson: `Chapter 12: Web Scraping & HTTP Request Scripting for ${competency}`,
-      detailedExplanation: `Al Sweigart teaches how to write lightweight Python scripts using the 'requests' and 'BeautifulSoup' libraries to automate HTTP requests, parse HTML responses, and test endpoints for ${dayTitle} across hundreds of target URLs simultaneously.\n\nBy leveraging loop iterations and status-code parsing, your script can automatically log successful responses, save extracted flags to local text files, and parse API endpoints without needing manual browser interactions.`,
+      whatTheyAreDoing: `The author is writing automated Python scripts to send HTTP requests at scale, parse response status codes, and test target endpoints for ${dayTitle} across hundreds of subdomains.`,
+      detailedExplanation: `Al Sweigart teaches how to write lightweight Python scripts using the 'requests' and 'BeautifulSoup' libraries. By automating HTTP GET/POST queries, your script can iterate through wordlists, inject parameter payloads, and log active vulnerabilities without needing manual browser interactions.\n\nThis approach transforms a slow manual audit into a high-throughput automated scanning tool capable of probing giant enterprise CIDR blocks.`,
       practicalExample: `import requests\nres = requests.get('https://target.corp/api/v1/resource', headers={'User-Agent': 'BugBountyMastery'})\nif res.status_code == 200:\n    print('[+] Endpoint Active! Exploit Verified.')`,
+      howToAdapt: `To adapt this technique to real targets:\n1. Pass target URL lists as command-line arguments (sys.argv[1]).\n2. Add custom headers matching target authentication tokens.\n3. Log HTTP response text variations to text files for review.`,
       takeaway: "Automate repetitive auditing tasks with simple Python scripts to test assets at scale."
     },
     {
       title: "Black Hat Python",
       author: "Justin Seitz",
       chapterLesson: `Chapter 4: Writing Custom Proxy Extensions for ${dayTitle}`,
+      whatTheyAreDoing: `The author is building custom offensive network extensions in Python to intercept raw HTTP traffic, modify headers on the fly, and bypass Web Application Firewalls (WAF).`,
       detailedExplanation: `Justin Seitz explains how to build custom Python network tools and Burp Suite extensions to intercept HTTP traffic, manipulate request headers on the fly, and bypass Web Application Firewall (WAF) filters when testing ${competency}.\n\nBy crafting raw socket connections and custom HTTP packet headers, Black Hat Python shows you how to bypass WAF rate limits, automate parameter fuzzing, and extract exfiltrated data directly from HTTP responses.`,
       practicalExample: `import urllib.request\nreq = urllib.request.Request('https://target.corp/api/v1/resource', headers={'X-Audit-Tool': 'BlackHatPython'})\nresponse = urllib.request.urlopen(req)\nprint(response.read().decode('utf-8'))`,
+      howToAdapt: `To adapt this technique to real targets:\n1. Wrap script functions in Burp Suite Python extension hooks.\n2. Automatically inject custom headers into all outbound Repeater traffic.\n3. Parse exfiltrated response strings using regular expressions.`,
       takeaway: "Build custom network scripts to automate non-standard payload injections and header overrides."
     }
   ];
 
-  // Detailed Creator & Website Walkthrough Lessons
+  // Specific YouTube Video Walkthroughs and Broad Explanations
   const creatorLessons: CreatorLesson[] = [
     {
       creatorName: "David Bombal",
       channelOrWebsite: "David Bombal (YouTube / Networking & Cyber)",
       lessonTitle: `Networking & HTTP Flow Analysis for ${dayTitle}`,
-      methodologyOverview: "David Bombal breaks down how network packets move across firewalls and web proxies. Learn to trace TCP/IP handshakes, inspect HTTP request headers, and analyze proxy traffic in Burp Suite.",
+      broadExplanation: "David Bombal broadly explains how web proxies intercept HTTP packets between client browsers and backend servers. He demonstrates how to trace TCP handshakes, inspect headers, and mutate payload values during active audits.",
+      methodologyOverview: "Learn to trace TCP/IP handshakes, inspect HTTP request headers, and analyze proxy traffic in Burp Suite.",
       stepByStepWalkthrough: [
         "1. Open Burp Suite Proxy and enable Intercept mode.",
         "2. Capture the target HTTP GET/POST request handling parameter routes.",
@@ -101,13 +110,14 @@ Analyze the following code snippet for ${dayTitle} vulnerabilities:
         "4. Forward request to Repeater (Ctrl+R) and modify values to test boundary limits."
       ],
       practicalCommand: `curl -i -X GET "https://target.corp/api/v1/resource" -H "X-Debug: 1"`,
-      directUrl: "https://www.youtube.com/@DavidBombal"
+      specificVideoUrl: "https://www.youtube.com/watch?v=2_s393XkR8A"
     },
     {
       creatorName: "NahamSec",
       channelOrWebsite: "NahamSec (Bug Bounty & Recon Methodology)",
       lessonTitle: `Target Recon & Discovery Pipeline for ${dayTitle}`,
-      methodologyOverview: "NahamSec demonstrates how top bug hunters discover un-linked web endpoints using automated Go toolchains (Subfinder, httpx, ffuf) before manual code auditing.",
+      broadExplanation: "NahamSec broadly outlines his reconnaissance strategy for discovering forgotten subdomains and un-linked API endpoints. He demonstrates chaining Go CLI tools (Subfinder, httpx, ffuf) to map attack surfaces before testing.",
+      methodologyOverview: "Discover un-linked web endpoints using automated Go toolchains before manual code auditing.",
       stepByStepWalkthrough: [
         "1. Enumerate target subdomains using Subfinder and Amass.",
         "2. Probe live HTTP endpoints using httpx.",
@@ -115,13 +125,14 @@ Analyze the following code snippet for ${dayTitle} vulnerabilities:
         "4. Inspect loaded JavaScript assets for parameter sinks."
       ],
       practicalCommand: `subfinder -d target.com -silent | httpx -title -status-code`,
-      directUrl: "https://www.youtube.com/@NahamSec"
+      specificVideoUrl: "https://www.youtube.com/watch?v=0O_A4S3a738"
     },
     {
       creatorName: "Jason Haddix",
       channelOrWebsite: "The Bug Hunter's Methodology (Jason Haddix)",
       lessonTitle: `Systematic Audit Checklist for ${dayTitle}`,
-      methodologyOverview: "Jason Haddix outlines his famous Bug Hunter's Methodology framework. Learn to organize your testing environment, prioritize attack surface vectors, and execute targeted parameter fuzzing.",
+      broadExplanation: "Jason Haddix broadly details the Bug Hunter's Methodology checklist. He demonstrates how to organize testing environments, prioritize high-yield vulnerability classes, and execute targeted parameter mining.",
+      methodologyOverview: "Organize testing environments, prioritize attack surface vectors, and execute targeted parameter fuzzing.",
       stepByStepWalkthrough: [
         "1. Map application functionality and user privilege roles.",
         "2. Identify all user input vectors (URL parameters, headers, POST bodies).",
@@ -129,13 +140,14 @@ Analyze the following code snippet for ${dayTitle} vulnerabilities:
         "4. Verify impact and document proof-of-concept steps."
       ],
       practicalCommand: `arjun -u "https://target.corp/page" -m GET,POST`,
-      directUrl: "https://github.com/jhaddix"
+      specificVideoUrl: "https://www.youtube.com/watch?v=3Kq1MIfTWCE"
     },
     {
       creatorName: "PortSwigger Web Security Academy",
       channelOrWebsite: "PortSwigger Academy (Interactive Labs & Specs)",
       lessonTitle: `Interactive Lab Demonstration: ${dayTitle}`,
-      methodologyOverview: "PortSwigger Web Security Academy provides the gold standard in web vulnerability research. Learn the core vulnerability mechanics and solve hands-on practical labs.",
+      broadExplanation: "PortSwigger Web Security Academy broadly breaks down vulnerability mechanics step-by-step. They demonstrate identifying vulnerable code sinks, constructing exploit payloads, and solving interactive labs.",
+      methodologyOverview: "Learn core vulnerability mechanics and solve hands-on practical labs.",
       stepByStepWalkthrough: [
         "1. Review vulnerability mechanics in PortSwigger documentation.",
         "2. Launch target lab instance and capture initial HTTP request.",
@@ -143,7 +155,7 @@ Analyze the following code snippet for ${dayTitle} vulnerabilities:
         "4. Verify successful flag extraction and solve the challenge."
       ],
       practicalCommand: `https://portswigger.net/web-security`,
-      directUrl: "https://portswigger.net/web-security"
+      specificVideoUrl: "https://portswigger.net/web-security"
     }
   ];
 
