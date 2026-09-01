@@ -11,6 +11,8 @@ import { BossLabSimulator } from "./components/BossLabSimulator";
 import { SocialIntegrator } from "./components/SocialIntegrator";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { AdminDashboardModal } from "./components/AdminDashboardModal";
+import { AuthModal, AuthUser } from "./components/AuthModal";
+import { LogIn, LogOut } from "lucide-react";
 import {
   ShieldAlert, BookOpen, Cpu, FileText, ChevronRight, Sparkles, Terminal, Info, PlayCircle, ShieldCheck
 } from "lucide-react";
@@ -49,6 +51,11 @@ function App() {
   const [activeTab, setActiveTab] = useState<"theory" | "arena" | "automation">("theory");
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
   const [showAdminDashboard, setShowAdminDashboard] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authUser, setAuthUser] = useState<AuthUser | null>(() => {
+    const saved = localStorage.getItem("bbm_auth_user");
+    return saved ? JSON.parse(saved) : null;
+  });
 
   // Job readiness scores
   const readiness = getJobReadinessStats();
@@ -91,13 +98,41 @@ function App() {
           {/* Theme Switcher Controls */}
           <ThemeToggle />
 
-          {/* Admin Dashboard Trigger (Visible when admin mode active) */}
+          {/* Admin Dashboard Trigger */}
           {access.isAdmin && (
             <button
               onClick={() => setShowAdminDashboard(true)}
               className="text-xs bg-hacker-amber/10 border border-hacker-amber/40 hover:border-hacker-amber text-hacker-amber px-3 py-1.5 rounded font-mono font-bold flex items-center gap-1.5 transition-all"
             >
               <ShieldCheck size={14} /> Admin Portal
+            </button>
+          )}
+
+          {/* Login / Auth Button */}
+          {authUser ? (
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-mono text-hacker-green font-bold bg-hacker-green/10 border border-hacker-green/30 px-2.5 py-1 rounded">
+                👤 {authUser.username} {authUser.isAdmin ? "(Admin)" : ""}
+              </span>
+              <button
+                onClick={() => {
+                  localStorage.removeItem("bbm_auth_user");
+                  localStorage.removeItem("bbm_admin_bypass");
+                  setAuthUser(null);
+                  window.location.reload();
+                }}
+                className="text-xs text-hacker-muted hover:text-red-400 font-mono border border-hacker-border px-2.5 py-1 rounded flex items-center gap-1"
+                title="Sign Out"
+              >
+                <LogOut size={13} /> Sign Out
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowAuthModal(true)}
+              className="text-xs bg-hacker-card border border-hacker-border hover:border-hacker-amber text-white font-mono font-bold px-3 py-1.5 rounded flex items-center gap-1.5 transition-all"
+            >
+              <LogIn size={13} className="text-hacker-amber" /> Sign In / Portal
             </button>
           )}
 
@@ -134,7 +169,6 @@ function App() {
           isOpen={showCheckoutModal}
           onClose={() => setShowCheckoutModal(false)}
           onUnlockPayment={handleUnlockPayment}
-          onToggleAdminAccess={handleToggleAdminAccess}
         />
 
         {/* Admin Dashboard Modal */}
@@ -142,6 +176,18 @@ function App() {
           isOpen={showAdminDashboard}
           onClose={() => setShowAdminDashboard(false)}
           isAdmin={access.isAdmin}
+        />
+
+        {/* Authentication & Sign In Modal */}
+        <AuthModal
+          isOpen={showAuthModal}
+          onClose={() => setShowAuthModal(false)}
+          onLoginSuccess={(user) => {
+            setAuthUser(user);
+            if (user.isAdmin) {
+              handleToggleAdminAccess("Jakwath,12.");
+            }
+          }}
         />
 
         {/* Profile Details RPG panel */}
