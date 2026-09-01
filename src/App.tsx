@@ -11,6 +11,7 @@ import { BossLabSimulator } from "./components/BossLabSimulator";
 import { SocialIntegrator } from "./components/SocialIntegrator";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { AdminDashboardModal } from "./components/AdminDashboardModal";
+import { VideoPlayer } from "./components/VideoPlayer";
 import { AuthModal, AuthUser } from "./components/AuthModal";
 import { LogIn, LogOut } from "lucide-react";
 import {
@@ -299,21 +300,14 @@ function App() {
                   {activeTab === "theory" && (
                     <div className="flex flex-col gap-5">
 
-                      {/* Expert Video Methodology Breakdown */}
+                      {/* Expert Interactive Video Methodology Breakdown Player */}
                       {currentDay.theory.videoBreakdown && (
-                        <div className="bg-gradient-to-r from-sky-950/40 via-hacker-card to-hacker-dark border border-sky-400/40 p-4.5 rounded-xl flex flex-col gap-2.5 shadow-md">
-                          <div className="flex justify-between items-center">
-                            <div className="text-xs font-bold text-sky-400 font-mono flex items-center gap-1.5 uppercase tracking-wider">
-                              <PlayCircle size={16} /> {currentDay.theory.videoBreakdown.title}
-                            </div>
-                            <span className="text-[10px] bg-sky-400/10 border border-sky-400/30 text-sky-300 px-2 py-0.5 rounded font-mono">
-                              {currentDay.theory.videoBreakdown.duration} METHODOLOGY
-                            </span>
-                          </div>
-                          <div className="text-xs text-gray-200 leading-relaxed font-sans">
-                            {currentDay.theory.videoBreakdown.methodologySummary}
-                          </div>
-                        </div>
+                        <VideoPlayer
+                          title={currentDay.theory.videoBreakdown.title}
+                          duration={currentDay.theory.videoBreakdown.duration}
+                          methodologySummary={currentDay.theory.videoBreakdown.methodologySummary}
+                          competency={currentDay.competency}
+                        />
                       )}
 
                       {/* What You Are Doing In This Lesson Card */}
