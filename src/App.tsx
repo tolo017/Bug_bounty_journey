@@ -9,8 +9,10 @@ import { PaymentCheckoutModal } from "./components/PaymentCheckoutModal";
 import { ProgramDirectory } from "./components/ProgramDirectory";
 import { BossLabSimulator } from "./components/BossLabSimulator";
 import { SocialIntegrator } from "./components/SocialIntegrator";
+import { ThemeToggle } from "./components/ThemeToggle";
+import { AdminDashboardModal } from "./components/AdminDashboardModal";
 import {
-  ShieldAlert, BookOpen, Cpu, FileText, ChevronRight, RefreshCw, Sparkles, Terminal, Info
+  ShieldAlert, BookOpen, Cpu, FileText, ChevronRight, Sparkles, Terminal, Info, PlayCircle, ShieldCheck
 } from "lucide-react";
 import confetti from "canvas-confetti";
 
@@ -46,6 +48,7 @@ function App() {
   // Track active sub-section tab inside Lesson page
   const [activeTab, setActiveTab] = useState<"theory" | "arena" | "automation">("theory");
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
+  const [showAdminDashboard, setShowAdminDashboard] = useState(false);
 
   // Job readiness scores
   const readiness = getJobReadinessStats();
@@ -70,7 +73,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-hacker-dark text-gray-100 font-sans pb-12">
+    <div className="min-h-screen bg-hacker-dark text-gray-100 font-sans pb-12 transition-colors duration-200">
 
       {/* Header Bar */}
       <header className="border-b border-hacker-border bg-hacker-dark/95 backdrop-blur-md sticky top-0 z-40 px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
@@ -79,12 +82,25 @@ function App() {
             <ShieldAlert size={20} className="text-hacker-green animate-pulse" />
           </div>
           <div>
-            <h1 className="text-lg font-bold text-white tracking-wider font-mono">BUG BOUNTY MASTERY</h1>
-            <p className="text-[10px] text-hacker-muted font-mono uppercase tracking-widest mt-0.5">3-Month Cybersecurity LMS Suite</p>
+            <h1 className="text-lg font-bold text-white tracking-wider font-mono">BUG BOUNTY MASTERY ACADEMY</h1>
+            <p className="text-[10px] text-hacker-muted font-mono uppercase tracking-widest mt-0.5">3-Month Cybersecurity LMS & Boot Camp Suite</p>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-wrap justify-center">
+          {/* Theme Switcher Controls */}
+          <ThemeToggle />
+
+          {/* Admin Dashboard Trigger (Visible when admin mode active) */}
+          {access.isAdmin && (
+            <button
+              onClick={() => setShowAdminDashboard(true)}
+              className="text-xs bg-hacker-amber/10 border border-hacker-amber/40 hover:border-hacker-amber text-hacker-amber px-3 py-1.5 rounded font-mono font-bold flex items-center gap-1.5 transition-all"
+            >
+              <ShieldCheck size={14} /> Admin Portal
+            </button>
+          )}
+
           <button
             onClick={() => {
               if (window.confirm("Are you sure you want to reset your LMS progress? This clears local state.")) {
@@ -97,7 +113,7 @@ function App() {
           </button>
 
           <span className="text-xs bg-hacker-card border border-hacker-amber/40 px-3 py-1.5 rounded font-mono text-hacker-amber font-bold flex items-center gap-1.5">
-            <Sparkles size={13} /> {access.isPaid || access.isAdmin ? "PRO LICENSE ACTIVE" : `4-DAY TRIAL (${access.trialDaysLeft} DAYS LEFT)`}
+            <Sparkles size={13} /> {access.isPaid || access.isAdmin ? "PRO ACADEMY ACTIVE" : `4-DAY TRIAL (${access.trialDaysLeft} DAYS LEFT)`}
           </span>
         </div>
       </header>
@@ -119,6 +135,13 @@ function App() {
           onClose={() => setShowCheckoutModal(false)}
           onUnlockPayment={handleUnlockPayment}
           onToggleAdminAccess={handleToggleAdminAccess}
+        />
+
+        {/* Admin Dashboard Modal */}
+        <AdminDashboardModal
+          isOpen={showAdminDashboard}
+          onClose={() => setShowAdminDashboard(false)}
+          isAdmin={access.isAdmin}
         />
 
         {/* Profile Details RPG panel */}
@@ -229,6 +252,23 @@ function App() {
                   {/* Theoretical Principles & Auditing (30 Mins) */}
                   {activeTab === "theory" && (
                     <div className="flex flex-col gap-5">
+
+                      {/* Expert Video Methodology Breakdown */}
+                      {currentDay.theory.videoBreakdown && (
+                        <div className="bg-gradient-to-r from-sky-950/40 via-hacker-card to-hacker-dark border border-sky-400/40 p-4.5 rounded-xl flex flex-col gap-2.5 shadow-md">
+                          <div className="flex justify-between items-center">
+                            <div className="text-xs font-bold text-sky-400 font-mono flex items-center gap-1.5 uppercase tracking-wider">
+                              <PlayCircle size={16} /> {currentDay.theory.videoBreakdown.title}
+                            </div>
+                            <span className="text-[10px] bg-sky-400/10 border border-sky-400/30 text-sky-300 px-2 py-0.5 rounded font-mono">
+                              {currentDay.theory.videoBreakdown.duration} METHODOLOGY
+                            </span>
+                          </div>
+                          <div className="text-xs text-gray-200 leading-relaxed font-sans">
+                            {currentDay.theory.videoBreakdown.methodologySummary}
+                          </div>
+                        </div>
+                      )}
 
                       {/* What You Are Doing In This Lesson Card */}
                       <div className="bg-gradient-to-r from-emerald-950/30 via-hacker-card to-hacker-dark border border-hacker-green/40 p-4.5 rounded-xl flex flex-col gap-2.5 shadow-md">
@@ -397,12 +437,12 @@ function App() {
                         <p className="text-xs text-gray-300 leading-relaxed font-sans">{currentDay.automation.bashExplanation}</p>
                       </div>
 
-                      {/* HackerOne / Bugcrowd VDP Vulnerability Report Template */}
+                      {/* Vulnerability Report Template */}
                       {currentDay.automation.vdpReportTemplate && (
                         <div className="bg-hacker-dark/60 border border-sky-400/40 p-4.5 rounded-xl flex flex-col gap-3">
                           <div className="flex justify-between items-center border-b border-hacker-border/40 pb-2">
                             <h4 className="text-xs font-bold text-sky-400 font-mono uppercase flex items-center gap-1.5">
-                              <FileText size={15} /> HACKERONE / BUGCROWD REPORT TEMPLATE
+                              <FileText size={15} /> CORPORATE VULNERABILITY DISCLOSURE REPORT TEMPLATE
                             </h4>
                             <span className="text-[10px] bg-red-500/20 text-red-400 border border-red-500/30 px-2 py-0.5 rounded font-mono font-bold">
                               {currentDay.automation.vdpReportTemplate.cvssVector} ({currentDay.automation.vdpReportTemplate.cvssScore})

