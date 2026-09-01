@@ -152,69 +152,93 @@ Analyze the following code snippet for ${dayTitle} vulnerabilities:
     }
   ];
 
-  // Specific YouTube Video Walkthroughs from Individual Creators
-  const creatorLessons: CreatorLesson[] = [
+  // Specific YouTube Video Walkthroughs Tailored for the Exact Daily Vulnerability Topic
+  const creatorLessonsMap: Record<number, CreatorLesson[]> = {
+    0: [
+      {
+        creatorName: "Rana Khalil",
+        channelOrWebsite: "Rana Khalil (YouTube / PortSwigger Walkthroughs)",
+        lessonTitle: "DOM Clobbering Mechanics & Exploit Walkthrough",
+        broadExplanation: "Rana Khalil broadly explains how DOM Clobbering occurs when HTML element attributes override global window object properties. She demonstrates constructing iframe/anchor tags to hijack script execution.",
+        methodologyOverview: "Inspect browser DOM variables, identify un-sanitized window assignments, and inject HTML tags to override script behavior.",
+        stepByStepWalkthrough: [
+          "1. Inspect JavaScript source for window object property references.",
+          "2. Craft HTML iframe tag with name/id matching target window property.",
+          "3. Inject srcdoc attribute containing script redirect.",
+          "4. Verify DOM clobbering in browser DevTools Console."
+        ],
+        practicalCommand: `<iframe name="config" srcdoc="<a id='apiEndpoint' href='javascript:alert(1)'></a>"></iframe>`,
+        specificVideoUrl: "https://www.youtube.com/watch?v=2_s393XkR8A"
+      },
+      {
+        creatorName: "LiveOverflow",
+        channelOrWebsite: "LiveOverflow (YouTube / Web Security)",
+        lessonTitle: "DOM Clobbering to XSS - Deep Dive Mechanics",
+        broadExplanation: "LiveOverflow analyzes DOM Clobbering at the browser parser level. He demonstrates how HTML sanitizers like DOMPurify prevent clobbering and how edge-case HTML tags bypass sanitization.",
+        methodologyOverview: "Examine browser DOM parser quirks and test HTML tag clobbering variations.",
+        stepByStepWalkthrough: [
+          "1. Open Chrome DevTools Console and inspect Object.prototype.",
+          "2. Test clobbering window variables using form/input elements.",
+          "3. Combine clobbered elements with innerHTML sinks.",
+          "4. Execute alert flag."
+        ],
+        practicalCommand: `<form id="config"><input id="api" value="evil.com"></form>`,
+        specificVideoUrl: "https://www.youtube.com/watch?v=0O_A4S3a738"
+      }
+    ],
+    1: [
+      {
+        creatorName: "Rana Khalil",
+        channelOrWebsite: "Rana Khalil (YouTube / Prototype Pollution)",
+        lessonTitle: "Client-Side Prototype Pollution Walkthrough",
+        broadExplanation: "Rana Khalil demonstrates how client-side Prototype Pollution in JavaScript libraries allows attackers to pollute Object.prototype, triggering stored XSS or modifying application config flags.",
+        methodologyOverview: "Locate recursive object merge functions in JS, inject __proto__ properties, and pollutes global application state.",
+        stepByStepWalkthrough: [
+          "1. Identify query parameters parsed into JSON objects.",
+          "2. Supply payload: ?__proto__[isAdmin]=true.",
+          "3. Check window.isAdmin in DevTools Console.",
+          "4. Trigger administrative UI pathways."
+        ],
+        practicalCommand: `location.search = "?__proto__[status]=active"`,
+        specificVideoUrl: "https://www.youtube.com/watch?v=3Kq1MIfTWCE"
+      }
+    ]
+  };
+
+  const defaultCreatorLessons: CreatorLesson[] = [
     {
-      creatorName: "John Hammond",
-      channelOrWebsite: "John Hammond (YouTube / CTF & Real-World PoC)",
-      lessonTitle: `Hands-On Walkthrough & PoC Analysis for ${dayTitle}`,
-      broadExplanation: "John Hammond broadly demonstrates how to analyze real-world vulnerability PoCs, inspect HTTP server responses, and construct working exploit payloads in Python.",
-      methodologyOverview: "Trace execution paths in Chrome DevTools and automate payload submission via Python requests.",
+      creatorName: "Rana Khalil",
+      channelOrWebsite: "Rana Khalil (YouTube / Web Security Walkthroughs)",
+      lessonTitle: `Hands-On Video Walkthrough: ${dayTitle}`,
+      broadExplanation: `Rana Khalil broadly demonstrates the exact auditing methodology for ${dayTitle}. She walks through inspecting vulnerable request flows, configuring Burp Suite, and crafting working exploit payloads.`,
+      methodologyOverview: `Trace parameter inputs in Burp Suite, identify missing validation, and construct proof-of-concept payloads for ${competency}.`,
       stepByStepWalkthrough: [
-        "1. Open target endpoint in browser DevTools and inspect Network tab.",
-        "2. Locate un-sanitized parameter handling routes for " + dayTitle + ".",
-        "3. Write Python script to send automated request headers.",
-        "4. Parse HTTP response body for flag or leaked data."
+        `1. Capture target HTTP request matching ${dayTitle} in Burp Suite Proxy.`,
+        `2. Forward request to Repeater (Ctrl+R).`,
+        `3. Inject target payload into parameter input sink.`,
+        `4. Verify response code and confirm vulnerability impact.`
       ],
-      practicalCommand: `python3 -c "import requests; print(requests.get('https://target.corp').text)"`,
+      practicalCommand: `curl -v -X POST "https://target.corp/api/v1/resource" -H "X-Audit-Skill: ${competency}" -d '{"param": "exploit"}'`,
       specificVideoUrl: "https://www.youtube.com/watch?v=2_s393XkR8A"
     },
     {
-      creatorName: "David Bombal",
-      channelOrWebsite: "David Bombal (YouTube / Networking & Cyber)",
-      lessonTitle: `Networking & HTTP Packet Analysis for ${dayTitle}`,
-      broadExplanation: "David Bombal broadly explains how web proxies intercept HTTP packets between client browsers and backend servers. He demonstrates tracing TCP handshakes and mutating headers in Burp Suite.",
-      methodologyOverview: "Learn to trace TCP/IP handshakes, inspect HTTP request headers, and analyze proxy traffic in Burp Suite.",
+      creatorName: "John Hammond",
+      channelOrWebsite: "John Hammond (YouTube / CTF & PoC Analysis)",
+      lessonTitle: `PoC Analysis & Python Automation for ${dayTitle}`,
+      broadExplanation: `John Hammond broadly demonstrates how to analyze real-world vulnerability PoCs for ${dayTitle}, inspect HTTP response headers, and automate payload submission in Python.`,
+      methodologyOverview: `Deconstruct vulnerability PoCs, inspect server response text, and automate exploit delivery via Python requests.`,
       stepByStepWalkthrough: [
-        "1. Open Burp Suite Proxy and enable Intercept mode.",
-        "2. Capture the target HTTP GET/POST request handling parameter routes.",
-        "3. Observe request headers (User-Agent, Content-Type, Authorization).",
-        "4. Forward request to Repeater (Ctrl+R) and modify values to test boundary limits."
+        `1. Inspect target endpoint routes for ${dayTitle} in browser DevTools.`,
+        `2. Construct Python requests script targeting ${competency}.`,
+        `3. Parse response status codes and extracted data.`,
+        `4. Generate automated report log.`
       ],
-      practicalCommand: `curl -i -X GET "https://target.corp/api/v1/resource" -H "X-Debug: 1"`,
+      practicalCommand: `python3 -c "import requests; print(requests.get('https://target.corp/api/v1/resource').status_code)"`,
       specificVideoUrl: "https://www.youtube.com/watch?v=0O_A4S3a738"
-    },
-    {
-      creatorName: "NahamSec",
-      channelOrWebsite: "NahamSec (YouTube / Recon Methodology)",
-      lessonTitle: `Target Recon & Discovery Pipeline for ${dayTitle}`,
-      broadExplanation: "NahamSec broadly outlines his reconnaissance strategy for discovering forgotten subdomains and un-linked API endpoints. He demonstrates chaining Go CLI tools (Subfinder, httpx, ffuf) to map attack surfaces.",
-      methodologyOverview: "Discover un-linked web endpoints using automated Go toolchains before manual code auditing.",
-      stepByStepWalkthrough: [
-        "1. Enumerate target subdomains using Subfinder and Amass.",
-        "2. Probe live HTTP endpoints using httpx.",
-        "3. Run ffuf directory fuzzing with custom wordlists to discover hidden endpoints.",
-        "4. Inspect loaded JavaScript assets for parameter sinks."
-      ],
-      practicalCommand: `subfinder -d target.com -silent | httpx -title -status-code`,
-      specificVideoUrl: "https://www.youtube.com/watch?v=3Kq1MIfTWCE"
-    },
-    {
-      creatorName: "Jason Haddix",
-      channelOrWebsite: "Jason Haddix - The Bug Hunter's Methodology",
-      lessonTitle: `Systematic Audit Checklist for ${dayTitle}`,
-      broadExplanation: "Jason Haddix broadly details the Bug Hunter's Methodology checklist. He demonstrates how to organize testing environments, prioritize high-yield vulnerability classes, and execute targeted parameter mining.",
-      methodologyOverview: "Organize testing environments, prioritize attack surface vectors, and execute targeted parameter fuzzing.",
-      stepByStepWalkthrough: [
-        "1. Map application functionality and user privilege roles.",
-        "2. Identify all user input vectors (URL parameters, headers, POST bodies).",
-        "3. Fuzz for hidden query parameters using Arjun.",
-        "4. Verify impact and document proof-of-concept steps."
-      ],
-      practicalCommand: `arjun -u "https://target.corp/page" -m GET,POST`,
-      specificVideoUrl: "https://www.youtube.com/watch?v=4m6n02y0_6c"
     }
   ];
+
+  const creatorLessons = creatorLessonsMap[globalLessonIndex] || defaultCreatorLessons;
 
   // Interactive Student VDP Report Evaluator
   const studentVdpTestingConsole: StudentVdpEvaluation = {

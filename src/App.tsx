@@ -15,6 +15,7 @@ import { AuthModal, AuthUser } from "./components/AuthModal";
 import { BookLessonModal } from "./components/BookLessonModal";
 import { YouTubeLessonModal } from "./components/YouTubeLessonModal";
 import { IntroVideoGallery } from "./components/IntroVideoGallery";
+import { ScreenRecorder } from "./components/ScreenRecorder";
 import { BookLesson, CreatorLesson } from "./types/curriculum";
 import {
   ShieldAlert, BookOpen, Cpu, FileText, ChevronRight, Sparkles, Terminal, Info, ShieldCheck, LogIn, LogOut, Lightbulb, Bot, BookMarked, PlayCircle, Target, Search, Filter, Rocket, ExternalLink, Award, CheckCircle2
@@ -816,6 +817,9 @@ function App() {
                           ))}
                         </div>
                       </div>
+
+                      {/* In-App Screen Recorder & AI Voiceover Suite */}
+                      <ScreenRecorder lessonTitle={currentDay.title} />
 
                       {/* Social ledger sharing & GitHub pushes triggers */}
                       <SocialIntegrator
