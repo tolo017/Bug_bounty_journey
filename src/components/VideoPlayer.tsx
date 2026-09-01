@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Play, Pause, Volume2, VolumeX, Sparkles, Clock, CheckCircle, ShieldCheck, Terminal, Cpu, FileText, ChevronRight, BookOpen } from "lucide-react";
+import { Play, Pause, Volume2, VolumeX, Sparkles, Clock, CheckCircle, ShieldCheck, Terminal, Cpu, FileText, Mic, Music, PlayCircle, Radio } from "lucide-react";
 
 interface VideoPlayerProps {
   title: string;
@@ -15,6 +15,8 @@ interface VideoPlayerProps {
   labLink?: string;
 }
 
+export type VoiceStyle = "us" | "uk" | "tactical";
+
 export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   title,
   duration,
@@ -29,88 +31,140 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   labLink
 }) => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isAudioEnabled, setIsAudioEnabled] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
+  const [voiceStyle, setVoiceStyle] = useState<VoiceStyle>("us");
+  const [bgMusic, setBgMusic] = useState(true);
   const [currentChapter, setCurrentChapter] = useState(0);
   const [progress, setProgress] = useState(0);
   const [completed, setCompleted] = useState(false);
-  const [synth, setSynth] = useState<SpeechSynthesis | null>(null);
+  const [typedCommand, setTypedCommand] = useState("");
 
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const oscRef = useRef<OscillatorNode | null>(null);
+
+  // Web Audio API Ambient Cyber Soundscape Generator
   useEffect(() => {
-    if (typeof window !== "undefined" && "speechSynthesis" in window) {
-      setSynth(window.speechSynthesis);
-    }
-  }, []);
+    if (bgMusic && isPlaying) {
+      try {
+        const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+        if (AudioCtx) {
+          const ctx = new AudioCtx();
+          audioCtxRef.current = ctx;
 
-  // 5 Dedicated AI Video Walkthrough Chapters for the lesson
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(110, ctx.currentTime); // Low cyber drone
+          gain.gain.setValueAtTime(0.015, ctx.currentTime); // Soft ambient volume
+
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start();
+          oscRef.current = osc;
+        }
+      } catch (e) {}
+    } else {
+      if (oscRef.current) {
+        try { oscRef.current.stop(); } catch (e) {}
+        oscRef.current = null;
+      }
+    }
+
+    return () => {
+      if (oscRef.current) {
+        try { oscRef.current.stop(); } catch (e) {}
+        oscRef.current = null;
+      }
+    };
+  }, [bgMusic, isPlaying]);
+
+  // Terminal Typing Simulation Effect
+  useEffect(() => {
+    const fullCommand = `curl -X POST "https://target.corp/api/v1/exploit" -H "X-Audit-Skill: ${competency}" -d '${payloadCrafting.slice(0, 45)}'`;
+    let idx = 0;
+    setTypedCommand("");
+
+    if (isPlaying) {
+      const interval = setInterval(() => {
+        if (idx < fullCommand.length) {
+          setTypedCommand((prev) => prev + fullCommand.charAt(idx));
+          idx++;
+        } else {
+          clearInterval(interval);
+        }
+      }, 40);
+      return () => clearInterval(interval);
+    }
+  }, [currentChapter, isPlaying, competency, payloadCrafting]);
+
+  // 5 Dedicated Chapters
   const chapters = [
     {
       id: 0,
-      title: "1. Overview & What You Are Learning",
-      icon: BookOpen,
-      badgeColor: "text-sky-400 bg-sky-400/10 border-sky-400/30",
-      content: whatYouAreDoing || methodologySummary
+      title: "1. Lesson Blueprint & Overview",
+      icon: Terminal,
+      content: `[BRANDING INTRO]\nWelcome to Bug Bounty Mastery Academy. Today we master ${title}.\n\n[PRACTICAL OVERVIEW]\n${whatYouAreDoing}`
     },
     {
       id: 1,
-      title: "2. Red Team Exploitation vs Blue Team Defense",
+      title: "2. Red Team Vectors vs Blue Team Defenses",
       icon: ShieldCheck,
-      badgeColor: "text-hacker-amber bg-hacker-amber/10 border-hacker-amber/30",
-      content: `RED TEAM EXPLOIT METHODOLOGY:\n${vulnerabilityOrigin}\n\nBLUE TEAM DEFENSE & SECURE CODING:\n${blueTeamDefense}`
+      content: `[RED TEAM EXPLOIT MECHANICS]\n${vulnerabilityOrigin}\n\n[BLUE TEAM DEFENSE & SECURE CODING]\n${blueTeamDefense}`
     },
     {
       id: 2,
-      title: "3. Vulnerability Detection & Code Audit Checklist",
-      icon: Terminal,
-      badgeColor: "text-hacker-green bg-hacker-green/10 border-hacker-green/30",
-      content: pentesterFocus
+      title: "3. Vulnerability Code Sinks & Inspection",
+      icon: Cpu,
+      content: `[AUDIT CHECKLIST & SINK INSPECTION]\n${pentesterFocus}`
     },
     {
       id: 3,
-      title: "4. Payload Crafting & Burp Suite Proxy Setup",
-      icon: Cpu,
-      badgeColor: "text-purple-400 bg-purple-400/10 border-purple-400/30",
-      content: `${payloadCrafting}\n\nBURP SUITE REPEATER CONFIGURATION:\n${burpSuiteSetup}`
+      title: "4. Burp Suite & Payload Construction",
+      icon: Radio,
+      content: `[PAYLOAD CRAFTING LOGIC]\n${payloadCrafting}\n\n[BURP SUITE REPEATER CONFIGURATION]\n${burpSuiteSetup}`
     },
     {
       id: 4,
-      title: "5. PortSwigger Practical Lab & Flag Walkthrough",
+      title: "5. PortSwigger Practical Lab Demonstration",
       icon: FileText,
-      badgeColor: "text-emerald-400 bg-emerald-400/10 border-emerald-400/30",
-      content: `PRACTICAL LAB WALKTHROUGH:\n1. Launch the interactive Digital Arena playground below.\n2. Review target code execution paths and payload requirements.\n3. Execute custom payload in local terminal shell and copy captured flag.\n4. Access external PortSwigger reference lab: ${labLink || "https://portswigger.net/web-security"}`
+      content: `[PRACTICAL DEMONSTRATION & RECAP]\n1. Launch Digital Arena playground.\n2. Supply payload into target console.\n3. Verify response status code and extract captured flag.\n4. Lab Reference: ${labLink || "https://portswigger.net/web-security"}\n\n[BRANDING OUTRO]\nKeep hunting, document your PoCs, and submit your VDP report. See you in the next lesson!`
     }
   ];
 
-  const speakText = (text: string) => {
-    if (synth && isAudioEnabled) {
-      synth.cancel(); // Stop current speech
-      const cleanText = text.replace(/[\*\#\`\_]/g, " ").slice(0, 300);
-      const utterance = new SpeechSynthesisUtterance(cleanText);
-      utterance.rate = 1.0;
-      utterance.pitch = 1.0;
-      synth.speak(utterance);
+  // Speak voiceover
+  const triggerVoiceover = (text: string) => {
+    if ("speechSynthesis" in window && !isMuted) {
+      window.speechSynthesis.cancel();
+      const introText = `Welcome to Bug Bounty Mastery Academy. Today we master ${title}. ${text.slice(0, 250)}`;
+      const utterance = new SpeechSynthesisUtterance(introText.replace(/[\*\#\`\_\[\]]/g, " "));
+
+      utterance.rate = voiceStyle === "tactical" ? 1.1 : 1.0;
+      utterance.pitch = voiceStyle === "uk" ? 1.1 : 1.0;
+
+      window.speechSynthesis.speak(utterance);
     }
   };
 
   const handlePlayPause = () => {
-    const nextPlayState = !isPlaying;
-    setIsPlaying(nextPlayState);
-
-    if (nextPlayState) {
-      speakText(chapters[currentChapter].content);
-    } else if (synth) {
-      synth.cancel();
+    const nextState = !isPlaying;
+    setIsPlaying(nextState);
+    if (nextState) {
+      triggerVoiceover(chapters[currentChapter].content);
+    } else if ("speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
     }
   };
 
-  const handleChapterSelect = (chapterIdx: number) => {
-    setCurrentChapter(chapterIdx);
-    setProgress((chapterIdx / (chapters.length - 1)) * 100);
+  const handleChapterSelect = (idx: number) => {
+    setCurrentChapter(idx);
+    setProgress((idx / 4) * 100);
     if (isPlaying) {
-      speakText(chapters[chapterIdx].content);
+      triggerVoiceover(chapters[idx].content);
     }
   };
 
-  // Automatic video progress timer
+  // Video progress interval
   useEffect(() => {
     let timer: any;
     if (isPlaying) {
@@ -119,102 +173,134 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
           if (prev >= 100) {
             setIsPlaying(false);
             setCompleted(true);
-            if (synth) synth.cancel();
+            if ("speechSynthesis" in window) window.speechSynthesis.cancel();
             return 100;
           }
-          const nextVal = prev + 2;
-          const nextChapter = Math.min(4, Math.floor((nextVal / 100) * 5));
-          if (nextChapter !== currentChapter) {
-            setCurrentChapter(nextChapter);
+          const next = prev + 2.5;
+          const nextCh = Math.min(4, Math.floor((next / 100) * 5));
+          if (nextCh !== currentChapter) {
+            setCurrentChapter(nextCh);
           }
-          return nextVal;
+          return next;
         });
-      }, 800);
+      }, 700);
     }
     return () => clearInterval(timer);
-  }, [isPlaying, currentChapter, synth]);
+  }, [isPlaying, currentChapter]);
 
-  const activeChapterObj = chapters[currentChapter];
-  const ActiveIcon = activeChapterObj.icon;
+  const activeCh = chapters[currentChapter];
 
   return (
     <div className="bg-gradient-to-r from-slate-950 via-hacker-card to-hacker-dark border border-sky-400/50 rounded-2xl p-4 sm:p-6 flex flex-col gap-5 shadow-2xl font-sans">
 
-      {/* Header Bar */}
+      {/* Studio Header Bar */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-hacker-border/60 pb-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-sky-400/10 border border-sky-400/40 flex items-center justify-center shrink-0">
-            <Sparkles size={20} className="text-sky-400 animate-pulse" />
+            <Radio size={20} className="text-sky-400 animate-pulse" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <span className="text-[10px] bg-sky-400/20 border border-sky-400/40 text-sky-300 px-2 py-0.5 rounded font-mono font-bold uppercase">
-                AI VIDEO WALKTHROUGH LECTURE
+                CYBERPUNK TERMINAL VIDEO STUDIO
               </span>
-              <span className="text-[10px] text-hacker-amber font-mono font-bold">1080P HD</span>
+              <span className="text-[10px] text-hacker-green font-mono font-bold">1080P HD</span>
             </div>
             <h3 className="text-sm font-bold text-white font-mono mt-0.5">{title}</h3>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <span className="text-xs bg-hacker-dark border border-hacker-border text-sky-300 px-3 py-1 rounded font-mono flex items-center gap-1.5">
-            <Clock size={13} /> {duration} FULL LECTURE
-          </span>
-          {completed && (
-            <span className="text-xs bg-hacker-green/10 border border-hacker-green/30 text-hacker-green px-3 py-1 rounded font-mono font-bold flex items-center gap-1.5">
-              <CheckCircle size={13} /> Completed
-            </span>
-          )}
+        {/* Audio & Voiceover Style Selector */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center bg-hacker-dark border border-hacker-border p-1 rounded-lg text-[10px] font-mono">
+            <span className="text-hacker-muted px-1.5 flex items-center gap-1"><Mic size={11} /> Voice:</span>
+            <button
+              onClick={() => setVoiceStyle("us")}
+              className={`px-2 py-0.5 rounded transition-all ${voiceStyle === "us" ? "bg-sky-400 text-black font-bold" : "text-hacker-muted"}`}
+            >
+              US Lead
+            </button>
+            <button
+              onClick={() => setVoiceStyle("uk")}
+              className={`px-2 py-0.5 rounded transition-all ${voiceStyle === "uk" ? "bg-sky-400 text-black font-bold" : "text-hacker-muted"}`}
+            >
+              UK Spec
+            </button>
+            <button
+              onClick={() => setVoiceStyle("tactical")}
+              className={`px-2 py-0.5 rounded transition-all ${voiceStyle === "tactical" ? "bg-sky-400 text-black font-bold" : "text-hacker-muted"}`}
+            >
+              Tactical
+            </button>
+          </div>
+
+          <button
+            onClick={() => setBgMusic(!bgMusic)}
+            className={`p-1.5 rounded border text-xs font-mono transition-all flex items-center gap-1 ${
+              bgMusic ? "bg-hacker-amber/20 text-hacker-amber border-hacker-amber/40" : "bg-hacker-dark text-hacker-muted border-hacker-border"
+            }`}
+            title="Toggle Ambient Cyber Background Audio"
+          >
+            <Music size={13} /> Synth Soundscape
+          </button>
         </div>
       </div>
 
-      {/* Main AI Video Screen Presentation Overlay */}
-      <div className="relative aspect-video bg-black/95 rounded-xl border border-hacker-border overflow-hidden flex flex-col justify-between p-4 sm:p-6 shadow-2xl group">
+      {/* Option A: Cyberpunk Hacker Terminal & Visual Walkthrough Screen */}
+      <div className="relative aspect-video bg-slate-950 rounded-xl border border-hacker-border overflow-hidden flex flex-col justify-between p-4 sm:p-6 shadow-2xl group">
 
-        {/* Top Video Overlay Controls */}
-        <div className="flex justify-between items-center z-20 font-mono text-xs">
+        {/* Top Screen Bar */}
+        <div className="flex justify-between items-center z-10 font-mono text-xs border-b border-hacker-border/40 pb-2">
           <div className="flex items-center gap-2">
-            <span className={`w-2.5 h-2.5 rounded-full ${isPlaying ? "bg-red-500 animate-ping" : "bg-hacker-muted"}`}></span>
+            <span className={`w-2.5 h-2.5 rounded-full ${isPlaying ? "bg-hacker-green animate-ping" : "bg-hacker-muted"}`}></span>
             <span className="text-sky-400 font-bold tracking-wider">
-              {isPlaying ? "● STREAMING AI LECTURE VIDEO" : "PAUSED"}
+              {isPlaying ? "LIVE TERMINAL EXPLOIT STREAM" : "PAUSED"}
             </span>
           </div>
 
-          <span className={`px-2.5 py-0.5 rounded border text-[10px] font-bold uppercase ${activeChapterObj.badgeColor}`}>
-            {activeChapterObj.title}
+          <span className="text-[10px] text-hacker-amber font-mono bg-hacker-amber/10 border border-hacker-amber/30 px-2.5 py-0.5 rounded">
+            CHAPTER {currentChapter + 1}: {activeCh.title.toUpperCase()}
           </span>
         </div>
 
-        {/* Center AI Presenter Screen Content */}
-        <div className="my-auto z-20 flex flex-col gap-3 max-w-3xl mx-auto w-full">
-          <div className="flex items-center gap-2 text-sky-400 font-mono text-xs font-bold uppercase">
-            <ActiveIcon size={18} /> {activeChapterObj.title}
+        {/* Live Terminal & HTTP Diff Visualization Area */}
+        <div className="my-auto z-10 flex flex-col gap-3 font-mono text-xs">
+
+          {/* Animated Typing CLI Command Bar */}
+          <div className="bg-black/90 border border-hacker-border p-3 rounded-lg flex items-center gap-2 shadow-inner">
+            <span className="text-hacker-green font-bold">root@academy-kali:~#</span>
+            <span className="text-white flex-1 truncate">{typedCommand}<span className="animate-pulse">_</span></span>
           </div>
 
-          <div className="bg-slate-900/90 border border-hacker-border/80 p-4 sm:p-5 rounded-xl shadow-xl backdrop-blur-md">
-            <pre className="font-mono text-xs text-gray-200 whitespace-pre-wrap leading-relaxed max-h-48 overflow-y-auto">
-              <code>{activeChapterObj.content}</code>
+          {/* Interactive Lesson Content Screen */}
+          <div className="bg-slate-900/90 border border-sky-400/30 p-4 rounded-xl shadow-xl backdrop-blur-md max-h-48 overflow-y-auto">
+            <div className="text-[10px] text-sky-400 font-bold uppercase mb-2 flex items-center gap-1.5">
+              <Terminal size={14} /> EXPLOIT ARCHITECTURE & INSTRUCTOR NOTES:
+            </div>
+            <pre className="text-xs text-gray-200 whitespace-pre-wrap leading-relaxed">
+              <code>{activeCh.content}</code>
             </pre>
           </div>
+
         </div>
 
         {/* Center Play Button Overlay when Paused */}
         {!isPlaying && (
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-30">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-xs flex flex-col items-center justify-center gap-3 z-20">
             <button
               onClick={handlePlayPause}
               className="w-20 h-20 rounded-full bg-sky-500/20 border-2 border-sky-400 text-sky-300 flex items-center justify-center hover:scale-110 transition-all shadow-2xl"
             >
               <Play size={36} className="ml-1" />
             </button>
+            <span className="text-xs font-mono font-bold text-white tracking-wider">
+              CLICK TO START CYBERPUNK TERMINAL LECTURE
+            </span>
           </div>
         )}
 
-        {/* Bottom Custom Video Controls Bar */}
-        <div className="z-20 bg-black/80 backdrop-blur-md p-3 rounded-lg border border-hacker-border/60 flex flex-col gap-2 font-mono text-xs">
-
-          {/* Progress Bar */}
+        {/* Bottom Custom Video Controls */}
+        <div className="z-10 bg-black/80 backdrop-blur-md p-3 rounded-lg border border-hacker-border/60 flex flex-col gap-2 font-mono text-xs">
           <input
             type="range"
             min="0"
@@ -223,8 +309,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             onChange={(e) => {
               const val = Number(e.target.value);
               setProgress(val);
-              const chapterIdx = Math.min(4, Math.floor((val / 100) * 5));
-              setCurrentChapter(chapterIdx);
+              setCurrentChapter(Math.min(4, Math.floor((val / 100) * 5)));
             }}
             className="w-full h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-sky-400"
           />
@@ -239,36 +324,28 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
               </button>
 
               <button
-                onClick={() => {
-                  const nextAudio = !isAudioEnabled;
-                  setIsAudioEnabled(nextAudio);
-                  if (!nextAudio && synth) synth.cancel();
-                }}
+                onClick={() => setIsMuted(!isMuted)}
                 className={`p-1.5 rounded border transition-all ${
-                  isAudioEnabled
-                    ? "bg-hacker-green/20 text-hacker-green border-hacker-green/40"
-                    : "bg-hacker-dark text-hacker-muted border-hacker-border"
+                  !isMuted ? "bg-hacker-green/20 text-hacker-green border-hacker-green/40" : "bg-hacker-dark text-hacker-muted border-hacker-border"
                 }`}
-                title="AI Speech Voiceover Audio"
               >
-                {isAudioEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+                {!isMuted ? <Volume2 size={16} /> : <VolumeX size={16} />}
               </button>
 
               <span className="text-[11px] text-hacker-muted">
-                Chapter {currentChapter + 1} of 5 • {duration} Lecture
+                Chapter {currentChapter + 1} / 5 • {duration}
               </span>
             </div>
 
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] text-hacker-green font-bold">AI NARRATIVE SYNTHESIS ACTIVE</span>
-            </div>
+            <span className="text-[10px] text-hacker-green font-bold">
+              AUDIO SYNTHESIS: {voiceStyle.toUpperCase()} INSTRUCTOR
+            </span>
           </div>
-
         </div>
 
       </div>
 
-      {/* Interactive 5-Chapter Navigation Selector */}
+      {/* 5 Chapter Quick-Nav Selector */}
       <div className="grid grid-cols-1 sm:grid-cols-5 gap-2 font-mono text-xs">
         {chapters.map((ch, idx) => {
           const ChIcon = ch.icon;
