@@ -307,6 +307,7 @@ function App() {
                           duration={currentDay.theory.videoBreakdown.duration}
                           methodologySummary={currentDay.theory.videoBreakdown.methodologySummary}
                           competency={currentDay.competency}
+                          embedId={currentDay.theory.videoBreakdown.embedId}
                         />
                       )}
 

@@ -18,7 +18,7 @@ export interface DayLesson {
   theory: {
     title: string;
     duration: string; // e.g. "30 Mins"
-    videoBreakdown: { title: string; duration: string; methodologySummary: string }; // Expert video methodology breakdown
+    videoBreakdown: { title: string; duration: string; methodologySummary: string; embedId?: string }; // Expert video methodology breakdown with curated cybersecurity walkthrough ID
     whatYouAreDoing: string; // Detailed breakdown of researcher actions
     vulnerabilityOrigin: string; // How the vulnerability comes about (Root Cause)
     pentesterFocus: string; // What to look for as a pentester
