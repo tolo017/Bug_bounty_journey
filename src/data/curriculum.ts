@@ -10,7 +10,7 @@ const getComprehensiveLessonContent = (
 ) => {
   const globalLessonIndex = weekIndex * 6 + dayIndex;
 
-  // 72 Unique Expert Video Methodology Breakdowns (Inspired by Haddix, Bombal, NahamSec, LiveOverflow, IppSec, John Hammond)
+  // 72 Unique Expert Video Methodology Breakdowns
   const videoBreakdowns: { title: string; duration: string; methodologySummary: string }[] = [
     // Week 1: Client-Side JS Deconstruction
     {
@@ -397,76 +397,90 @@ const getComprehensiveLessonContent = (
     }
   ];
 
-  // Pick unique video breakdown object
   const videoBreakdown = videoBreakdowns[globalLessonIndex] || {
     title: `Expert Methodology Breakdown: ${dayTitle}`,
     duration: "20 Mins",
     methodologySummary: `Master the systematic methodology for auditing ${dayTitle}. Learn how leading security researchers trace code execution, configure Burp Suite, and construct bulletproof exploit payloads.`
   };
 
-  // Generate 72 unique details
-  const whatYouAreDoing = `RED TEAM AUDIT (Day ${globalLessonIndex + 1}):\nYou are auditing ${dayTitle} in a target enterprise environment. You will inspect source code execution paths, configure proxy intercept rules, craft custom payloads, run terminal exploits, and record verified flags.`;
+  const whatYouAreDoing = `RED TEAM AUDIT (Day ${globalLessonIndex + 1} - ${dayName}):
+You are executing a focused Red Team assessment against target endpoints for ${dayTitle}.
+Your objective is to inspect runtime application data flows, isolate input parameters, construct targeted payloads, execute automated scripts, and extract verified system flags.`;
 
-  const vulnerabilityOrigin = `ORIGIN & ROOT CAUSE:\nIn modern web applications, ${dayTitle} arises when backend developers or front-end frameworks fail to perform strict input sanitization, object-level authorization checks, or numerical boundary validation prior to executing state transitions or database queries.`;
+  const vulnerabilityOrigin = `ORIGIN & ROOT CAUSE:
+${dayTitle} stems from missing input sanitization and implicit trust assumptions in server-side handling of ${competency}. When applications process external parameters without strict type enforcement or authorization validation, attackers alter execution context.`;
 
-  const pentesterFocus = `PENTESTER FOCUS & AUDIT STEPS:\n1. Search application request routing for ${dayTitle} input parameters.\n2. Intercept and mutate HTTP headers, query parameters, and JSON payloads using Burp Suite Repeater.\n3. Verify missing server-side validation checks and document complete step-by-step reproduction steps.`;
+  const pentesterFocus = `PENTESTER FOCUS & AUDIT CHECKLIST:
+1. Locate input vector for ${dayTitle} in HTTP requests or client bundles.
+2. Intercept requests in Burp Suite and mutate parameters (${competency}).
+3. Execute automated CLI scan and verify response code differences.`;
 
-  const payloadCrafting = `PAYLOAD CRAFTING LOGIC:\n1. Primary Exploit Payload: Target parameter manipulation for ${dayTitle}.\n2. Bypass Payload: Inject custom encoding or duplicate parameter keys to bypass WAF filtering.\n3. Exfiltration Test String: Confirm payload execution via terminal output or flag extraction.`;
+  const payloadCrafting = `PAYLOAD CRAFTING LOGIC FOR ${dayTitle.toUpperCase()}:
+1. Standard Payload: Craft parameter string targeting ${competency}.
+2. Encoding Bypass: Apply URL/Base64 encoding or parameter duplicate injection.
+3. Verification String: Confirm payload reflection or state mutation in response body.`;
 
-  const burpSuiteSetup = `BURP SUITE SETUP & PROXY CONFIGURATION:\n1. Proxy Intercept: Intercept target HTTP requests matching ${dayTitle}.\n2. Match/Replace & Extensions: Configure Burp Suite Repeater markers or specialized BApp extensions to automate payload injection.\n3. Logger++: Monitor background HTTP status code variances to flag successful exploits.`;
+  const burpSuiteSetup = `BURP SUITE SETUP FOR ${dayTitle.toUpperCase()}:
+1. Intercept target endpoint matching ${dayTitle}.
+2. Add Match/Replace rule in Proxy Options matching ${competency}.
+3. Monitor Logger++ for HTTP status code anomalies.`;
 
-  const blueTeamDefense = `BLUE TEAM DEFENSE & SECURE CODING:\n1. Server-side Validation: Enforce strict server-side type and boundary validation.\n2. Authorization Enforcement: Verify object-level access controls on every API endpoint.\n3. Defense-in-Depth: Implement strict Content Security Policies (CSP) and WAF protection rules.`;
+  const blueTeamDefense = `BLUE TEAM DEFENSE & SECURE CODING:
+1. Enforce strict server-side input validation and parameter allowlists.
+2. Verify object-level authorization on every API resolver.
+3. Deploy Content Security Policy (CSP) and WAF rules for ${competency}.`;
 
   const stepByStepTutorial = [
-    `Step 1: Open the target code inspection panel below and locate un-sanitized variables or endpoints.`,
-    `Step 2: Identify where user-supplied inputs trigger dangerous execution sinks or authorization bypasses.`,
-    `Step 3: Construct your exploit payload string tailored for ${dayTitle}.`,
-    `Step 4: Execute the payload in the local shell terminal to compromise the target sandbox container.`,
-    `Step 5: Copy the captured flag into the verification input and submit to claim your XP.`
+    `Step 1: Open the Digital Arena inspection panel and review target endpoint parameters for ${dayTitle}.`,
+    `Step 2: Identify parameter handling gaps in ${competency}.`,
+    `Step 3: Construct your exploit payload for ${dayTitle}.`,
+    `Step 4: Execute the payload in the interactive shell terminal.`,
+    `Step 5: Copy the captured flag into the answer box to earn XP.`
   ];
 
   const usefulResources = [
-    { name: `OWASP Testing Guide: ${competency}`, url: "https://owasp.org/www-project-web-security-testing-guide/", category: "Standard" },
-    { name: `PortSwigger Web Security Academy Labs`, url: "https://portswigger.net/web-security", category: "Lab & Guide" },
-    { name: `HackerOne Public Vulnerability Disclosures`, url: "https://hackerone.com/hacktivity", category: "Reference" }
+    { name: `OWASP Standard: ${competency}`, url: "https://owasp.org/www-project-web-security-testing-guide/", category: "Standard" },
+    { name: `PortSwigger Academy: ${dayTitle}`, url: "https://portswigger.net/web-security", category: "Lab & Guide" },
+    { name: `HackerOne Hacktivity Reports`, url: "https://hackerone.com/hacktivity", category: "Reference" }
   ];
 
-  const industryInsight = `💡 INDUSTRY INSIGHT & STATISTIC (Day ${globalLessonIndex + 1}):\nVulnerabilities in ${competency} consistently command high-severity bounties on HackerOne and Bugcrowd programs, averaging between $1,500 and $10,000+ for verified corporate reports.`;
+  const industryInsight = `💡 INDUSTRY INSIGHT (Day ${globalLessonIndex + 1}):
+Reports covering ${dayTitle} in ${competency} regularly command $1,500 to $10,000+ bounties on HackerOne and Bugcrowd programs.`;
 
   const pythonScript = `#!/usr/bin/env python3
+# Reusable Python Exploit Script: ${dayTitle} (Day ${globalLessonIndex + 1})
 import requests
 import sys
 
-# Python Automation Tool: ${dayTitle}
-def execute_audit(target_url):
-    print(f"[*] Executing automated audit for ${dayTitle} on: {target_url}")
-    headers = {"User-Agent": "BugBountyMastery/1.0", "X-Audit-Target": "${competency}"}
+def audit_${dayName.toLowerCase()}_target(url):
+    print(f"[*] Auditing target endpoint for ${dayTitle}: {url}")
+    headers = {"User-Agent": "BugBountyMastery/2.0", "X-Target-Module": "${competency}"}
     try:
-        res = requests.get(target_url, headers=headers, timeout=5)
-        print(f"[+] Server Response Code: {res.status_code}")
+        res = requests.get(f"{url}/api/v1/audit", headers=headers, timeout=5)
+        print(f"[+] HTTP Status: {res.status_code}")
         if res.status_code == 200:
-            print("[+] Target endpoint active. Exploit payload executed successfully!")
+            print("[+] Target endpoint active! Exploit payload verified.")
     except Exception as e:
-        print(f"[-] Connection failed: {e}")
+        print(f"[-] Connection error: {e}")
 
 if __name__ == "__main__":
-    target = sys.argv[1] if len(sys.argv) > 1 else "http://sandbox-target.corp.internal"
-    execute_audit(target)`;
+    target_url = sys.argv[1] if len(sys.argv) > 1 else "http://sandbox-target.corp.internal"
+    audit_${dayName.toLowerCase()}_target(target_url)`;
 
   const bashScript = `#!/usr/bin/env bash
-# Bash Automation Script: ${dayTitle}
+# CLI Bash Automation: ${dayTitle} (Day ${globalLessonIndex + 1})
 TARGET=\${1:-"http://sandbox-target.corp.internal"}
 
-echo "[*] Launching CLI audit tool for ${dayTitle}..."
-curl -s -X GET -H "X-Audit-Tool: BugBountyMastery" "$TARGET" | head -n 20`;
+echo "[*] Launching CLI scanner for ${dayTitle}..."
+curl -s -X GET -H "X-Audit-Skill: ${competency}" "$TARGET/api/v1/audit" | head -n 20`;
 
   const vdpReportTemplate = {
-    title: `[HIGH] ${dayTitle} Identified in Core Application Endpoint`,
+    title: `[HIGH] ${dayTitle} Identified in Application Endpoint`,
     cvssVector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
     cvssScore: 8.2,
-    description: `During a security assessment, an un-sanitized endpoint flaw (${dayTitle}) was identified. An unauthenticated attacker can exploit this condition to bypass application controls and read or modify sensitive data.`,
-    stepsToReproduce: `1. Send GET request to target URL: \`https://target.corp.internal/api/v1/resource\`\n2. Inject custom payload parameter string.\n3. Observe HTTP 200 response returning unauthorized data.`,
-    remediation: `1. Implement strict server-side validation and sanitization.\n2. Enforce object-level access control on all backend API routes.`
+    description: `During a security assessment, an un-sanitized endpoint flaw (${dayTitle}) was identified in ${competency}. An attacker can exploit this condition to bypass application controls and read or modify sensitive data.`,
+    stepsToReproduce: `1. Issue HTTP GET request to endpoint for ${dayTitle}.\n2. Supply parameter payload string.\n3. Observe HTTP 200 response returning unauthorized target data.`,
+    remediation: `1. Enforce strict server-side validation and parameter allowlists.\n2. Implement object-level authorization checks across all API routes.`
   };
 
   return {

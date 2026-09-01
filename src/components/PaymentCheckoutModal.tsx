@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AccessState } from "../hooks/useLMSState";
-import { CreditCard, ShieldCheck, Sparkles, KeyRound, Settings, ArrowRight } from "lucide-react";
+import { CreditCard, Sparkles, Settings, ArrowRight } from "lucide-react";
 
 interface PaymentCheckoutModalProps {
   access: AccessState;
@@ -14,8 +14,7 @@ export const PaymentCheckoutModal: React.FC<PaymentCheckoutModalProps> = ({
   access,
   isOpen,
   onClose,
-  onUnlockPayment,
-  onToggleAdminAccess
+  onUnlockPayment
 }) => {
   // Configurable Payment Link Slot (Only editable by builder)
   const [paymentLinkSlot, setPaymentLinkSlot] = useState(
@@ -23,10 +22,8 @@ export const PaymentCheckoutModal: React.FC<PaymentCheckoutModalProps> = ({
   );
   const [showLinkConfig, setShowLinkConfig] = useState(false);
 
-  // Verification / Admin Override State
+  // Verification State
   const [txnId, setTxnId] = useState("");
-  const [builderCode, setBuilderCode] = useState("");
-  const [showBuilderSlot, setShowBuilderSlot] = useState(false);
   const [statusMsg, setStatusMsg] = useState({ text: "", isError: false });
 
   if (!isOpen) return null;
@@ -57,18 +54,6 @@ export const PaymentCheckoutModal: React.FC<PaymentCheckoutModalProps> = ({
     setTimeout(() => {
       onClose();
     }, 1000);
-  };
-
-  const handleBuilderBypass = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!builderCode.trim()) return;
-    const res = onToggleAdminAccess(builderCode);
-    setStatusMsg({ text: res.message, isError: !res.success });
-    if (res.success) {
-      setTimeout(() => {
-        onClose();
-      }, 1000);
-    }
   };
 
   return (
@@ -178,38 +163,6 @@ export const PaymentCheckoutModal: React.FC<PaymentCheckoutModalProps> = ({
             </button>
           </div>
         </form>
-
-        {/* Builder / Admin Access Override Slot */}
-        <div className="flex flex-col items-center gap-2 border-t border-hacker-border/40 pt-3">
-          <button
-            type="button"
-            onClick={() => setShowBuilderSlot(!showBuilderSlot)}
-            className="text-[11px] text-hacker-muted hover:text-white font-mono flex items-center gap-1"
-          >
-            <KeyRound size={12} /> Website Builder Access Slot
-          </button>
-
-          {showBuilderSlot && (
-            <form onSubmit={handleBuilderBypass} className="w-full bg-hacker-dark p-3 rounded-lg border border-hacker-border flex flex-col gap-2">
-              <span className="text-[10px] text-hacker-muted font-mono uppercase">Builder Access Key:</span>
-              <div className="flex gap-2">
-                <input
-                  type="password"
-                  value={builderCode}
-                  onChange={(e) => setBuilderCode(e.target.value)}
-                  placeholder="Enter Builder Access Code..."
-                  className="flex-1 bg-hacker-card border border-hacker-border rounded px-2.5 py-1 text-xs font-mono text-white focus:outline-none focus:ring-1 focus:ring-hacker-amber"
-                />
-                <button
-                  type="submit"
-                  className="bg-hacker-amber text-black font-mono font-bold text-xs px-3 rounded"
-                >
-                  Bypass
-                </button>
-              </div>
-            </form>
-          )}
-        </div>
 
         {statusMsg.text && (
           <div className={`p-2.5 rounded text-xs font-mono ${statusMsg.isError ? "bg-red-500/10 text-red-400 border border-red-500/20" : "bg-hacker-green/10 text-hacker-green border border-hacker-green/20"}`}>
