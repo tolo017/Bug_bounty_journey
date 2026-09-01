@@ -31,7 +31,7 @@ export interface AccessState {
   isTrialExpired: boolean;
 }
 
-const CURRICULUM_VERSION = "v6_beginner_analogies_chatgpt_books_2026";
+const CURRICULUM_VERSION = "v7_creator_and_book_lessons_2026";
 
 export const useLMSState = () => {
   const [weeks, setWeeks] = useState<Week[]>([]);

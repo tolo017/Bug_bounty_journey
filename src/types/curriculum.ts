@@ -13,6 +13,16 @@ export interface BookLesson {
   takeaway: string;
 }
 
+export interface CreatorLesson {
+  creatorName: string;
+  channelOrWebsite: string;
+  lessonTitle: string;
+  methodologyOverview: string;
+  stepByStepWalkthrough: string[];
+  practicalCommand: string;
+  directUrl: string;
+}
+
 export interface DayLesson {
   id: string; // e.g. "week-1-monday"
   weekIndex: number; // 0 to 11 (Week 1 to 12)
@@ -30,6 +40,7 @@ export interface DayLesson {
     beginnerAnalogy: { story: string; realWorldComparison: string }; // Simple real-world story
     chatGptPromptStrategy: string; // ChatGPT & AI prompt strategy for bug bounty
     recommendedBooks: BookLesson[]; // Detailed book chapter lessons
+    creatorLessons: CreatorLesson[]; // Detailed YouTube creator & website lessons
     whatYouAreDoing: string; // Detailed breakdown of researcher actions
     vulnerabilityOrigin: string; // How the vulnerability comes about (Root Cause)
     pentesterFocus: string; // What to look for as a pentester

@@ -13,9 +13,10 @@ import { ThemeToggle } from "./components/ThemeToggle";
 import { AdminDashboardModal } from "./components/AdminDashboardModal";
 import { AuthModal, AuthUser } from "./components/AuthModal";
 import { BookLessonModal } from "./components/BookLessonModal";
-import { BookLesson } from "./types/curriculum";
+import { YouTubeLessonModal } from "./components/YouTubeLessonModal";
+import { BookLesson, CreatorLesson } from "./types/curriculum";
 import {
-  ShieldAlert, BookOpen, Cpu, FileText, ChevronRight, Sparkles, Terminal, Info, ShieldCheck, LogIn, LogOut, Lightbulb, Bot, BookMarked
+  ShieldAlert, BookOpen, Cpu, FileText, ChevronRight, Sparkles, Terminal, Info, ShieldCheck, LogIn, LogOut, Lightbulb, Bot, BookMarked, PlayCircle
 } from "lucide-react";
 import confetti from "canvas-confetti";
 
@@ -55,6 +56,8 @@ function App() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [selectedBook, setSelectedBook] = useState<BookLesson | null>(null);
   const [showBookModal, setShowBookModal] = useState(false);
+  const [selectedCreatorLesson, setSelectedCreatorLesson] = useState<CreatorLesson | null>(null);
+  const [showCreatorModal, setShowCreatorModal] = useState(false);
   const [authUser, setAuthUser] = useState<AuthUser | null>(() => {
     const saved = localStorage.getItem("bbm_auth_user");
     return saved ? JSON.parse(saved) : null;
@@ -201,6 +204,14 @@ function App() {
           dayTitle={currentDay?.title || "Cybersecurity Auditing"}
         />
 
+        {/* Interactive Creator / YouTube Walkthrough Lesson Modal */}
+        <YouTubeLessonModal
+          lesson={selectedCreatorLesson}
+          isOpen={showCreatorModal}
+          onClose={() => setShowCreatorModal(false)}
+          dayTitle={currentDay?.title || "Cybersecurity Auditing"}
+        />
+
         {/* Profile Details RPG panel */}
         <ProfilePanel stats={stats} onUpdateStats={updateStats} />
 
@@ -334,6 +345,36 @@ function App() {
                           <pre className="bg-black/80 border border-hacker-border rounded p-3 text-xs text-purple-300 font-mono whitespace-pre-wrap leading-relaxed overflow-x-auto">
                             <code>{currentDay.theory.chatGptPromptStrategy}</code>
                           </pre>
+                        </div>
+                      )}
+
+                      {/* Expert YouTube Creator & Security Website Walkthrough Lessons */}
+                      {currentDay.theory.creatorLessons && currentDay.theory.creatorLessons.length > 0 && (
+                        <div className="bg-hacker-dark/50 border border-sky-400/40 p-4 rounded-xl flex flex-col gap-3">
+                          <div className="flex justify-between items-center">
+                            <div className="text-xs font-bold text-sky-400 font-mono flex items-center gap-2 uppercase tracking-wider">
+                              <PlayCircle size={18} /> CREATOR & SECURITY WEBSITE WALKTHROUGH LESSONS
+                            </div>
+                            <span className="text-[10px] text-hacker-muted font-mono">(Click card to launch lesson)</span>
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            {currentDay.theory.creatorLessons.map((creator, idx) => (
+                              <button
+                                key={idx}
+                                onClick={() => {
+                                  setSelectedCreatorLesson(creator);
+                                  setShowCreatorModal(true);
+                                }}
+                                className="bg-hacker-card border border-hacker-border hover:border-sky-400 p-3.5 rounded-lg flex flex-col gap-1.5 font-mono text-xs text-left transition-all group shadow-sm hover:shadow-md"
+                              >
+                                <span className="font-bold text-white group-hover:text-sky-400 transition-colors flex items-center justify-between">
+                                  {creator.lessonTitle} <span className="text-[10px] bg-sky-400/10 text-sky-300 px-2 py-0.5 rounded">View Lesson →</span>
+                                </span>
+                                <span className="text-[10px] text-hacker-amber">{creator.creatorName} ({creator.channelOrWebsite})</span>
+                                <p className="text-[11px] text-gray-300 font-sans mt-0.5 leading-relaxed line-clamp-2">{creator.methodologyOverview}</p>
+                              </button>
+                            ))}
+                          </div>
                         </div>
                       )}
 
