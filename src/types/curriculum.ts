@@ -26,6 +26,13 @@ export interface CreatorLesson {
   specificVideoUrl: string;
 }
 
+export interface RealWorldHuntingGuide {
+  targetDiscoveryDorks: string[];
+  reconFilterStrategy: string;
+  realWorldTriageTips: string;
+  bypassTricks: string;
+}
+
 export interface DayLesson {
   id: string; // e.g. "week-1-monday"
   weekIndex: number; // 0 to 11 (Week 1 to 12)
@@ -44,6 +51,7 @@ export interface DayLesson {
     chatGptPromptStrategy: string; // ChatGPT & AI prompt strategy for bug bounty
     recommendedBooks: BookLesson[]; // Detailed book chapter lessons with practicals & adaptations
     creatorLessons: CreatorLesson[]; // Detailed YouTube creator & website lessons with specific video URLs
+    howToDoRealWorldHunting: RealWorldHuntingGuide; // Real World Hunting Field Guide
     whatYouAreDoing: string; // Detailed breakdown of researcher actions
     vulnerabilityOrigin: string; // How the vulnerability comes about (Root Cause)
     pentesterFocus: string; // What to look for as a pentester

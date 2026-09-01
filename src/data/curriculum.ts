@@ -1,4 +1,4 @@
-import { Week, DayLesson, BossLab, BookLesson, CreatorLesson } from "../types/curriculum";
+import { Week, DayLesson, BossLab, BookLesson, CreatorLesson, RealWorldHuntingGuide } from "../types/curriculum";
 
 // Helper generator creating broad, beginner-friendly, highly practical Red/Blue Team lesson content entries across all 12 weeks
 const getComprehensiveLessonContent = (
@@ -51,6 +51,18 @@ Analyze the following code snippet for ${dayTitle} vulnerabilities:
 3. Explain step-by-step how a penetration tester can verify this flaw in Burp Suite Repeater.
 4. Provide secure refactored code using modern defense-in-depth principles."`;
 
+  // Real-World Bug Hunting Field Guide Section
+  const howToDoRealWorldHunting: RealWorldHuntingGuide = {
+    targetDiscoveryDorks: [
+      `site:target.corp inurl:api/v1/${competency.toLowerCase().replace(/[\s&()\-]/g, "")}`,
+      `site:*.target.corp ext:js "${dayTitle.split(" ")[0].toLowerCase()}"`,
+      `site:target.corp inurl:debug=1`
+    ],
+    reconFilterStrategy: `1. Run 'subfinder -d target.corp -silent | httpx -title -status-code' to enumerate live HTTP assets.\n2. Filter for JS bundles containing parameter routing or API endpoints matching ${competency}.\n3. Use 'arjun -u https://target.corp/api/v1/resource -m GET,POST' to mine un-linked query parameters.`,
+    realWorldTriageTips: `1. When reporting ${dayTitle} on HackerOne or Bugcrowd, always attach a clean, copy-pasteable cURL command.\n2. Demonstrate business impact: prove whether an unauthenticated user can read private PII or execute administrative state changes.\n3. Verify that the flaw reproduces on production assets before filing to avoid duplicate status.`,
+    bypassTricks: `1. WAF Bypass: Try double URL encoding (%2527 instead of %27) or unicode normalization (%u0027).\n2. HTTP Parameter Pollution (HPP): Supply duplicate query parameters (?id=101&id=102).\n3. Method Override: Send 'X-HTTP-Method-Override: PUT' header if direct PUT/DELETE calls return HTTP 405.`
+  };
+
   // Detailed Book Chapter Lessons with Practical Examples & Real-Target Adaptations
   const recommendedBooks: BookLesson[] = [
     {
@@ -95,12 +107,12 @@ Analyze the following code snippet for ${dayTitle} vulnerabilities:
     }
   ];
 
-  // Specific YouTube Video Walkthroughs and Broad Explanations
+  // Specific YouTube Video Walkthroughs from Individual Creators
   const creatorLessons: CreatorLesson[] = [
     {
       creatorName: "David Bombal",
-      channelOrWebsite: "David Bombal (YouTube / Networking & Cyber)",
-      lessonTitle: `Networking & HTTP Flow Analysis for ${dayTitle}`,
+      channelOrWebsite: "David Bombal (YouTube)",
+      lessonTitle: `Networking & HTTP Packet Analysis for ${dayTitle}`,
       broadExplanation: "David Bombal broadly explains how web proxies intercept HTTP packets between client browsers and backend servers. He demonstrates how to trace TCP handshakes, inspect headers, and mutate payload values during active audits.",
       methodologyOverview: "Learn to trace TCP/IP handshakes, inspect HTTP request headers, and analyze proxy traffic in Burp Suite.",
       stepByStepWalkthrough: [
@@ -114,7 +126,7 @@ Analyze the following code snippet for ${dayTitle} vulnerabilities:
     },
     {
       creatorName: "NahamSec",
-      channelOrWebsite: "NahamSec (Bug Bounty & Recon Methodology)",
+      channelOrWebsite: "NahamSec (YouTube)",
       lessonTitle: `Target Recon & Discovery Pipeline for ${dayTitle}`,
       broadExplanation: "NahamSec broadly outlines his reconnaissance strategy for discovering forgotten subdomains and un-linked API endpoints. He demonstrates chaining Go CLI tools (Subfinder, httpx, ffuf) to map attack surfaces before testing.",
       methodologyOverview: "Discover un-linked web endpoints using automated Go toolchains before manual code auditing.",
@@ -129,7 +141,7 @@ Analyze the following code snippet for ${dayTitle} vulnerabilities:
     },
     {
       creatorName: "Jason Haddix",
-      channelOrWebsite: "The Bug Hunter's Methodology (Jason Haddix)",
+      channelOrWebsite: "Jason Haddix - The Bug Hunter's Methodology",
       lessonTitle: `Systematic Audit Checklist for ${dayTitle}`,
       broadExplanation: "Jason Haddix broadly details the Bug Hunter's Methodology checklist. He demonstrates how to organize testing environments, prioritize high-yield vulnerability classes, and execute targeted parameter mining.",
       methodologyOverview: "Organize testing environments, prioritize attack surface vectors, and execute targeted parameter fuzzing.",
@@ -143,19 +155,19 @@ Analyze the following code snippet for ${dayTitle} vulnerabilities:
       specificVideoUrl: "https://www.youtube.com/watch?v=3Kq1MIfTWCE"
     },
     {
-      creatorName: "PortSwigger Web Security Academy",
-      channelOrWebsite: "PortSwigger Academy (Interactive Labs & Specs)",
-      lessonTitle: `Interactive Lab Demonstration: ${dayTitle}`,
-      broadExplanation: "PortSwigger Web Security Academy broadly breaks down vulnerability mechanics step-by-step. They demonstrate identifying vulnerable code sinks, constructing exploit payloads, and solving interactive labs.",
-      methodologyOverview: "Learn core vulnerability mechanics and solve hands-on practical labs.",
+      creatorName: "LiveOverflow",
+      channelOrWebsite: "LiveOverflow (YouTube)",
+      lessonTitle: `Deep-Dive Exploit Mechanics for ${dayTitle}`,
+      broadExplanation: "LiveOverflow broadly breaks down low-level vulnerability mechanics, browser memory representations, and server parser quirks. He demonstrates step-by-step how edge-case inputs break backend parsing logic.",
+      methodologyOverview: "Examine underlying browser engine memory states and server parser execution quirks.",
       stepByStepWalkthrough: [
-        "1. Review vulnerability mechanics in PortSwigger documentation.",
-        "2. Launch target lab instance and capture initial HTTP request.",
-        "3. Inject custom exploit payload into vulnerable sink.",
-        "4. Verify successful flag extraction and solve the challenge."
+        "1. Inspect JavaScript object execution paths in Chrome DevTools Console.",
+        "2. Locate dangerous sinks receiving un-sanitized user strings.",
+        "3. Construct payload variations to bypass client validation.",
+        "4. Capture exfiltrated data or token responses."
       ],
-      practicalCommand: `https://portswigger.net/web-security`,
-      specificVideoUrl: "https://portswigger.net/web-security"
+      practicalCommand: `console.log(window.config); // Inspect runtime global object`,
+      specificVideoUrl: "https://www.youtube.com/watch?v=4m6n02y0_6c"
     }
   ];
 
@@ -243,6 +255,7 @@ curl -s -X GET -H "X-Audit-Skill: ${competency}" "$TARGET/api/v1/resource" | hea
     chatGptPromptStrategy,
     recommendedBooks,
     creatorLessons,
+    howToDoRealWorldHunting,
     whatYouAreDoing,
     vulnerabilityOrigin,
     pentesterFocus,
@@ -474,6 +487,7 @@ export const generateDefaultCurriculum = (): Week[] => {
           chatGptPromptStrategy: details.chatGptPromptStrategy,
           recommendedBooks: details.recommendedBooks,
           creatorLessons: details.creatorLessons,
+          howToDoRealWorldHunting: details.howToDoRealWorldHunting,
           whatYouAreDoing: details.whatYouAreDoing,
           vulnerabilityOrigin: details.vulnerabilityOrigin,
           pentesterFocus: details.pentesterFocus,

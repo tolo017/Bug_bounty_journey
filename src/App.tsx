@@ -16,7 +16,7 @@ import { BookLessonModal } from "./components/BookLessonModal";
 import { YouTubeLessonModal } from "./components/YouTubeLessonModal";
 import { BookLesson, CreatorLesson } from "./types/curriculum";
 import {
-  ShieldAlert, BookOpen, Cpu, FileText, ChevronRight, Sparkles, Terminal, Info, ShieldCheck, LogIn, LogOut, Lightbulb, Bot, BookMarked, PlayCircle
+  ShieldAlert, BookOpen, Cpu, FileText, ChevronRight, Sparkles, Terminal, Info, ShieldCheck, LogIn, LogOut, Lightbulb, Bot, BookMarked, PlayCircle, Target, Search, Filter
 } from "lucide-react";
 import confetti from "canvas-confetti";
 
@@ -332,6 +332,59 @@ function App() {
                           </p>
                           <div className="text-xs text-gray-300 font-mono bg-black/60 p-3 rounded border border-hacker-border/40 mt-1">
                             <span className="font-bold text-hacker-amber">REAL WORLD COMPARISON:</span> {currentDay.theory.beginnerAnalogy.realWorldComparison}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Real-World Bug Hunting Field Guide */}
+                      {currentDay.theory.howToDoRealWorldHunting && (
+                        <div className="bg-gradient-to-r from-emerald-950/40 via-hacker-card to-hacker-dark border border-hacker-green/50 p-5 rounded-xl flex flex-col gap-3 shadow-lg">
+                          <div className="text-xs font-bold text-hacker-green font-mono flex items-center gap-2 uppercase tracking-wider">
+                            <Target size={18} /> REAL-WORLD BUG HUNTING FIELD GUIDE
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-1 font-mono text-xs">
+                            <div className="bg-black/70 p-3.5 rounded-lg border border-hacker-border/60 flex flex-col gap-2">
+                              <span className="font-bold text-hacker-green flex items-center gap-1.5">
+                                <Search size={14} /> TARGET DISCOVERY GOOGLE DORKS:
+                              </span>
+                              <div className="flex flex-col gap-1 text-[11px] text-gray-300">
+                                {currentDay.theory.howToDoRealWorldHunting.targetDiscoveryDorks.map((dork, idx) => (
+                                  <code key={idx} className="bg-slate-950 p-1.5 rounded border border-hacker-border/40 text-hacker-green overflow-x-auto">
+                                    {dork}
+                                  </code>
+                                ))}
+                              </div>
+                            </div>
+
+                            <div className="bg-black/70 p-3.5 rounded-lg border border-hacker-border/60 flex flex-col gap-2">
+                              <span className="font-bold text-sky-400 flex items-center gap-1.5">
+                                <Filter size={14} /> RECON & FILTERING STRATEGY:
+                              </span>
+                              <p className="text-[11px] text-gray-300 font-sans leading-relaxed whitespace-pre-wrap">
+                                {currentDay.theory.howToDoRealWorldHunting.reconFilterStrategy}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 font-mono text-xs">
+                            <div className="bg-black/70 p-3.5 rounded-lg border border-hacker-border/60 flex flex-col gap-1.5 font-sans">
+                              <span className="font-bold text-hacker-amber font-mono text-xs flex items-center gap-1.5">
+                                📝 REAL-WORLD TRIAGE & REPORTING TIPS:
+                              </span>
+                              <p className="text-[11px] text-gray-300 leading-relaxed whitespace-pre-wrap">
+                                {currentDay.theory.howToDoRealWorldHunting.realWorldTriageTips}
+                              </p>
+                            </div>
+
+                            <div className="bg-black/70 p-3.5 rounded-lg border border-hacker-border/60 flex flex-col gap-1.5 font-sans">
+                              <span className="font-bold text-purple-400 font-mono text-xs flex items-center gap-1.5">
+                                🛡️ WAF BYPASS & PARAMETER TRICKS:
+                              </span>
+                              <p className="text-[11px] text-gray-300 leading-relaxed whitespace-pre-wrap">
+                                {currentDay.theory.howToDoRealWorldHunting.bypassTricks}
+                              </p>
+                            </div>
                           </div>
                         </div>
                       )}
