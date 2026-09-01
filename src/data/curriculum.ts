@@ -1,4 +1,4 @@
-import { Week, DayLesson, BossLab } from "../types/curriculum";
+import { Week, DayLesson, BossLab, BookLesson } from "../types/curriculum";
 
 // Helper generator creating broad, beginner-friendly, highly practical Red/Blue Team lesson content entries across all 12 weeks
 const getComprehensiveLessonContent = (
@@ -38,7 +38,6 @@ const getComprehensiveLessonContent = (
     }
   ];
 
-  // Pick analogy based on lesson index
   const beginnerAnalogy = beginnerAnalogies[globalLessonIndex % beginnerAnalogies.length];
 
   // ChatGPT & AI Bug Bounty Auditing Strategy Prompts (Inspired by Joas Antonio dos Santos Barbosa)
@@ -52,27 +51,39 @@ Analyze the following code snippet for ${dayTitle} vulnerabilities:
 3. Explain step-by-step how a penetration tester can verify this flaw in Burp Suite Repeater.
 4. Provide secure refactored code using modern defense-in-depth principles."`;
 
-  // Curated Book References
-  const recommendedBooks = [
+  // Detailed Interactive Book Chapter Lessons for the active topic
+  const recommendedBooks: BookLesson[] = [
     {
       title: "Bug Bounty Tips & Tricks using ChatGPT",
       author: "Joas Antonio dos Santos Barbosa",
-      takeaway: "Leverage AI prompt engineering to accelerate code auditing, decode obfuscated JavaScript bundles, and automate payload generation."
+      chapterLesson: `Chapter 3: Auditing ${competency} with AI Prompts`,
+      detailedExplanation: `In this chapter, Joas Antonio demonstrates how bug bounty hunters use AI language models to deconstruct complex JavaScript functions and identify ${dayTitle}. By feeding un-minified code blocks into structured prompt templates, researchers spot missing validation sinks in seconds.`,
+      practicalExample: `Prompt: "Explain how this JavaScript function handles user input and generate a PoC string for ${dayTitle}."`,
+      takeaway: "Use structured AI prompts to automate static code analysis and generate targeted payload variations."
     },
     {
       title: "Bug Bounty from Scratch",
       author: "Santiago Vazquez & Francisco Javier",
-      takeaway: "Master fundamental web vulnerability classes, reconnaissance workflows, and step-by-step vulnerability disclosure program (VDP) submissions."
+      chapterLesson: `Chapter 5: Practical Exploitation of ${dayTitle}`,
+      detailedExplanation: `Santiago Vazquez and Francisco Javier walk through real-world bug bounty submissions. They explain that finding ${dayTitle} requires mapping parameter data flows, testing boundary conditions, and documenting cURL reproduction commands for triage officers.`,
+      practicalExample: `curl -v -X POST "https://target.corp/api/v1/resource" -H "Content-Type: application/json" -d '{"test": "payload"}'`,
+      takeaway: "Always document clean, minimal cURL reproduction commands to ensure fast report triage."
     },
     {
       title: "Automate the Boring Stuff with Python",
       author: "Al Sweigart",
-      takeaway: "Build custom web scrapers, regex log parsers, and HTTP automation scripts using Python 3 and the requests library."
+      chapterLesson: `Chapter 12: Web Scraping & Scripting for ${competency}`,
+      detailedExplanation: `Al Sweigart teaches how to write lightweight Python scripts using the 'requests' and 'BeautifulSoup' libraries to automate HTTP requests, parse HTML responses, and test endpoints for ${dayTitle} across hundreds of target URLs simultaneously.`,
+      practicalExample: `import requests\nres = requests.get('https://target.corp/api/v1/resource')\nif 'flag' in res.text: print('[+] Vulnerability Verified!')`,
+      takeaway: "Automate repetitive auditing tasks with simple Python scripts to test assets at scale."
     },
     {
       title: "Black Hat Python",
       author: "Justin Seitz",
-      takeaway: "Develop offensive network tools, raw socket sniffers, and custom proxy extensions for bug hunting."
+      chapterLesson: `Chapter 4: Writing Custom Proxy Extensions for ${dayTitle}`,
+      detailedExplanation: `Justin Seitz explains how to build custom Python network tools and Burp Suite extensions to intercept HTTP traffic, manipulate request headers on the fly, and bypass Web Application Firewall (WAF) filters when testing ${competency}.`,
+      practicalExample: `import urllib.request\nreq = urllib.request.Request('https://target.corp', headers={'X-Audit': 'Test'})\nhtml = urllib.request.urlopen(req).read()`,
+      takeaway: "Build custom network scripts to automate non-standard payload injections and header overrides."
     }
   ];
 

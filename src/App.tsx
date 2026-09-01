@@ -12,6 +12,8 @@ import { SocialIntegrator } from "./components/SocialIntegrator";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { AdminDashboardModal } from "./components/AdminDashboardModal";
 import { AuthModal, AuthUser } from "./components/AuthModal";
+import { BookLessonModal } from "./components/BookLessonModal";
+import { BookLesson } from "./types/curriculum";
 import {
   ShieldAlert, BookOpen, Cpu, FileText, ChevronRight, Sparkles, Terminal, Info, ShieldCheck, LogIn, LogOut, Lightbulb, Bot, BookMarked
 } from "lucide-react";
@@ -51,6 +53,8 @@ function App() {
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
   const [showAdminDashboard, setShowAdminDashboard] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [selectedBook, setSelectedBook] = useState<BookLesson | null>(null);
+  const [showBookModal, setShowBookModal] = useState(false);
   const [authUser, setAuthUser] = useState<AuthUser | null>(() => {
     const saved = localStorage.getItem("bbm_auth_user");
     return saved ? JSON.parse(saved) : null;
@@ -187,6 +191,14 @@ function App() {
               handleToggleAdminAccess("Jakwath,12.");
             }
           }}
+        />
+
+        {/* Interactive Book Lesson Modal */}
+        <BookLessonModal
+          book={selectedBook}
+          isOpen={showBookModal}
+          onClose={() => setShowBookModal(false)}
+          dayTitle={currentDay?.title || "Cybersecurity Auditing"}
         />
 
         {/* Profile Details RPG panel */}
@@ -328,16 +340,28 @@ function App() {
                       {/* Recommended Reading & Book References */}
                       {currentDay.theory.recommendedBooks && currentDay.theory.recommendedBooks.length > 0 && (
                         <div className="bg-hacker-dark/50 border border-hacker-border p-4 rounded-xl flex flex-col gap-3">
-                          <div className="text-xs font-bold text-sky-400 font-mono flex items-center gap-2 uppercase tracking-wider">
-                            <BookMarked size={18} /> RECOMMENDED READING & BOOK REFERENCES
+                          <div className="flex justify-between items-center">
+                            <div className="text-xs font-bold text-sky-400 font-mono flex items-center gap-2 uppercase tracking-wider">
+                              <BookMarked size={18} /> RECOMMENDED READING & BOOK LESSONS
+                            </div>
+                            <span className="text-[10px] text-hacker-muted font-mono">(Click book card to open full lesson)</span>
                           </div>
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             {currentDay.theory.recommendedBooks.map((book, idx) => (
-                              <div key={idx} className="bg-hacker-card border border-hacker-border p-3 rounded-lg flex flex-col gap-1.5 font-mono text-xs">
-                                <span className="font-bold text-white">{book.title}</span>
-                                <span className="text-[10px] text-hacker-amber">Author: {book.author}</span>
+                              <button
+                                key={idx}
+                                onClick={() => {
+                                  setSelectedBook(book);
+                                  setShowBookModal(true);
+                                }}
+                                className="bg-hacker-card border border-hacker-border hover:border-sky-400 p-3.5 rounded-lg flex flex-col gap-1.5 font-mono text-xs text-left transition-all group shadow-sm hover:shadow-md"
+                              >
+                                <span className="font-bold text-white group-hover:text-sky-400 transition-colors flex items-center justify-between">
+                                  {book.title} <span className="text-[10px] bg-sky-400/10 text-sky-300 px-2 py-0.5 rounded">View Lesson →</span>
+                                </span>
+                                <span className="text-[10px] text-hacker-amber">Author: {book.author} • {book.chapterLesson}</span>
                                 <p className="text-[11px] text-gray-300 font-sans mt-0.5 leading-relaxed">{book.takeaway}</p>
-                              </div>
+                              </button>
                             ))}
                           </div>
                         </div>

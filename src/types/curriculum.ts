@@ -4,6 +4,15 @@ export interface ChecklistItem {
   completed: boolean;
 }
 
+export interface BookLesson {
+  title: string;
+  author: string;
+  chapterLesson: string;
+  detailedExplanation: string;
+  practicalExample: string;
+  takeaway: string;
+}
+
 export interface DayLesson {
   id: string; // e.g. "week-1-monday"
   weekIndex: number; // 0 to 11 (Week 1 to 12)
@@ -20,7 +29,7 @@ export interface DayLesson {
     duration: string; // e.g. "30 Mins"
     beginnerAnalogy: { story: string; realWorldComparison: string }; // Simple real-world story
     chatGptPromptStrategy: string; // ChatGPT & AI prompt strategy for bug bounty
-    recommendedBooks: { title: string; author: string; takeaway: string }[]; // Book references
+    recommendedBooks: BookLesson[]; // Detailed book chapter lessons
     whatYouAreDoing: string; // Detailed breakdown of researcher actions
     vulnerabilityOrigin: string; // How the vulnerability comes about (Root Cause)
     pentesterFocus: string; // What to look for as a pentester
