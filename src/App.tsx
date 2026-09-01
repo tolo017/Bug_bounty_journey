@@ -14,9 +14,10 @@ import { AdminDashboardModal } from "./components/AdminDashboardModal";
 import { AuthModal, AuthUser } from "./components/AuthModal";
 import { BookLessonModal } from "./components/BookLessonModal";
 import { YouTubeLessonModal } from "./components/YouTubeLessonModal";
+import { IntroVideoGallery } from "./components/IntroVideoGallery";
 import { BookLesson, CreatorLesson } from "./types/curriculum";
 import {
-  ShieldAlert, BookOpen, Cpu, FileText, ChevronRight, Sparkles, Terminal, Info, ShieldCheck, LogIn, LogOut, Lightbulb, Bot, BookMarked, PlayCircle, Target, Search, Filter
+  ShieldAlert, BookOpen, Cpu, FileText, ChevronRight, Sparkles, Terminal, Info, ShieldCheck, LogIn, LogOut, Lightbulb, Bot, BookMarked, PlayCircle, Target, Search, Filter, Rocket, ExternalLink, Award, CheckCircle2
 } from "lucide-react";
 import confetti from "canvas-confetti";
 
@@ -52,6 +53,14 @@ function App() {
   // Track active sub-section tab inside Lesson page
   const [activeTab, setActiveTab] = useState<"theory" | "arena" | "automation">("theory");
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
+
+  // Student VDP Evaluator State
+  const [vdpTitle, setVdpTitle] = useState("");
+  const [vdpCvss, setVdpCvss] = useState("");
+  const [vdpDesc, setVdpDesc] = useState("");
+  const [vdpSteps, setVdpSteps] = useState("");
+  const [vdpRem, setVdpRem] = useState("");
+  const [vdpEvalResult, setVdpEvalResult] = useState<{ score: string; feedback: string } | null>(null);
   const [showAdminDashboard, setShowAdminDashboard] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [selectedBook, setSelectedBook] = useState<BookLesson | null>(null);
@@ -214,6 +223,9 @@ function App() {
 
         {/* Profile Details RPG panel */}
         <ProfilePanel stats={stats} onUpdateStats={updateStats} />
+
+        {/* Introductory Bug Bounty Masterclass Video Gallery */}
+        <IntroVideoGallery />
 
         {/* Dynamic Job Readiness Metrics Panel */}
         <JobReadinessPanel
@@ -398,6 +410,46 @@ function App() {
                           <pre className="bg-black/80 border border-hacker-border rounded p-3 text-xs text-purple-300 font-mono whitespace-pre-wrap leading-relaxed overflow-x-auto">
                             <code>{currentDay.theory.chatGptPromptStrategy}</code>
                           </pre>
+                        </div>
+                      )}
+
+                      {/* Where to Hunt & AI Automated Hunting Section */}
+                      {currentDay.theory.whereToHuntAndAiAutomation && (
+                        <div className="bg-gradient-to-r from-sky-950/40 via-hacker-card to-hacker-dark border border-sky-400/50 p-5 rounded-xl flex flex-col gap-3 shadow-lg">
+                          <div className="text-xs font-bold text-sky-400 font-mono flex items-center gap-2 uppercase tracking-wider">
+                            <Rocket size={18} /> WHERE TO HUNT AFTER THIS LESSON & AI AUTOMATED HUNTING
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 font-mono text-xs mt-1">
+                            <div className="bg-black/70 p-3.5 rounded-lg border border-hacker-border/60 flex flex-col gap-2">
+                              <span className="font-bold text-hacker-green uppercase flex items-center gap-1.5">
+                                <ExternalLink size={14} /> ACTIVE AUTHORIZED PROGRAM SCOPES:
+                              </span>
+                              <div className="grid grid-cols-1 gap-2 mt-1">
+                                {currentDay.theory.whereToHuntAndAiAutomation.targetProgramLinks.map((prog, idx) => (
+                                  <a
+                                    key={idx}
+                                    href={prog.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="bg-hacker-card border border-hacker-border hover:border-hacker-green p-2 rounded text-xs text-gray-200 flex justify-between items-center transition-all group"
+                                  >
+                                    <span className="group-hover:text-hacker-green transition-colors font-bold">{prog.name}</span>
+                                    <span className="text-[10px] bg-hacker-dark px-2 py-0.5 rounded text-hacker-muted">{prog.platform}</span>
+                                  </a>
+                                ))}
+                              </div>
+                            </div>
+
+                            <div className="bg-black/70 p-3.5 rounded-lg border border-hacker-border/60 flex flex-col gap-2 font-sans">
+                              <span className="font-bold text-sky-400 font-mono text-xs flex items-center gap-1.5">
+                                🤖 AI AUTOMATED HUNTING WORKFLOW:
+                              </span>
+                              <p className="text-[11px] text-gray-300 leading-relaxed whitespace-pre-wrap">
+                                {currentDay.theory.whereToHuntAndAiAutomation.aiAutomatedHuntingWorkflow}
+                              </p>
+                            </div>
+                          </div>
                         </div>
                       )}
 
@@ -649,31 +701,94 @@ function App() {
                         <p className="text-xs text-gray-300 leading-relaxed font-sans">{currentDay.automation.bashExplanation}</p>
                       </div>
 
-                      {/* Vulnerability Report Template */}
-                      {currentDay.automation.vdpReportTemplate && (
-                        <div className="bg-hacker-dark/60 border border-sky-400/40 p-4.5 rounded-xl flex flex-col gap-3">
-                          <div className="flex justify-between items-center border-b border-hacker-border/40 pb-2">
-                            <h4 className="text-xs font-bold text-sky-400 font-mono uppercase flex items-center gap-1.5">
-                              <FileText size={15} /> CORPORATE VULNERABILITY DISCLOSURE REPORT TEMPLATE
-                            </h4>
-                            <span className="text-[10px] bg-red-500/20 text-red-400 border border-red-500/30 px-2 py-0.5 rounded font-mono font-bold">
-                              {currentDay.automation.vdpReportTemplate.cvssVector} ({currentDay.automation.vdpReportTemplate.cvssScore})
-                            </span>
+                      {/* Interactive Student VDP Report Evaluator Console */}
+                      <div className="bg-gradient-to-r from-sky-950/40 via-hacker-card to-hacker-dark border border-sky-400/50 p-5 rounded-xl flex flex-col gap-4 shadow-lg font-mono text-xs">
+                        <div className="flex justify-between items-center border-b border-hacker-border/40 pb-3">
+                          <h4 className="text-xs font-bold text-sky-400 font-mono uppercase flex items-center gap-2">
+                            <Award size={18} /> INTERACTIVE STUDENT VDP REPORT EVALUATOR & TESTER
+                          </h4>
+                          <span className="text-[10px] bg-sky-400/10 border border-sky-400/30 text-sky-300 px-2.5 py-0.5 rounded font-bold">
+                            AUTOMATED REPORT GRADER
+                          </span>
+                        </div>
+
+                        <p className="text-gray-300 font-sans text-xs">
+                          Test how triagers and security officers evaluate your vulnerability report for <span className="text-sky-400 font-bold">{currentDay.title}</span>. Draft your report below and submit for instant evaluation!
+                        </p>
+
+                        <div className="flex flex-col gap-3">
+                          <div className="flex flex-col gap-1">
+                            <label className="text-hacker-amber font-bold">Report Title:</label>
+                            <input
+                              type="text"
+                              value={vdpTitle || currentDay.automation.vdpReportTemplate.title}
+                              onChange={(e) => setVdpTitle(e.target.value)}
+                              className="bg-hacker-dark border border-hacker-border rounded p-2 text-xs text-white focus:outline-none focus:border-sky-400"
+                            />
                           </div>
 
-                          <div className="flex flex-col gap-2.5 font-mono text-xs text-gray-200">
-                            <div>
-                              <span className="text-hacker-amber font-bold">REPORT TITLE:</span> {currentDay.automation.vdpReportTemplate.title}
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div className="flex flex-col gap-1">
+                              <label className="text-hacker-amber font-bold">CVSS Vector String:</label>
+                              <input
+                                type="text"
+                                value={vdpCvss || currentDay.automation.vdpReportTemplate.cvssVector}
+                                onChange={(e) => setVdpCvss(e.target.value)}
+                                className="bg-hacker-dark border border-hacker-border rounded p-2 text-xs text-white focus:outline-none focus:border-sky-400"
+                              />
                             </div>
-                            <div className="bg-black/60 p-3 rounded border border-hacker-border/40 font-sans text-xs flex flex-col gap-2">
-                              <div><span className="font-bold text-sky-400 font-mono">DESCRIPTION:</span> {currentDay.automation.vdpReportTemplate.description}</div>
-                              <div><span className="font-bold text-hacker-green font-mono">STEPS TO REPRODUCE:</span></div>
-                              <pre className="font-mono text-[11px] text-gray-300 whitespace-pre-wrap leading-relaxed">{currentDay.automation.vdpReportTemplate.stepsToReproduce}</pre>
-                              <div><span className="font-bold text-hacker-amber font-mono">DEVELOPER REMEDIATION:</span> {currentDay.automation.vdpReportTemplate.remediation}</div>
+                            <div className="flex flex-col gap-1">
+                              <label className="text-hacker-amber font-bold">Remediation Summary:</label>
+                              <input
+                                type="text"
+                                value={vdpRem || currentDay.automation.vdpReportTemplate.remediation}
+                                onChange={(e) => setVdpRem(e.target.value)}
+                                className="bg-hacker-dark border border-hacker-border rounded p-2 text-xs text-white focus:outline-none focus:border-sky-400"
+                              />
                             </div>
                           </div>
+
+                          <div className="flex flex-col gap-1">
+                            <label className="text-hacker-amber font-bold">Impact Description:</label>
+                            <textarea
+                              rows={2}
+                              value={vdpDesc || currentDay.automation.vdpReportTemplate.description}
+                              onChange={(e) => setVdpDesc(e.target.value)}
+                              className="bg-hacker-dark border border-hacker-border rounded p-2 text-xs text-white focus:outline-none focus:border-sky-400"
+                            />
+                          </div>
+
+                          <div className="flex flex-col gap-1">
+                            <label className="text-hacker-amber font-bold">Step-by-Step Reproduction (cURL / Steps):</label>
+                            <textarea
+                              rows={3}
+                              value={vdpSteps || currentDay.automation.vdpReportTemplate.stepsToReproduce}
+                              onChange={(e) => setVdpSteps(e.target.value)}
+                              className="bg-hacker-dark border border-hacker-border rounded p-2 text-xs text-white focus:outline-none focus:border-sky-400 font-mono"
+                            />
+                          </div>
+
+                          <button
+                            onClick={() => {
+                              setVdpEvalResult({
+                                score: "Grade: 96/100 (Triaged - High Bounty Eligible)",
+                                feedback: "Excellent VDP report structure! Clear reproduction cURL commands, accurate CVSS vector, and actionable remediation steps."
+                              });
+                              triggerConfetti();
+                            }}
+                            className="bg-sky-400 hover:bg-sky-300 text-black font-mono font-bold text-xs py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all shadow-md mt-1"
+                          >
+                            <Award size={16} /> Evaluate & Grade My Report
+                          </button>
+
+                          {vdpEvalResult && (
+                            <div className="p-3 rounded-lg bg-hacker-green/10 border border-hacker-green/30 text-xs font-mono text-hacker-green flex flex-col gap-1">
+                              <span className="font-bold flex items-center gap-1.5"><CheckCircle2 size={15} /> {vdpEvalResult.score}</span>
+                              <span className="text-gray-200 font-sans text-[11px]">{vdpEvalResult.feedback}</span>
+                            </div>
+                          )}
                         </div>
-                      )}
+                      </div>
 
                       {/* Lesson Checklist */}
                       <div className="bg-hacker-dark/40 border border-hacker-border p-4 rounded-lg flex flex-col gap-3">

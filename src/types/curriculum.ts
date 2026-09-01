@@ -33,6 +33,24 @@ export interface RealWorldHuntingGuide {
   bypassTricks: string;
 }
 
+export interface WhereToHuntAndAiAutomation {
+  targetProgramLinks: { name: string; url: string; platform: string }[];
+  aiAutomatedHuntingWorkflow: string;
+  automatedScrapersAndDorks: string[];
+}
+
+export interface StudentVdpEvaluation {
+  prompt: string;
+  titleInput: string;
+  cvssInput: string;
+  descriptionInput: string;
+  stepsInput: string;
+  remediationInput: string;
+  evaluated: boolean;
+  score: string;
+  feedback: string;
+}
+
 export interface DayLesson {
   id: string; // e.g. "week-1-monday"
   weekIndex: number; // 0 to 11 (Week 1 to 12)
@@ -52,6 +70,7 @@ export interface DayLesson {
     recommendedBooks: BookLesson[]; // Detailed book chapter lessons with practicals & adaptations
     creatorLessons: CreatorLesson[]; // Detailed YouTube creator & website lessons with specific video URLs
     howToDoRealWorldHunting: RealWorldHuntingGuide; // Real World Hunting Field Guide
+    whereToHuntAndAiAutomation: WhereToHuntAndAiAutomation; // Active Hunting Scopes & AI Automation
     whatYouAreDoing: string; // Detailed breakdown of researcher actions
     vulnerabilityOrigin: string; // How the vulnerability comes about (Root Cause)
     pentesterFocus: string; // What to look for as a pentester
@@ -90,6 +109,7 @@ export interface DayLesson {
       stepsToReproduce: string;
       remediation: string;
     };
+    studentVdpTestingConsole: StudentVdpEvaluation; // Interactive student VDP evaluator after every lesson
     dailyAssignment: {
       title: string;
       objective: string;
