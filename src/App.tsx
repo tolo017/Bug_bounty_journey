@@ -330,8 +330,143 @@ function App() {
                 {/* Tab content renderer */}
                 <div className="min-h-[300px]">
 
-                  {/* Theoretical Principles & Auditing (30 Mins) */}
-                  {activeTab === "theory" && (
+                  {/* Exact 8-Part Framework Architecture Workspace */}
+                  {activeTab === "theory" && currentDay.framework && (
+                    <div className="flex flex-col gap-6">
+
+                      {/* Section 1: Theoretical Foundation & Book Integration */}
+                      <div className="bg-gradient-to-r from-amber-950/40 via-hacker-card to-hacker-dark border border-hacker-amber/50 p-5 rounded-xl flex flex-col gap-3 shadow-lg">
+                        <div className="text-xs font-bold text-hacker-amber font-mono flex items-center gap-2 uppercase tracking-wider border-b border-hacker-border/40 pb-2">
+                          <BookOpen size={18} /> SECTION 1: THEORETICAL FOUNDATION & BOOK INTEGRATION
+                        </div>
+                        <p className="text-xs text-white leading-relaxed font-sans whitespace-pre-wrap">
+                          {currentDay.framework.section1_TheoreticalFoundation.breakdown}
+                        </p>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+                          {currentDay.framework.section1_TheoreticalFoundation.mappedBookChapters.map((book, idx) => (
+                            <div key={idx} className="bg-black/60 border border-hacker-border/60 p-3 rounded-lg font-mono text-xs flex flex-col gap-1">
+                              <span className="font-bold text-sky-400">{book.bookTitle}</span>
+                              <span className="text-[10px] text-hacker-amber">{book.chapter} ({book.author})</span>
+                              <p className="text-[11px] text-gray-300 font-sans mt-0.5 leading-relaxed">{book.concept}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Section 2: Video Walkthrough & Analysis */}
+                      <div className="bg-hacker-dark/80 border border-sky-400/40 p-5 rounded-xl flex flex-col gap-3 shadow-lg font-mono text-xs">
+                        <div className="text-xs font-bold text-sky-400 flex items-center gap-2 uppercase tracking-wider border-b border-hacker-border/40 pb-2">
+                          <PlayCircle size={18} /> SECTION 2: VIDEO WALKTHROUGH & ANALYSIS
+                        </div>
+
+                        <div className="bg-black/70 p-3 rounded-lg border border-hacker-border/40 flex flex-col gap-1.5">
+                          <span className="font-bold text-hacker-green flex items-center gap-1.5"><Search size={14} /> PRECISE YOUTUBE POC SEARCH TERMS:</span>
+                          <div className="flex flex-wrap gap-2 mt-1">
+                            {currentDay.framework.section2_VideoWalkthroughAnalysis.youtubeSearchTerms.map((term, idx) => (
+                              <a
+                                key={idx}
+                                href={`https://www.youtube.com/results?search_query=${encodeURIComponent(term)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="bg-hacker-card border border-hacker-border hover:border-sky-400 text-sky-300 hover:text-white px-2.5 py-1 rounded text-[11px] transition-all flex items-center gap-1"
+                              >
+                                {term} <ExternalLink size={10} />
+                              </a>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-sans text-xs">
+                          <div className="bg-black/60 p-3 rounded-lg border border-hacker-border/40 flex flex-col gap-1">
+                            <span className="font-bold text-hacker-amber font-mono">1. Target Recon:</span>
+                            <pre className="text-[11px] text-gray-300 font-mono whitespace-pre-wrap">{currentDay.framework.section2_VideoWalkthroughAnalysis.instructorSteps.targetRecon}</pre>
+                          </div>
+                          <div className="bg-black/60 p-3 rounded-lg border border-hacker-border/40 flex flex-col gap-1">
+                            <span className="font-bold text-hacker-amber font-mono">2. Discovery & Payload:</span>
+                            <pre className="text-[11px] text-gray-300 font-mono whitespace-pre-wrap">{currentDay.framework.section2_VideoWalkthroughAnalysis.instructorSteps.discoveryAndPayload}</pre>
+                          </div>
+                          <div className="bg-black/60 p-3 rounded-lg border border-hacker-border/40 flex flex-col gap-1">
+                            <span className="font-bold text-hacker-green font-mono">3. Exploitation:</span>
+                            <pre className="text-[11px] text-gray-300 font-mono whitespace-pre-wrap">{currentDay.framework.section2_VideoWalkthroughAnalysis.instructorSteps.exploitation}</pre>
+                          </div>
+                          <div className="bg-black/60 p-3 rounded-lg border border-hacker-border/40 flex flex-col gap-1">
+                            <span className="font-bold text-sky-400 font-mono">4. Mitigation:</span>
+                            <pre className="text-[11px] text-gray-300 font-mono whitespace-pre-wrap">{currentDay.framework.section2_VideoWalkthroughAnalysis.instructorSteps.mitigation}</pre>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Section 6: Real-World Case Study */}
+                      <div className="bg-gradient-to-r from-purple-950/40 via-hacker-card to-hacker-dark border border-purple-400/40 p-5 rounded-xl flex flex-col gap-3 shadow-lg">
+                        <div className="text-xs font-bold text-purple-400 font-mono flex items-center gap-2 uppercase tracking-wider border-b border-hacker-border/40 pb-2">
+                          <Award size={18} /> SECTION 6: REAL-WORLD CASE STUDY
+                        </div>
+                        <div className="flex justify-between items-center font-mono text-xs">
+                          <span className="font-bold text-white">{currentDay.framework.section6_RealWorldCaseStudy.disclosedReportTitle}</span>
+                          <span className="bg-hacker-green/10 border border-hacker-green/30 text-hacker-green font-bold px-2.5 py-0.5 rounded">
+                            Bounty: {currentDay.framework.section6_RealWorldCaseStudy.bountyAwarded}
+                          </span>
+                        </div>
+                        <p className="text-xs text-gray-200 font-sans leading-relaxed">
+                          {currentDay.framework.section6_RealWorldCaseStudy.hunterMethodology}
+                        </p>
+                      </div>
+
+                      {/* Section 7: Live Hunting Grounds */}
+                      <div className="bg-hacker-dark/80 border border-hacker-green/40 p-5 rounded-xl flex flex-col gap-3 shadow-lg font-mono text-xs">
+                        <div className="text-xs font-bold text-hacker-green flex items-center gap-2 uppercase tracking-wider border-b border-hacker-border/40 pb-2">
+                          <Target size={18} /> SECTION 7: LIVE HUNTING GROUNDS & GOOGLE DORKS
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                          {currentDay.framework.section7_LiveHuntingGrounds.curatedProgramLinks.map((link, idx) => (
+                            <a
+                              key={idx}
+                              href={link.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="bg-hacker-card border border-hacker-border hover:border-hacker-green p-2.5 rounded text-gray-200 flex justify-between items-center transition-all group"
+                            >
+                              <span className="group-hover:text-hacker-green transition-colors font-bold">{link.name}</span>
+                              <ExternalLink size={12} className="text-hacker-muted" />
+                            </a>
+                          ))}
+                        </div>
+
+                        <div className="bg-black/60 p-3 rounded-lg border border-hacker-border/40 flex flex-col gap-1.5 mt-1">
+                          <span className="font-bold text-hacker-amber">ACTIVE GOOGLE DORKS:</span>
+                          {currentDay.framework.section7_LiveHuntingGrounds.searchDorks.map((dork, idx) => (
+                            <code key={idx} className="bg-slate-950 p-1.5 rounded border border-hacker-border/40 text-hacker-green">
+                              {dork}
+                            </code>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Section 8: Expert Audit Note */}
+                      <div className="bg-hacker-dark/90 border border-hacker-amber/50 p-4 rounded-xl flex flex-col gap-2 shadow-lg">
+                        <div className="text-xs font-bold text-hacker-amber font-mono flex items-center gap-2 uppercase tracking-wider">
+                          <Sparkles size={16} /> SECTION 8: EXPERT AUDIT NOTE
+                        </div>
+                        <p className="text-xs text-white leading-relaxed font-sans font-medium whitespace-pre-wrap">
+                          {currentDay.framework.section8_ExpertAuditNote}
+                        </p>
+                      </div>
+
+                      <div className="flex justify-end mt-2">
+                        <button
+                          onClick={() => setActiveTab("arena")}
+                          className="bg-hacker-amber hover:bg-amber-400 text-black font-bold font-mono text-xs px-5 py-2.5 rounded-lg flex items-center gap-1.5 transition-all shadow"
+                        >
+                          Proceed to CTF Arena (Practical Track) <ChevronRight size={14} />
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Theoretical Principles & Auditing (Fallback) */}
+                  {activeTab === "theory" && !currentDay.framework && (
                     <div className="flex flex-col gap-5">
 
                       {/* Simple Beginner Analogy Card */}

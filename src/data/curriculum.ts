@@ -1,7 +1,7 @@
-import { Week, DayLesson, BossLab, BookLesson, CreatorLesson, RealWorldHuntingGuide, WhereToHuntAndAiAutomation, StudentVdpEvaluation } from "../types/curriculum";
+import { Week, DayLesson, BossLab } from "../types/curriculum";
 
-// Helper generator creating broad, beginner-friendly, highly practical Red/Blue Team lesson content entries across all 12 weeks
-const getComprehensiveLessonContent = (
+// Helper generator creating broad, 100% independent 8-part Red/Blue Team lesson content entries across all 12 weeks
+const get8PartLessonContent = (
   weekIndex: number,
   dayIndex: number,
   dayTitle: string,
@@ -10,349 +10,211 @@ const getComprehensiveLessonContent = (
 ) => {
   const globalLessonIndex = weekIndex * 6 + dayIndex;
 
-  // Real-world beginner analogies explaining vulnerabilities through simple stories
-  const beginnerAnalogies: { story: string; realWorldComparison: string }[] = [
-    {
-      story: "Imagine a hotel where every door has a name tag instead of a digital key. If you swap the name tag on Room 101 to say 'Room 102', the lock gets confused and lets you inside!",
-      realWorldComparison: "In web applications, DOM Clobbering happens when user-controlled HTML tags override JavaScript variables or window properties, fooling the script into executing unauthorized code."
-    },
-    {
-      story: "Imagine a master blueprint in a toy factory. If someone writes 'Make all toys free' on the master blueprint, every single toy built afterward inherits that flaw!",
-      realWorldComparison: "Prototype Pollution occurs when an attacker modifies Object.prototype in JavaScript. Every object created in the application inherits the polluted property, granting admin privileges across the app."
-    },
-    {
-      story: "Imagine a puzzle box shipped inside a transparent plastic wrapper. Even though the wrapper looks sealed, anyone looking through the plastic can see the secret solution code written inside!",
-      realWorldComparison: "Source maps (.map files) preserve original un-minified source code for debugging. Developers forget to remove them in production, allowing bug hunters to read full backend endpoints."
-    },
-    {
-      story: "Imagine storing your house keys inside a clear glass jar left sitting on the front porch. Anyone passing by on the sidewalk can look inside or reach in and take them!",
-      realWorldComparison: "Websites store secret login tokens in window.localStorage. If an attacker finds a Cross-Site Scripting (XSS) vulnerability, they can read localStorage and steal session tokens."
-    },
-    {
-      story: "Imagine a walkie-talkie channel between two security guards. If an outsider tunes into the exact frequency and imitates a guard's voice, they can send false orders without needing a password!",
-      realWorldComparison: "WebSockets maintain full-duplex open connections. If the server doesn't check the Origin header during handshake, attackers can send malicious WebSocket messages."
-    },
-    {
-      story: "Imagine a bank vault that prints 'Welcome Everyone!' on its front door. When a stranger asks 'Can I enter?', the vault reads the sign and automatically unlocks the door for anyone!",
-      realWorldComparison: "CORS headers control cross-origin data sharing. Setting Access-Control-Allow-Origin: * or reflecting arbitrary Origin headers lets external sites steal sensitive API responses."
-    }
-  ];
-
-  const beginnerAnalogy = beginnerAnalogies[globalLessonIndex % beginnerAnalogies.length];
-
-  // ChatGPT & AI Bug Bounty Auditing Strategy Prompts (Inspired by Joas Antonio dos Santos Barbosa)
-  const chatGptPromptStrategy = `🤖 CHATGPT BUG BOUNTY PROMPT STRATEGY (by Joas Antonio dos Santos Barbosa):
-Copy and paste this prompt into ChatGPT / Claude to audit target code for ${dayTitle}:
-
-"Act as an elite Web Application Security Auditor reviewing source code for ${competency}.
-Analyze the following code snippet for ${dayTitle} vulnerabilities:
-1. Identify dangerous input sinks, un-sanitized variables, or missing authorization checks.
-2. Generate 3 stealthy proof-of-concept payload variations designed to bypass Web Application Firewalls (WAF).
-3. Explain step-by-step how a penetration tester can verify this flaw in Burp Suite Repeater.
-4. Provide secure refactored code using modern defense-in-depth principles."`;
-
-  // Real-World Bug Hunting Field Guide Section
-  const howToDoRealWorldHunting: RealWorldHuntingGuide = {
-    targetDiscoveryDorks: [
-      `site:target.corp inurl:api/v1/${competency.toLowerCase().replace(/[\s&()\-]/g, "")}`,
-      `site:*.target.corp ext:js "${dayTitle.split(" ")[0].toLowerCase()}"`,
-      `site:target.corp inurl:debug=1`
-    ],
-    reconFilterStrategy: `1. Run 'subfinder -d target.corp -silent | httpx -title -status-code' to enumerate live HTTP assets.\n2. Filter for JS bundles containing parameter routing or API endpoints matching ${competency}.\n3. Use 'arjun -u https://target.corp/api/v1/resource -m GET,POST' to mine un-linked query parameters.`,
-    realWorldTriageTips: `1. When reporting ${dayTitle} on HackerOne or Bugcrowd, always attach a clean, copy-pasteable cURL command.\n2. Demonstrate business impact: prove whether an unauthenticated user can read private PII or execute administrative state changes.\n3. Verify that the flaw reproduces on production assets before filing to avoid duplicate status.`,
-    bypassTricks: `1. WAF Bypass: Try double URL encoding (%2527 instead of %27) or unicode normalization (%u0027).\n2. HTTP Parameter Pollution (HPP): Supply duplicate query parameters (?id=101&id=102).\n3. Method Override: Send 'X-HTTP-Method-Override: PUT' header if direct PUT/DELETE calls return HTTP 405.`
-  };
-
-  // Where to Hunt Scopes & AI Automated Hunting
-  const whereToHuntAndAiAutomation: WhereToHuntAndAiAutomation = {
-    targetProgramLinks: [
-      { name: "HackerOne Public Directory Scope", url: "https://hackerone.com/hacktivity", platform: "HackerOne" },
-      { name: "Bugcrowd Public Programs Scope", url: "https://bugcrowd.com/programs", platform: "Bugcrowd" },
-      { name: "Intigriti VDP Directory", url: "https://www.intigriti.com/programs", platform: "Intigriti" },
-      { name: "Immunefi Web3 Scope Directory", url: "https://immunefi.com/explore/", platform: "Immunefi" }
-    ],
-    aiAutomatedHuntingWorkflow: `1. Connect a Python script to OpenAI API / ChatGPT using python-requests.\n2. Fetch target endpoint responses or JS assets continuously using background cron jobs.\n3. Feed HTTP response text into ChatGPT prompt filters to automatically identify un-sanitized parameter sinks for ${dayTitle}.\n4. Log potential findings to local JSON files and trigger Desktop notifications upon discovery.`,
-    automatedScrapersAndDorks: [
-      `python3 -c "import requests; print(requests.get('https://hackerone.com/directory/programs').status_code)"`,
-      `subfinder -d target.com -silent | waybackurls | grep -E "(\\.js|/api/)"`
-    ]
-  };
-
-  // All 7 Essential Books Detailed Chapter Lessons
-  const recommendedBooks: BookLesson[] = [
-    {
-      title: "The Web Application Hacker's Handbook (WAHH)",
-      author: "Dafydd Stuttard & Marcus Pinto",
-      chapterLesson: `Chapter 9: Attacking Data Stores & ${competency}`,
-      whatTheyAreDoing: `The authors demonstrate how core web architecture handling ${dayTitle} fails when trust boundaries between client requests and backend server handlers are blurred.`,
-      detailedExplanation: `In WAHH, Stuttard and Pinto detail the exact mechanics of HTTP request manipulation. They explain how proxy tools intercept outbound packets, allowing researchers to modify parameter types, inject boundary payloads, and bypass client-side validation controls when auditing ${competency}.`,
-      practicalExample: `GET /api/v1/resource?id=101' OR '1'='1 HTTP/1.1\nHost: target.corp\nUser-Agent: WAHH_Auditor`,
-      howToAdapt: `Intercept the request in Burp Suite Repeater, append payload boundaries, and observe SQL or logic error reflections in response headers.`,
-      takeaway: "Never trust client-side validation; always verify parameter constraints on the server."
-    },
-    {
-      title: "Bug Bounty Bootcamp",
-      author: "Vickie Li",
-      chapterLesson: `Chapter 7: Finding and Exploiting ${dayTitle}`,
-      whatTheyAreDoing: `Vickie Li explains step-by-step how bug bounty hunters discover ${dayTitle} in production web applications and construct clean PoCs.`,
-      detailedExplanation: `Vickie Li breaks down common developer mistakes that cause ${dayTitle}. She provides practical methodology checklists for mapping application functionality, isolating parameter inputs, and verifying impact without crashing production servers.`,
-      practicalExample: `curl -i -X GET "https://target.corp/api/v1/user?id=102" -H "Authorization: Bearer TOKEN"`,
-      howToAdapt: `Swap account session tokens between Account A and Account B to verify access control boundaries.`,
-      takeaway: "Isolate input parameters and test privilege escalation across multiple test user roles."
-    },
-    {
-      title: "Real-World Bug Hunting",
-      author: "Peter Yaworski",
-      chapterLesson: `Chapter 4: Case Studies in ${competency}`,
-      whatTheyAreDoing: `Peter Yaworski analyzes real public vulnerability reports submitted to Google, Twitter, and Shopify, showing how researchers earned $5,000+ bounties for ${dayTitle}.`,
-      detailedExplanation: `Yaworski examines actual HackerOne reports. He shows how simple observation and creative parameter manipulation allowed researchers to bypass complex WAF filters and escalate low-severity bugs into critical payouts.`,
-      practicalExample: `https://target.corp/redirect?url=https://attacker.com/oauth/callback`,
-      howToAdapt: `Test parameters against OAuth callbacks and parameter overrides on staging subdomains.`,
-      takeaway: "Study disclosed bug reports to learn creative payload variations used by top hunters."
-    },
-    {
-      title: "Bug Bounty Tips & Tricks using ChatGPT",
-      author: "Joas Antonio dos Santos Barbosa",
-      chapterLesson: `Chapter 3: AI Code Auditing & Prompt Engineering for ${competency}`,
-      whatTheyAreDoing: `The author uses AI prompts as an automated assistant to analyze code blocks, locate sinks, and generate proof-of-concept payloads for ${dayTitle}.`,
-      detailedExplanation: `Joas Antonio demonstrates feeding JavaScript bundles and API functions into ChatGPT. By using structured prompts specifying security auditor personas, AI models spot validation gaps and generate WAF bypass strings.`,
-      practicalExample: `Prompt: "Analyze this code for ${dayTitle} in ${competency}. Identify dangerous sinks and write 3 cURL command line payloads."`,
-      howToAdapt: `Paste code snippets from Burp Suite Target Site Map into AI prompts to generate custom test strings.`,
-      takeaway: "Use structured AI prompts to automate static code analysis and generate targeted payload variations."
-    },
-    {
-      title: "Bug Bounty from Scratch",
-      author: "Santiago Vazquez & Francisco Javier",
-      chapterLesson: `Chapter 5: Practical Exploitation & VDP Submission for ${dayTitle}`,
-      whatTheyAreDoing: `The authors demonstrate transitioning from parameter weakness discovery to drafting a high-impact vulnerability report for HackerOne or Bugcrowd.`,
-      detailedExplanation: `Santiago Vazquez and Francisco Javier analyze real-world submissions. They explain that finding ${dayTitle} requires mapping parameter data flows, testing boundary conditions, and documenting minimal cURL commands for triagers.`,
-      practicalExample: `curl -v -X POST "https://target.corp/api/v1/resource" -H "Content-Type: application/json" -d '{"param": "test_payload"}'`,
-      howToAdapt: `Replace target.corp with your authorized scope URL and run cURL commands directly in terminal.`,
-      takeaway: "Always document clean, minimal cURL reproduction commands to ensure fast report triage."
-    },
-    {
-      title: "Automate the Boring Stuff with Python",
-      author: "Al Sweigart",
-      chapterLesson: `Chapter 12: Web Scraping & HTTP Request Scripting for ${competency}`,
-      whatTheyAreDoing: `The author writes automated Python scripts to send HTTP requests at scale, parse status codes, and test endpoints for ${dayTitle} across subdomains.`,
-      detailedExplanation: `Al Sweigart teaches writing lightweight Python scripts using the 'requests' library. By automating HTTP GET/POST queries, your script can iterate through wordlists and log active vulnerabilities without manual browser interactions.`,
-      practicalExample: `import requests\nres = requests.get('https://target.corp/api/v1/resource')\nif res.status_code == 200: print('[+] Vulnerability Verified!')`,
-      howToAdapt: `Pass target URL lists as command line arguments (sys.argv[1]) and save output to JSON files.`,
-      takeaway: "Automate repetitive auditing tasks with simple Python scripts to test assets at scale."
-    },
-    {
-      title: "Black Hat Python",
-      author: "Justin Seitz",
-      chapterLesson: `Chapter 4: Writing Custom Proxy Extensions for ${dayTitle}`,
-      whatTheyAreDoing: `The author builds custom offensive network extensions in Python to intercept raw HTTP traffic, modify headers on the fly, and bypass WAF filters.`,
-      detailedExplanation: `Justin Seitz explains building custom Python network tools and Burp extensions to intercept traffic, manipulate headers, and bypass WAF rate limits when testing ${competency}.`,
-      practicalExample: `import urllib.request\nreq = urllib.request.Request('https://target.corp', headers={'X-Audit-Tool': 'BlackHatPython'})\nprint(urllib.request.urlopen(req).read().decode())`,
-      howToAdapt: `Wrap script functions in Burp Suite Python extension hooks to automatically inject custom headers.`,
-      takeaway: "Build custom network scripts to automate non-standard payload injections and header overrides."
-    }
-  ];
-
-  // Specific YouTube Video Walkthroughs Tailored for the Exact Daily Vulnerability Topic
-  const creatorLessonsMap: Record<number, CreatorLesson[]> = {
-    0: [
+  // 1. Theoretical Foundation & Book Integration
+  const section1_TheoreticalFoundation = {
+    breakdown: `In modern web architectures, ${dayTitle} represents a fundamental vulnerability class where inputs handled under ${competency} bypass trust boundaries. Under rapid development deadlines, engineering teams assume client-originating data streams or secondary parameter inputs are inherently safe. When sanitization or object-level authorization is omitted, malicious actors alter application state, read unauthorized tenant records, or execute arbitrary commands.`,
+    mappedBookChapters: [
       {
-        creatorName: "Rana Khalil",
-        channelOrWebsite: "Rana Khalil (YouTube / PortSwigger Walkthroughs)",
-        lessonTitle: "DOM Clobbering Mechanics & Exploit Walkthrough",
-        broadExplanation: "Rana Khalil broadly explains how DOM Clobbering occurs when HTML element attributes override global window object properties. She demonstrates constructing iframe/anchor tags to hijack script execution.",
-        methodologyOverview: "Inspect browser DOM variables, identify un-sanitized window assignments, and inject HTML tags to override script behavior.",
-        stepByStepWalkthrough: [
-          "1. Inspect JavaScript source for window object property references.",
-          "2. Craft HTML iframe tag with name/id matching target window property.",
-          "3. Inject srcdoc attribute containing script redirect.",
-          "4. Verify DOM clobbering in browser DevTools Console."
-        ],
-        practicalCommand: `<iframe name="config" srcdoc="<a id='apiEndpoint' href='javascript:alert(1)'></a>"></iframe>`,
-        specificVideoUrl: "https://www.youtube.com/watch?v=2_s393XkR8A"
+        bookTitle: "The Web Application Hacker's Handbook (WAHH)",
+        author: "Dafydd Stuttard & Marcus Pinto",
+        chapter: "Chapter 9: Attacking Data Stores & Access Controls",
+        concept: "Exploiting boundary flaws and parameter pollution in client-server data flows."
       },
       {
-        creatorName: "LiveOverflow",
-        channelOrWebsite: "LiveOverflow (YouTube / Web Security)",
-        lessonTitle: "DOM Clobbering to XSS - Deep Dive Mechanics",
-        broadExplanation: "LiveOverflow analyzes DOM Clobbering at the browser parser level. He demonstrates how HTML sanitizers like DOMPurify prevent clobbering and how edge-case HTML tags bypass sanitization.",
-        methodologyOverview: "Examine browser DOM parser quirks and test HTML tag clobbering variations.",
-        stepByStepWalkthrough: [
-          "1. Open Chrome DevTools Console and inspect Object.prototype.",
-          "2. Test clobbering window variables using form/input elements.",
-          "3. Combine clobbered elements with innerHTML sinks.",
-          "4. Execute alert flag."
-        ],
-        practicalCommand: `<form id="config"><input id="api" value="evil.com"></form>`,
-        specificVideoUrl: "https://www.youtube.com/watch?v=0O_A4S3a738"
-      }
-    ],
-    1: [
+        bookTitle: "Bug Bounty Bootcamp",
+        author: "Vickie Li",
+        chapter: "Chapter 7: Isolating Input Sinks & Parameter Discovery",
+        concept: "Systematic mapping of input vectors and testing for privilege escalation."
+      },
       {
-        creatorName: "Rana Khalil",
-        channelOrWebsite: "Rana Khalil (YouTube / Prototype Pollution)",
-        lessonTitle: "Client-Side Prototype Pollution Walkthrough",
-        broadExplanation: "Rana Khalil demonstrates how client-side Prototype Pollution in JavaScript libraries allows attackers to pollute Object.prototype, triggering stored XSS or modifying application config flags.",
-        methodologyOverview: "Locate recursive object merge functions in JS, inject __proto__ properties, and pollutes global application state.",
-        stepByStepWalkthrough: [
-          "1. Identify query parameters parsed into JSON objects.",
-          "2. Supply payload: ?__proto__[isAdmin]=true.",
-          "3. Check window.isAdmin in DevTools Console.",
-          "4. Trigger administrative UI pathways."
-        ],
-        practicalCommand: `location.search = "?__proto__[status]=active"`,
-        specificVideoUrl: "https://www.youtube.com/watch?v=3Kq1MIfTWCE"
+        bookTitle: "Real-World Bug Hunting",
+        author: "Peter Yaworski",
+        chapter: "Chapter 4: Case Studies in Application Logic Flaws",
+        concept: "Analyzing disclosed HackerOne/Bugcrowd reports to discover creative WAF bypasses."
+      },
+      {
+        bookTitle: "Bug Bounty Tips & Tricks using ChatGPT",
+        author: "Joas Antonio dos Santos Barbosa",
+        chapter: "Chapter 3: Prompt Engineering for Code Sinks",
+        concept: "Using AI models to audit source code and generate proof-of-concept payloads."
       }
     ]
   };
 
-  const defaultCreatorLessons: CreatorLesson[] = [
-    {
-      creatorName: "Rana Khalil",
-      channelOrWebsite: "Rana Khalil (YouTube / Web Security Walkthroughs)",
-      lessonTitle: `Hands-On Video Walkthrough: ${dayTitle}`,
-      broadExplanation: `Rana Khalil broadly demonstrates the exact auditing methodology for ${dayTitle}. She walks through inspecting vulnerable request flows, configuring Burp Suite, and crafting working exploit payloads.`,
-      methodologyOverview: `Trace parameter inputs in Burp Suite, identify missing validation, and construct proof-of-concept payloads for ${competency}.`,
-      stepByStepWalkthrough: [
-        `1. Capture target HTTP request matching ${dayTitle} in Burp Suite Proxy.`,
-        `2. Forward request to Repeater (Ctrl+R).`,
-        `3. Inject target payload into parameter input sink.`,
-        `4. Verify response code and confirm vulnerability impact.`
-      ],
-      practicalCommand: `curl -v -X POST "https://target.corp/api/v1/resource" -H "X-Audit-Skill: ${competency}" -d '{"param": "exploit"}'`,
-      specificVideoUrl: "https://www.youtube.com/watch?v=2_s393XkR8A"
-    },
-    {
-      creatorName: "John Hammond",
-      channelOrWebsite: "John Hammond (YouTube / CTF & PoC Analysis)",
-      lessonTitle: `PoC Analysis & Python Automation for ${dayTitle}`,
-      broadExplanation: `John Hammond broadly demonstrates how to analyze real-world vulnerability PoCs for ${dayTitle}, inspect HTTP response headers, and automate payload submission in Python.`,
-      methodologyOverview: `Deconstruct vulnerability PoCs, inspect server response text, and automate exploit delivery via Python requests.`,
-      stepByStepWalkthrough: [
-        `1. Inspect target endpoint routes for ${dayTitle} in browser DevTools.`,
-        `2. Construct Python requests script targeting ${competency}.`,
-        `3. Parse response status codes and extracted data.`,
-        `4. Generate automated report log.`
-      ],
-      practicalCommand: `python3 -c "import requests; print(requests.get('https://target.corp/api/v1/resource').status_code)"`,
-      specificVideoUrl: "https://www.youtube.com/watch?v=0O_A4S3a738"
+  // 2. Video Walkthrough & Analysis
+  const section2_VideoWalkthroughAnalysis = {
+    youtubeSearchTerms: [
+      `${dayTitle} PoC walkthrough bug bounty`,
+      `How to exploit ${dayTitle} in Burp Suite`,
+      `PortSwigger ${dayTitle} lab solution`
+    ],
+    instructorSteps: {
+      targetRecon: `1. Enumerate target subdomains using Subfinder and httpx.\n2. Filter HTTP traffic in Burp Suite for API endpoints handling ${competency}.\n3. Inspect client-side JavaScript assets for un-sanitized parameter sinks.`,
+      discoveryAndPayload: `1. Intercept target request in Burp Suite Repeater.\n2. Construct base payload targeting ${dayTitle}.\n3. Apply URL/Base64 encoding or duplicate parameter injection to bypass WAF filtering.`,
+      exploitation: `1. Send modified request to target application server.\n2. Observe response status code variations (HTTP 200 vs 403).\n3. Extract exfiltrated data or verify state mutation.`,
+      mitigation: `1. Implement strict server-side parameter sanitization and allowlists.\n2. Enforce object-level authorization on all API routes.\n3. Deploy Content Security Policy (CSP) headers.`
     }
-  ];
-
-  const creatorLessons = creatorLessonsMap[globalLessonIndex] || defaultCreatorLessons;
-
-  // Interactive Student VDP Report Evaluator
-  const studentVdpTestingConsole: StudentVdpEvaluation = {
-    prompt: `Draft your VDP Report for ${dayTitle} below. Fill in Title, CVSS Score, Impact Description, Reproduction Steps, and Remediation. The Academy Evaluator will test and grade your report!`,
-    titleInput: `[HIGH] ${dayTitle} Identified in Application Endpoint`,
-    cvssInput: `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N (8.2)`,
-    descriptionInput: `During a security assessment, an un-sanitized parameter flaw (${dayTitle}) was identified in ${competency}. An unauthenticated attacker can exploit this condition to read or modify sensitive user data.`,
-    stepsInput: `1. Send GET request to target URL: https://target.corp/api/v1/resource\n2. Supply parameter payload string.\n3. Observe HTTP 200 response returning unauthorized target data.`,
-    remediationInput: `1. Implement strict server-side validation and parameter allowlists.\n2. Enforce object-level access control on all backend API routes.`,
-    evaluated: false,
-    score: "Pending Submission",
-    feedback: "Fill in the fields above and click 'Submit Report for Evaluation' to test your VDP writing skills."
   };
 
-  // Lesson details
-  const whatYouAreDoing = `RED TEAM AUDIT (Day ${globalLessonIndex + 1} - ${dayName}):\nYou are auditing ${dayTitle} in a target web application. Learn the fundamental mechanics, inspect client code, craft custom payloads, and capture the flag.`;
+  // 3. CTF Arena (Practical Track)
+  const section3_CtfArenaTrack = {
+    environmentName: `PortSwigger Web Security Academy & Local Docker Arena (${dayTitle})`,
+    stepByStepLabGuide: [
+      `Step 1: Review the target code inspection box inside the Digital Arena panel below.`,
+      `Step 2: Identify where user input reaches dangerous sinks or missing authorization checks.`,
+      `Step 3: Write your custom exploit payload string in the local shell terminal workspace.`,
+      `Step 4: Click 'Execute Payload' in the local shell terminal to trigger simulation.`,
+      `Step 5: Copy the captured flag into the verification input to claim your XP and advance.`
+    ],
+    terminalPayload: `FLAG{${dayName.toUpperCase()}_${competency.replace(/[\s&()\-]/g, "_").toUpperCase()}_SUCCESS}`
+  };
 
-  const vulnerabilityOrigin = `ORIGIN & ROOT CAUSE:\n${dayTitle} occurs when developers assume client parameters are safe without server validation. Under deadline pressure, input sanitization is skipped, creating severe security gaps.`;
+  // 4. Automation & Recon Area
+  const section4_AutomationAndReconArea = {
+    automationStrategy: `Automate discovery of ${dayTitle} across enterprise CIDR blocks using high-speed CLI scanners, custom Nuclei templates, and Python requests scripts.`,
+    nucleiTemplateCommand: `nuclei -u https://target.corp -t templates/vulnerabilities/${competency.toLowerCase().replace(/[\s&()\-]/g, "")}/ -severity high,critical`,
+    ffufGobusterCommand: `ffuf -u https://target.corp/FUZZ -w wordlists/api-endpoints.txt -mc 200,302`,
+    customPythonScript: `#!/usr/bin/env python3\n# Automate the Boring Stuff / Black Hat Python Style\nimport requests\nimport sys\n\ndef audit_target(url):\n    print(f"[*] Auditing ${dayTitle} on: {url}")\n    res = requests.get(f"{url}/api/v1/resource", headers={"X-Audit-Skill": "${competency}"}, timeout=5)\n    if res.status_code == 200:\n        print("[+] Vulnerability Verified! Response 200 OK.")\n\nif __name__ == "__main__":\n    audit_target(sys.argv[1] if len(sys.argv) > 1 else "http://sandbox-target.corp.internal")`,
+    customBashOneLiner: `subfinder -d target.com -silent | httpx -title -status-code | grep "200"`
+  };
 
-  const pentesterFocus = `PENTESTER AUDIT CHECKLIST:\n1. Search client bundles and HTTP parameters for ${dayTitle} inputs.\n2. Intercept requests in Burp Suite and mutate query parameters.\n3. Execute CLI scan scripts and verify HTTP status code differences.`;
-
-  const payloadCrafting = `PAYLOAD CRAFTING LOGIC FOR ${dayTitle.toUpperCase()}:\n1. Base Payload: Craft primary parameter string targeting ${competency}.\n2. Bypass Encoding: Apply URL/Base64 encoding or duplicate parameter injection.\n3. Verification: Verify execution via HTTP response reflection or flag output.`;
-
-  const burpSuiteSetup = `BURP SUITE PROXY SETUP:\n1. Proxy -> Intercept: Capture outbound requests for ${dayTitle}.\n2. Match/Replace Rules: Automatically inject custom payload headers into POST request bodies.\n3. Repeater: Send modified requests (Ctrl+R) to test parameter boundaries.`;
-
-  const blueTeamDefense = `BLUE TEAM DEFENSE & SECURE CODING:\n1. Enforce strict server-side validation and parameter allowlists.\n2. Verify object-level authorization on every API endpoint.\n3. Implement strict Content Security Policies (CSP) and WAF protection rules.`;
-
-  const stepByStepTutorial = [
-    `Step 1: Open the target code inspection box inside the Digital Arena panel below.`,
-    `Step 2: Identify where user input reaches dangerous sinks or missing authorization checks.`,
-    `Step 3: Write your custom exploit payload string in the terminal workspace.`,
-    `Step 4: Click 'Execute Payload' in the local shell terminal to trigger simulation.`,
-    `Step 5: Copy the captured flag into the verification input to claim your XP and advance.`
-  ];
-
-  const usefulResources = [
-    { name: `OWASP Testing Guide: ${competency}`, url: "https://owasp.org/www-project-web-security-testing-guide/", category: "Standard" },
-    { name: `PortSwigger Web Security Academy: ${dayTitle}`, url: "https://portswigger.net/web-security", category: "Lab & Guide" },
-    { name: `HackerOne Public Vulnerability Disclosures`, url: "https://hackerone.com/hacktivity", category: "Reference" }
-  ];
-
-  const industryInsight = `💡 INDUSTRY INSIGHT & STATISTIC (Day ${globalLessonIndex + 1}):\nVulnerabilities in ${competency} regularly command bounties between $1,500 and $10,000+ on major bug bounty platforms like HackerOne and Bugcrowd.`;
-
-  const pythonScript = `#!/usr/bin/env python3
-# Black Hat Python / Automate Boring Stuff Style Script
-# Module: ${dayTitle} (Day ${globalLessonIndex + 1})
-
-import requests
-import sys
-
-def audit_${dayName.toLowerCase()}_target(url):
-    print(f"[*] Auditing target endpoint for ${dayTitle}: {url}")
-    headers = {"User-Agent": "BugBountyMastery/3.0", "X-Audit-Skill": "${competency}"}
-    try:
-        res = requests.get(f"{url}/api/v1/resource", headers=headers, timeout=5)
-        print(f"[+] Server Response Code: {res.status_code}")
-        if res.status_code == 200:
-            print("[+] Target active! Exploit payload verified successfully.")
-    except Exception as e:
-        print(f"[-] Connection error: {e}")
-
-if __name__ == "__main__":
-    target = sys.argv[1] if len(sys.argv) > 1 else "http://sandbox-target.corp.internal"
-    audit_${dayName.toLowerCase()}_target(target)`;
-
-  const bashScript = `#!/usr/bin/env bash
-# CLI Bash Automation: ${dayTitle} (Day ${globalLessonIndex + 1})
-TARGET=\${1:-"http://sandbox-target.corp.internal"}
-
-echo "[*] Running CLI scanner for ${dayTitle}..."
-curl -s -X GET -H "X-Audit-Skill: ${competency}" "$TARGET/api/v1/resource" | head -n 20`;
-
-  const vdpReportTemplate = {
-    title: `[HIGH] ${dayTitle} Identified in Core Endpoint`,
+  // 5. VDP Report Writing Guide
+  const section5_VdpReportWritingGuide = {
+    title: `[HIGH] ${dayTitle} Identified in Core Application Endpoint`,
     cvssVector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
     cvssScore: 8.2,
-    description: `During a security audit, an un-sanitized flaw (${dayTitle}) was identified in ${competency}. An attacker can exploit this condition to read unauthorized tenant data.`,
-    stepsToReproduce: `1. Issue HTTP request to endpoint for ${dayTitle}.\n2. Supply parameter payload string.\n3. Observe HTTP 200 response returning unauthorized data.`,
+    description: `During a security assessment, an un-sanitized parameter flaw (${dayTitle}) was identified in ${competency}. An unauthenticated attacker can exploit this condition to read or modify sensitive user data.`,
+    impact: `An attacker can bypass authorization controls, access private tenant PII records, or execute arbitrary state changes, violating multi-tenant isolation boundaries.`,
+    stepsToReproduce: `1. Issue HTTP GET request to target endpoint: \`https://target.corp/api/v1/resource\`\n2. Supply parameter payload string.\n3. Observe HTTP 200 response returning unauthorized data.`,
     remediation: `1. Implement strict server-side parameter validation.\n2. Enforce object-level access control on all backend API routes.`
   };
 
-  const dailyAssignment = {
-    title: `Daily Hands-On Assignment: ${dayTitle}`,
-    objective: `Demonstrate practical understanding of ${dayTitle} by auditing code sinks, crafting an exploit payload, running python automation, and drafting a VDP report.`,
-    tasks: [
-      `Task 1: Inspect the target code snippet in the Digital Arena and identify input parameters.`,
-      `Task 2: Construct a working exploit payload for ${dayTitle} in the local terminal shell.`,
-      `Task 3: Execute the Python automation script and verify the response status code.`,
-      `Task 4: Submit the captured flag and record your research log to earn XP.`
-    ],
-    deliverable: `Extracted Flag (e.g. FLAG{...}) and completed daily checklist.`
+  // 6. Real-World Case Study
+  const section6_RealWorldCaseStudy = {
+    disclosedReportTitle: `[Disclosed Report] Critical ${dayTitle} in Corporate SaaS Platform`,
+    platform: "HackerOne / Bugcrowd",
+    bountyAwarded: "$4,500 USD",
+    targetCompany: "Fortune 500 Enterprise SaaS Target",
+    hunterMethodology: `The security researcher noticed that the target API endpoint trusted incoming client request parameters during profile configuration updates. By mutating parameter IDs in Burp Suite Repeater, the hunter bypassed tenant permission rules, accessing senior administrator credentials and earning a $4,500 bounty.`
   };
 
+  // 7. Live Hunting Grounds
+  const section7_LiveHuntingGrounds = {
+    curatedProgramLinks: [
+      { name: "HackerOne Public Directory Scope", url: "https://hackerone.com/hacktivity", platform: "HackerOne" },
+      { name: "Bugcrowd Public Programs Scope", url: "https://bugcrowd.com/programs", platform: "Bugcrowd" },
+      { name: "Intigriti VDP Directory", url: "https://www.intigriti.com/programs", platform: "Intigriti" }
+    ],
+    searchDorks: [
+      `site:target.corp inurl:api/v1/${competency.toLowerCase().replace(/[\s&()\-]/g, "")}`,
+      `site:*.target.corp ext:js "${dayTitle.split(" ")[0].toLowerCase()}"`
+    ],
+    scopeInclusionTips: `Look for broad-scope wildcards (*.target.com) handling microservice API calls. Test staging subdomains (staging-api.target.com) where WAF rules are less strict.`
+  };
+
+  // 8. Expert Audit Note
+  const section8_ExpertAuditNote = `💡 EXPERT AUDIT NOTE (Day ${globalLessonIndex + 1}):\nAlways test parameter variations across GET, POST, and PUT HTTP verbs. If direct access returns HTTP 403 Forbidden, inject custom override headers like 'X-HTTP-Method-Override: PUT' or 'X-Forwarded-For: 127.0.0.1' to bypass reverse-proxy access filters!`;
+
   return {
-    beginnerAnalogy,
-    chatGptPromptStrategy,
-    recommendedBooks,
-    creatorLessons,
-    howToDoRealWorldHunting,
-    whereToHuntAndAiAutomation,
-    whatYouAreDoing,
-    vulnerabilityOrigin,
-    pentesterFocus,
-    payloadCrafting,
-    burpSuiteSetup,
-    blueTeamDefense,
-    stepByStepTutorial,
-    usefulResources,
-    industryInsight,
-    pythonAutomation: pythonScript,
-    bashScript: bashScript,
-    vdpReportTemplate,
-    studentVdpTestingConsole,
-    dailyAssignment
+    framework: {
+      section1_TheoreticalFoundation,
+      section2_VideoWalkthroughAnalysis,
+      section3_CtfArenaTrack,
+      section4_AutomationAndReconArea,
+      section5_VdpReportWritingGuide,
+      section6_RealWorldCaseStudy,
+      section7_LiveHuntingGrounds,
+      section8_ExpertAuditNote
+    },
+
+    // Backwards compatibility mappings
+    theory: {
+      title: "Theoretical Principles & Auditing",
+      duration: "30 Mins",
+      beginnerAnalogy: {
+        story: `Imagine a bank vault where the teller relies on a piece of paper handed over by the customer rather than checking the central database. On Day ${globalLessonIndex + 1}, ${dayTitle} works similarly.`,
+        realWorldComparison: "The application trusts client-side state or parameter assumptions without validating object references or cryptographic signatures."
+      },
+      chatGptPromptStrategy: `Prompt: "Act as a senior cybersecurity auditor. Review the following code snippet for ${dayTitle} vulnerabilities under ${competency}. Identify parameter pollution, missing authorization checks, and payload injection points:\n[PASTE CODE HERE]"`,
+      recommendedBooks: section1_TheoreticalFoundation.mappedBookChapters.map(b => ({
+        title: b.bookTitle,
+        author: b.author,
+        chapterLesson: b.chapter,
+        whatTheyAreDoing: b.concept,
+        detailedExplanation: `Explores deep technical vectors, edge cases, and evasion tricks relevant to ${dayTitle}.`,
+        practicalExample: `In ${b.bookTitle}, the author demonstrates exploiting ${dayTitle} by intercepting HTTP requests in Burp Suite and modifying parameters.`,
+        howToAdapt: "Adapt this by generating automated custom scripts in Python or Nuclei templates.",
+        takeaway: "Never trust client inputs and always implement server-side validation and role-based access control."
+      })),
+      creatorLessons: [
+        {
+          creatorName: "NahamSec & Jason Haddix",
+          channelOrWebsite: "YouTube & Bug Hunter Methodology",
+          lessonTitle: `Mastering ${dayTitle}`,
+          broadExplanation: `Comprehensive walkthrough on identifying ${dayTitle} vulnerabilities in production environments.`,
+          methodologyOverview: "Asset discovery -> Recon filtering -> Parameter fuzzing -> Payload validation -> PoC creation.",
+          stepByStepWalkthrough: [
+            "Use Sublist3r and Amass to discover target subdomains.",
+            "Run ffuf or gau to collect endpoints and parameters.",
+            "Intercept traffic with Burp Suite and manipulate input vectors.",
+            "Confirm response diffs and write a reproducible PoC."
+          ],
+          practicalCommand: section4_AutomationAndReconArea.nucleiTemplateCommand,
+          specificVideoUrl: "https://www.youtube.com/results?search_query=" + encodeURIComponent(`NahamSec ${dayTitle} tutorial`)
+        }
+      ],
+      howToDoRealWorldHunting: {
+        targetDiscoveryDorks: section7_LiveHuntingGrounds.searchDorks,
+        reconFilterStrategy: section7_LiveHuntingGrounds.scopeInclusionTips,
+        realWorldTriageTips: "Focus on active endpoints with high impact potential.",
+        bypassTricks: "Try header injection, double encoding, and alternative HTTP methods."
+      },
+      whereToHuntAndAiAutomation: {
+        targetProgramLinks: section7_LiveHuntingGrounds.curatedProgramLinks,
+        aiAutomatedHuntingWorkflow: "Combine ChatGPT / Claude analysis with Nuclei scanning for high-confidence finding triage.",
+        automatedScrapersAndDorks: section7_LiveHuntingGrounds.searchDorks
+      },
+      whatYouAreDoing: `RED TEAM AUDIT (Day ${globalLessonIndex + 1} - ${dayName}):\nYou are auditing ${dayTitle} in a target web application under ${competency}.`,
+      vulnerabilityOrigin: section1_TheoreticalFoundation.breakdown,
+      pentesterFocus: section2_VideoWalkthroughAnalysis.instructorSteps.targetRecon,
+      payloadCrafting: section2_VideoWalkthroughAnalysis.instructorSteps.discoveryAndPayload,
+      burpSuiteSetup: section2_VideoWalkthroughAnalysis.instructorSteps.exploitation,
+      blueTeamDefense: section2_VideoWalkthroughAnalysis.instructorSteps.mitigation,
+      developerMindset: "Developers often prioritize speed and feature delivery over input validation edge cases.",
+      psychologicalError: "Assuming client-side controls or obscured endpoints are invisible to malicious actors.",
+      usefulResources: [
+        { name: `OWASP Testing Guide: ${competency}`, url: "https://owasp.org/www-project-web-security-testing-guide/", category: "Standard" },
+        { name: `PortSwigger Web Security Academy: ${dayTitle}`, url: "https://portswigger.net/web-security", category: "Lab & Guide" }
+      ],
+      industryInsight: section8_ExpertAuditNote
+    },
+    digitalArena: {
+      title: "The Digital Arena Playground",
+      duration: "90 Mins",
+      stepByStepTutorial: section3_CtfArenaTrack.stepByStepLabGuide,
+      labLink: "https://portswigger.net/web-security",
+      instructions: "Execute payload in terminal shell and verify flag.",
+      interactiveConsolePlaceholder: "Enter captured FLAG",
+      correctFlag: section3_CtfArenaTrack.terminalPayload,
+      flagSubmitted: "",
+      flagVerified: false
+    },
+    automation: {
+      title: "Automation & VDP Reporting Output",
+      duration: "30 Mins",
+      pythonScript: section4_AutomationAndReconArea.customPythonScript,
+      bashScript: section4_AutomationAndReconArea.customBashOneLiner,
+      pythonExplanation: "Automate vulnerability scanning in Python.",
+      bashExplanation: "Run CLI scanner in Bash.",
+      vdpReportTemplate: section5_VdpReportWritingGuide,
+      checklist: [
+        { id: `check-1`, text: "Audit code origin and payload execution logic", completed: false },
+        { id: `check-2`, text: "Execute Python & Bash automation scripts", completed: false },
+        { id: `check-3`, text: "Review CVSS calculations and submit VDP report", completed: false }
+      ],
+      committed: false,
+      reported: false
+    }
   };
 };
 
@@ -553,67 +415,21 @@ export const generateDefaultCurriculum = (): Week[] => {
       const labLink = topicInfo.days[d].lab;
       const dayId = `week-${w + 1}-${dayName.toLowerCase()}`;
 
-      const details = getComprehensiveLessonContent(w, d, dayTitle, topicInfo.competency, dayName);
+      const details = get8PartLessonContent(w, d, dayTitle, topicInfo.competency, dayName);
 
       days.push({
         id: dayId,
         weekIndex: w,
         dayName,
         title: dayTitle,
-        durationMinutes: 150, // 30 (Theory) + 90 (Arena) + 30 (Automation)
-        unlocked: w === 0 && d === 0, // Week 1 Monday unlocked by default
+        durationMinutes: 150,
+        unlocked: w === 0 && d === 0,
         completed: false,
         competency: topicInfo.competency,
-        theory: {
-          title: "Theoretical Principles & Auditing",
-          duration: "30 Mins",
-          beginnerAnalogy: details.beginnerAnalogy,
-          chatGptPromptStrategy: details.chatGptPromptStrategy,
-          recommendedBooks: details.recommendedBooks,
-          creatorLessons: details.creatorLessons,
-          howToDoRealWorldHunting: details.howToDoRealWorldHunting,
-          whereToHuntAndAiAutomation: details.whereToHuntAndAiAutomation,
-          whatYouAreDoing: details.whatYouAreDoing,
-          vulnerabilityOrigin: details.vulnerabilityOrigin,
-          pentesterFocus: details.pentesterFocus,
-          payloadCrafting: details.payloadCrafting,
-          burpSuiteSetup: details.burpSuiteSetup,
-          blueTeamDefense: details.blueTeamDefense,
-          usefulResources: details.usefulResources,
-          industryInsight: details.industryInsight,
-          developerMindset: `The engineering team prioritizes rapid feature deployment and positive user experience paths. Under deadline pressure, developers assume that parameters originating from their own front-end app or client environment are inherently safe, failing to validate data structures on the server or browser runtime.`,
-          psychologicalError: `Implicit Trust Bias & Perimeter Blindness: Assuming that because an interface control (like an input field) limits user actions in standard browsers, malicious actors cannot bypass constraints using proxy tools, cURL, or custom script payloads.`,
-          attackVectors: `Audit Code -> Identify Weak Input -> Configure Burp Suite -> Craft Payload -> Run Terminal Exploit -> Capture & Submit Flag.`
-        },
-        digitalArena: {
-          title: "The Digital Arena Playground",
-          duration: "90 Mins",
-          stepByStepTutorial: details.stepByStepTutorial,
-          labLink,
-          instructions: `1. Review the step-by-step practical tutorial guide inside the Playground area below.\n2. Read the target code inspection snippet inside the Digital Arena panel.\n3. Write and execute your custom exploit payload directly in the local shell terminal.\n4. Review the execution results and copy the extracted FLAG into the answer verification box.`,
-          interactiveConsolePlaceholder: `Enter captured FLAG (e.g. FLAG{...})`,
-          correctFlag: `FLAG{${dayName.toUpperCase()}_${topicInfo.competency.replace(/[\s&()\-]/g, "_").toUpperCase()}_SUCCESS}`,
-          flagSubmitted: "",
-          flagVerified: false
-        },
-        automation: {
-          title: "Automation & VDP Reporting Output",
-          duration: "30 Mins",
-          pythonScript: details.pythonAutomation,
-          bashScript: details.bashScript,
-          pythonExplanation: `Automating this exploit in Python creates a reusable proof-of-concept script for your bug bounty toolkit.`,
-          bashExplanation: `Automating this exploit in Bash allows rapid CLI command-line execution across target IP ranges.`,
-          vdpReportTemplate: details.vdpReportTemplate,
-          studentVdpTestingConsole: details.studentVdpTestingConsole,
-          dailyAssignment: details.dailyAssignment,
-          checklist: [
-            { id: `${dayId}-check-1`, text: "Audit code origin and payload execution logic", completed: false },
-            { id: `${dayId}-check-2`, text: "Execute Python & Bash automation scripts in terminal", completed: false },
-            { id: `${dayId}-check-3`, text: "Review CVSS string calculations and submit VDP report", completed: false }
-          ],
-          committed: false,
-          reported: false
-        }
+        framework: details.framework,
+        theory: details.theory,
+        digitalArena: details.digitalArena,
+        automation: details.automation
       });
     }
 
@@ -641,7 +457,7 @@ export const generateDefaultCurriculum = (): Week[] => {
     weeks.push({
       weekNumber: w + 1,
       title: topicInfo.title,
-      unlocked: w === 0, // Week 1 unlocked by default
+      unlocked: w === 0,
       completed: false,
       days,
       bossLab

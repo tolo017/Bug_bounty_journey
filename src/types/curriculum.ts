@@ -51,6 +51,59 @@ export interface StudentVdpEvaluation {
   feedback: string;
 }
 
+export interface TheoreticalFoundation {
+  breakdown: string;
+  mappedBookChapters: { bookTitle: string; author: string; chapter: string; concept: string }[];
+}
+
+export interface VideoWalkthroughAnalysis {
+  youtubeSearchTerms: string[];
+  instructorSteps: {
+    targetRecon: string;
+    discoveryAndPayload: string;
+    exploitation: string;
+    mitigation: string;
+  };
+}
+
+export interface CtfArenaTrack {
+  environmentName: string;
+  stepByStepLabGuide: string[];
+  terminalPayload: string;
+}
+
+export interface AutomationAndReconArea {
+  automationStrategy: string;
+  nucleiTemplateCommand: string;
+  ffufGobusterCommand: string;
+  customPythonScript: string;
+  customBashOneLiner: string;
+}
+
+export interface VdpReportWritingGuide {
+  title: string;
+  cvssVector: string;
+  cvssScore: number;
+  description: string;
+  impact: string;
+  stepsToReproduce: string;
+  remediation: string;
+}
+
+export interface RealWorldCaseStudy {
+  disclosedReportTitle: string;
+  platform: string;
+  bountyAwarded: string;
+  targetCompany: string;
+  hunterMethodology: string;
+}
+
+export interface LiveHuntingGrounds {
+  curatedProgramLinks: { name: string; url: string; platform: string }[];
+  searchDorks: string[];
+  scopeInclusionTips: string;
+}
+
 export interface DayLesson {
   id: string; // e.g. "week-1-monday"
   weekIndex: number; // 0 to 11 (Week 1 to 12)
@@ -61,33 +114,43 @@ export interface DayLesson {
   completed: boolean;
   competency: string; // e.g. "Client-Side Security"
 
-  // Expanded Beginner-Friendly Sections
+  // Exact 8-Part Architecture
+  framework: {
+    section1_TheoreticalFoundation: TheoreticalFoundation;
+    section2_VideoWalkthroughAnalysis: VideoWalkthroughAnalysis;
+    section3_CtfArenaTrack: CtfArenaTrack;
+    section4_AutomationAndReconArea: AutomationAndReconArea;
+    section5_VdpReportWritingGuide: VdpReportWritingGuide;
+    section6_RealWorldCaseStudy: RealWorldCaseStudy;
+    section7_LiveHuntingGrounds: LiveHuntingGrounds;
+    section8_ExpertAuditNote: string;
+  };
+
   theory: {
     title: string;
-    duration: string; // e.g. "30 Mins"
-    beginnerAnalogy: { story: string; realWorldComparison: string }; // Simple real-world story
-    chatGptPromptStrategy: string; // ChatGPT & AI prompt strategy for bug bounty
-    recommendedBooks: BookLesson[]; // Detailed book chapter lessons with practicals & adaptations
-    creatorLessons: CreatorLesson[]; // Detailed YouTube creator & website lessons with specific video URLs
-    howToDoRealWorldHunting: RealWorldHuntingGuide; // Real World Hunting Field Guide
-    whereToHuntAndAiAutomation: WhereToHuntAndAiAutomation; // Active Hunting Scopes & AI Automation
-    whatYouAreDoing: string; // Detailed breakdown of researcher actions
-    vulnerabilityOrigin: string; // How the vulnerability comes about (Root Cause)
-    pentesterFocus: string; // What to look for as a pentester
-    payloadCrafting: string; // How to come up with and construct payloads
-    burpSuiteSetup: string; // How to set up Burp Suite (Proxy, Match/Replace, Extensions)
-    blueTeamDefense: string; // What defenders look for, prevention & secure coding
-    developerMindset: string; // Developer mindset assumption
-    psychologicalError: string; // Cognitive bias / error
-    attackVectors: string; // Attack vector execution chain
-    usefulResources: { name: string; url: string; category: string }[]; // External specs & cheat sheets
-    industryInsight: string; // Industry insight & fun fact placed at the bottom
+    duration: string;
+    beginnerAnalogy?: { story: string; realWorldComparison: string };
+    chatGptPromptStrategy?: string;
+    recommendedBooks?: BookLesson[];
+    creatorLessons?: CreatorLesson[];
+    howToDoRealWorldHunting?: RealWorldHuntingGuide;
+    whereToHuntAndAiAutomation?: WhereToHuntAndAiAutomation;
+    whatYouAreDoing: string;
+    vulnerabilityOrigin: string;
+    pentesterFocus: string;
+    payloadCrafting: string;
+    burpSuiteSetup: string;
+    blueTeamDefense: string;
+    developerMindset?: string;
+    psychologicalError?: string;
+    usefulResources: { name: string; url: string; category: string }[];
+    industryInsight: string;
   };
   digitalArena: {
     title: string;
-    duration: string; // "90 Mins"
-    stepByStepTutorial: string[]; // Step-by-step tutorial inside the Playground Area
-    labLink: string; // PortSwigger lab reference
+    duration: string;
+    stepByStepTutorial: string[];
+    labLink: string;
     instructions: string;
     interactiveConsolePlaceholder: string;
     correctFlag: string;
@@ -96,9 +159,9 @@ export interface DayLesson {
   };
   automation: {
     title: string;
-    duration: string; // "30 Mins"
-    pythonScript: string; // Python script (Automate Boring Stuff / Black Hat Python style)
-    bashScript: string; // Bash script
+    duration: string;
+    pythonScript: string;
+    bashScript: string;
     pythonExplanation: string;
     bashExplanation: string;
     vdpReportTemplate: {
@@ -109,8 +172,8 @@ export interface DayLesson {
       stepsToReproduce: string;
       remediation: string;
     };
-    studentVdpTestingConsole: StudentVdpEvaluation; // Interactive student VDP evaluator after every lesson
-    dailyAssignment: {
+    studentVdpTestingConsole?: StudentVdpEvaluation;
+    dailyAssignment?: {
       title: string;
       objective: string;
       tasks: string[];
