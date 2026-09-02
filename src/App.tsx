@@ -978,9 +978,7 @@ function App() {
                           ))}
                         </div>
                       </div>
-
-                      {/* In-App Screen Recorder & AI Voiceover Suite */}
-
+                      
                       {/* Social ledger sharing & GitHub pushes triggers */}
                       <SocialIntegrator
                         lessonTitle={currentDay.title}
