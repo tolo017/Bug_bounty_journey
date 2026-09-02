@@ -246,14 +246,21 @@ def portfolio_export_view(request):
                 import urllib.request
                 import urllib.error
 
+                # Generate full GitHub Markdown Research Log
+                full_markdown = f"# Bug Bounty Mastery Academy - Security Research & Lab Logs\n**Student:** {request.user.username}\n**Job Readiness Metric:** {profile.calculate_job_readiness()}%\n**Total Skills Acquired:** {profile.total_skills_acquired()}\n\n---\n\n## Technical Curriculum Log\n\n"
+                for w in range(1, 13):
+                    lesson = get_week_data(w)
+                    prog = UserWeekProgress.objects.filter(user=request.user, week_number=w).first()
+                    status = "COMPLETED" if (prog and prog.lab_b_completed) else ("UNLOCKED" if (prog and prog.is_unlocked) else "LOCKED")
+                    if lesson:
+                        full_markdown += f"### Week {w}: {lesson['title']} [{status}]\n- **Analogy:** {lesson['analogy']}\n- **Root Cause:** {lesson['root_cause'][:200]}...\n- **Flag Status:** {prog.lab_b_flag_submitted if (prog and prog.lab_b_completed) else 'Pending'}\n- **Report Score:** {prog.report_score if prog else 0}/100\n\n"
+
                 repo = profile.github_repo.strip('/')
                 pat = profile.github_pat.strip()
                 target_path = "RESEARCH_LOGS.md"
                 url = f"https://api.github.com/repos/{repo}/contents/{target_path}"
 
-                # Generate markdown payload
-                markdown_content = f"# Bug Bounty Mastery Academy - Security Research & Lab Logs\nStudent: {request.user.username}\nJob Readiness Metric: {profile.calculate_job_readiness()}%\n"
-                encoded_content = base64.b64encode(markdown_content.encode('utf-8')).decode('utf-8')
+                encoded_content = base64.b64encode(full_markdown.encode('utf-8')).decode('utf-8')
 
                 # Check if file exists to get SHA
                 sha = None

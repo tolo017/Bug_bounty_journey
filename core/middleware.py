@@ -30,7 +30,7 @@ class TrialExpirationMiddleware:
                 current_path = request.path
 
                 # Allow access to subscription, login, logout, register, static/admin exempt paths
-                exempt_paths = ['/subscribe/', '/paypal/', '/logout/', '/login/', '/register/', '/admin/']
+                exempt_paths = ['/subscribe/', '/paypal/', '/logout/', '/login/', '/register/', '/admin/', '/static/']
                 is_exempt = any(current_path.startswith(p) for p in exempt_paths) or (current_url_name in EXEMPT_URL_NAMES)
 
                 if not is_exempt:
