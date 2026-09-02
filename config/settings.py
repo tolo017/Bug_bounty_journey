@@ -26,7 +26,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-ko*b&f4c_!hla#hqp8x*b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "True").lower() in ("true", "1", "t")
 
-ALLOWED_HOSTS = ['.vercel.app', 'now.sh', 'localhost', '127.0.0.1', '*']
+ALLOWED_HOSTS = ['.vercel.app', 'now.sh', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -86,19 +86,23 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
+# Database Configuration
+# On Vercel serverless environments where DATABASE_URL is not set, SQLite must write to /tmp
+IS_VERCEL = "VERCEL" in os.environ or os.environ.get("VERCEL_ENV") is not None
+SQLITE_DB_PATH = "/tmp/db.sqlite3" if IS_VERCEL else BASE_DIR / "db.sqlite3"
+
 try:
     import dj_database_url
-    DATABASES = {
-        "default": dj_database_url.config(
-            default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
-            conn_max_age=600
-        )
-    }
+    db_config = dj_database_url.config(
+        default=f"sqlite:///{SQLITE_DB_PATH}",
+        conn_max_age=600
+    )
+    DATABASES = {"default": db_config}
 except ImportError:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
+            "NAME": SQLITE_DB_PATH,
         }
     }
 

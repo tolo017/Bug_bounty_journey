@@ -1,5 +1,5 @@
 import os
 from config.wsgi import app
 
-# Vercel serverless function entrypoint
+# Vercel serverless entrypoint
 app = app
