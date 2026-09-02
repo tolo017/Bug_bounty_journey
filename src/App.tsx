@@ -307,9 +307,9 @@ function App() {
                   </div>
 
                   <div className="flex items-center justify-between gap-2 bg-hacker-card border border-hacker-border px-3 py-1.5 rounded">
-                    <span className="text-gray-300 truncate"><strong className="text-white">GitHub Asset:</strong> {currentDay.githubPushAsset?.name}</span>
+                    <span className="text-gray-300 truncate"><strong className="text-white">GitHub Asset:</strong> {currentDay.architecture?.section8_PortfolioIntegration?.githubAssetName || "script.py"}</span>
                     <span className="text-[10px] bg-white/10 text-white px-2 py-0.5 rounded font-bold shrink-0">
-                      {currentDay.githubPushAsset?.type}
+                      {currentDay.architecture?.section8_PortfolioIntegration?.githubAssetType || "Python"}
                     </span>
                   </div>
                 </div>
@@ -357,126 +357,159 @@ function App() {
                 <div className="min-h-[300px]">
 
                   {/* Exact 8-Part Framework Architecture Workspace */}
-                  {activeTab === "theory" && currentDay.framework && (
+                  {activeTab === "theory" && currentDay.architecture && (
                     <div className="flex flex-col gap-6">
 
-                      {/* Section 1: Theoretical Foundation & Book Integration */}
+                      {/* Section 1: The Root Cause (Why It Breaks) */}
                       <div className="bg-gradient-to-r from-amber-950/40 via-hacker-card to-hacker-dark border border-hacker-amber/50 p-5 rounded-xl flex flex-col gap-3 shadow-lg">
                         <div className="text-xs font-bold text-hacker-amber font-mono flex items-center gap-2 uppercase tracking-wider border-b border-hacker-border/40 pb-2">
-                          <BookOpen size={18} /> SECTION 1: THEORETICAL FOUNDATION & BOOK INTEGRATION
+                          <BookOpen size={18} /> SECTION 1: THE ROOT CAUSE (WHY IT BREAKS)
                         </div>
-                        <p className="text-xs text-white leading-relaxed font-sans whitespace-pre-wrap">
-                          {currentDay.framework.section1_TheoreticalFoundation.breakdown}
-                        </p>
+                        <div className="flex flex-col gap-2 font-sans text-xs leading-relaxed text-gray-200">
+                          <p><strong className="text-white font-mono">Foundational Architecture:</strong> {currentDay.architecture.section1_RootCause.foundationalArchitecture}</p>
+                          <p><strong className="text-white font-mono">Coding Mistake & Logic Failure:</strong> {currentDay.architecture.section1_RootCause.codingMistakeAndLogicFailure}</p>
+                          <p><strong className="text-white font-mono">Protocol & Code Level Impact:</strong> {currentDay.architecture.section1_RootCause.protocolAndCodeLevelImpact}</p>
+                        </div>
+                      </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
-                          {currentDay.framework.section1_TheoreticalFoundation.mappedBookChapters.map((book, idx) => (
-                            <div key={idx} className="bg-black/60 border border-hacker-border/60 p-3 rounded-lg font-mono text-xs flex flex-col gap-1">
-                              <span className="font-bold text-sky-400">{book.bookTitle}</span>
-                              <span className="text-[10px] text-hacker-amber">{book.chapter} ({book.author})</span>
-                              <p className="text-[11px] text-gray-300 font-sans mt-0.5 leading-relaxed">{book.concept}</p>
+                      {/* Section 2: Textbook Cross-Reference & Resolution Map */}
+                      <div className="bg-hacker-dark/80 border border-sky-400/40 p-5 rounded-xl flex flex-col gap-3 shadow-lg font-mono text-xs">
+                        <div className="text-xs font-bold text-sky-400 flex items-center gap-2 uppercase tracking-wider border-b border-hacker-border/40 pb-2">
+                          <BookOpen size={18} /> SECTION 2: TEXTBOOK CROSS-REFERENCE & RESOLUTION MAP
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          {currentDay.architecture.section2_TextbookCrossReference.textbookList.map((tb, idx) => (
+                            <div key={idx} className="bg-black/60 border border-hacker-border/60 p-3 rounded-lg flex flex-col gap-1">
+                              <span className="font-bold text-sky-300">{tb.bookTitle}</span>
+                              <span className="text-[10px] text-hacker-amber">{tb.chapter} ({tb.author})</span>
+                              <p className="text-[11px] text-gray-300 font-sans mt-0.5 leading-relaxed"><strong>Author Approach:</strong> {tb.authorMethodology}</p>
+                              <p className="text-[11px] text-hacker-green font-sans leading-relaxed"><strong>Advice / Resolution:</strong> {tb.adviceToSolveOrBypass}</p>
                             </div>
                           ))}
                         </div>
                       </div>
 
-                      {/* Section 2: Video Walkthrough & Analysis */}
-                      <div className="bg-hacker-dark/80 border border-sky-400/40 p-5 rounded-xl flex flex-col gap-3 shadow-lg font-mono text-xs">
-                        <div className="text-xs font-bold text-sky-400 flex items-center gap-2 uppercase tracking-wider border-b border-hacker-border/40 pb-2">
-                          <PlayCircle size={18} /> SECTION 2: VIDEO WALKTHROUGH & ANALYSIS
-                        </div>
-
-                        <div className="bg-black/70 p-3 rounded-lg border border-hacker-border/40 flex flex-col gap-1.5">
-                          <span className="font-bold text-hacker-green flex items-center gap-1.5"><Search size={14} /> PRECISE YOUTUBE POC SEARCH TERMS:</span>
-                          <div className="flex flex-wrap gap-2 mt-1">
-                            {currentDay.framework.section2_VideoWalkthroughAnalysis.youtubeSearchTerms.map((term, idx) => (
-                              <a
-                                key={idx}
-                                href={`https://www.youtube.com/results?search_query=${encodeURIComponent(term)}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="bg-hacker-card border border-hacker-border hover:border-sky-400 text-sky-300 hover:text-white px-2.5 py-1 rounded text-[11px] transition-all flex items-center gap-1"
-                              >
-                                {term} <ExternalLink size={10} />
-                              </a>
-                            ))}
-                          </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-sans text-xs">
-                          <div className="bg-black/60 p-3 rounded-lg border border-hacker-border/40 flex flex-col gap-1">
-                            <span className="font-bold text-hacker-amber font-mono">1. Target Recon:</span>
-                            <pre className="text-[11px] text-gray-300 font-mono whitespace-pre-wrap">{currentDay.framework.section2_VideoWalkthroughAnalysis.instructorSteps.targetRecon}</pre>
-                          </div>
-                          <div className="bg-black/60 p-3 rounded-lg border border-hacker-border/40 flex flex-col gap-1">
-                            <span className="font-bold text-hacker-amber font-mono">2. Discovery & Payload:</span>
-                            <pre className="text-[11px] text-gray-300 font-mono whitespace-pre-wrap">{currentDay.framework.section2_VideoWalkthroughAnalysis.instructorSteps.discoveryAndPayload}</pre>
-                          </div>
-                          <div className="bg-black/60 p-3 rounded-lg border border-hacker-border/40 flex flex-col gap-1">
-                            <span className="font-bold text-hacker-green font-mono">3. Exploitation:</span>
-                            <pre className="text-[11px] text-gray-300 font-mono whitespace-pre-wrap">{currentDay.framework.section2_VideoWalkthroughAnalysis.instructorSteps.exploitation}</pre>
-                          </div>
-                          <div className="bg-black/60 p-3 rounded-lg border border-hacker-border/40 flex flex-col gap-1">
-                            <span className="font-bold text-sky-400 font-mono">4. Mitigation:</span>
-                            <pre className="text-[11px] text-gray-300 font-mono whitespace-pre-wrap">{currentDay.framework.section2_VideoWalkthroughAnalysis.instructorSteps.mitigation}</pre>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Section 6: Real-World Case Study */}
-                      <div className="bg-gradient-to-r from-purple-950/40 via-hacker-card to-hacker-dark border border-purple-400/40 p-5 rounded-xl flex flex-col gap-3 shadow-lg">
-                        <div className="text-xs font-bold text-purple-400 font-mono flex items-center gap-2 uppercase tracking-wider border-b border-hacker-border/40 pb-2">
-                          <Award size={18} /> SECTION 6: REAL-WORLD CASE STUDY
-                        </div>
-                        <div className="flex justify-between items-center font-mono text-xs">
-                          <span className="font-bold text-white">{currentDay.framework.section6_RealWorldCaseStudy.disclosedReportTitle}</span>
-                          <span className="bg-hacker-green/10 border border-hacker-green/30 text-hacker-green font-bold px-2.5 py-0.5 rounded">
-                            Bounty: {currentDay.framework.section6_RealWorldCaseStudy.bountyAwarded}
-                          </span>
+                      {/* Section 3: Red Team Perspective (Burp Execution & JS Deconstruction) */}
+                      <div className="bg-hacker-dark/80 border border-red-500/40 p-5 rounded-xl flex flex-col gap-3 shadow-lg font-mono text-xs">
+                        <div className="text-xs font-bold text-red-400 flex items-center gap-2 uppercase tracking-wider border-b border-hacker-border/40 pb-2">
+                          <Target size={18} /> SECTION 3: RED TEAM PERSPECTIVE (BURP & JS DECONSTRUCTION)
                         </div>
                         <p className="text-xs text-gray-200 font-sans leading-relaxed">
-                          {currentDay.framework.section6_RealWorldCaseStudy.hunterMethodology}
+                          {currentDay.architecture.section3_RedTeamPerspective.discoveryAndWeaponization}
                         </p>
-                      </div>
 
-                      {/* Section 7: Live Hunting Grounds */}
-                      <div className="bg-hacker-dark/80 border border-hacker-green/40 p-5 rounded-xl flex flex-col gap-3 shadow-lg font-mono text-xs">
-                        <div className="text-xs font-bold text-hacker-green flex items-center gap-2 uppercase tracking-wider border-b border-hacker-border/40 pb-2">
-                          <Target size={18} /> SECTION 7: LIVE HUNTING GROUNDS & GOOGLE DORKS
+                        <div className="bg-black/60 p-3 rounded-lg border border-hacker-border/40 flex flex-col gap-1.5 mt-1">
+                          <span className="font-bold text-hacker-amber">BURP SUITE EXECUTION STEPS:</span>
+                          {currentDay.architecture.section3_RedTeamPerspective.burpSuiteExecutionSteps.map((step, idx) => (
+                            <div key={idx} className="text-gray-300 text-[11px] font-mono">
+                              {step}
+                            </div>
+                          ))}
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                          {currentDay.framework.section7_LiveHuntingGrounds.curatedProgramLinks.map((link, idx) => (
-                            <a
-                              key={idx}
-                              href={link.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="bg-hacker-card border border-hacker-border hover:border-hacker-green p-2.5 rounded text-gray-200 flex justify-between items-center transition-all group"
-                            >
-                              <span className="group-hover:text-hacker-green transition-colors font-bold">{link.name}</span>
-                              <ExternalLink size={12} className="text-hacker-muted" />
-                            </a>
+                        {/* JS Deconstruction Deep Dive */}
+                        <div className="bg-black/80 p-3.5 rounded-lg border border-red-500/30 flex flex-col gap-2 mt-1 font-sans text-xs">
+                          <span className="font-bold text-red-400 font-mono uppercase tracking-wider text-[11px]">Browser DevTools & JavaScript Deconstruction Walkthrough:</span>
+                          <p><strong className="text-white font-mono">Sources & DevTools:</strong> {currentDay.architecture.section3_RedTeamPerspective.jsDeconstructionGuide.sourceMappingAndDevTools}</p>
+                          <p><strong className="text-white font-mono">Deobfuscation Technique:</strong> {currentDay.architecture.section3_RedTeamPerspective.jsDeconstructionGuide.deobfuscationTechnique}</p>
+                          <p><strong className="text-white font-mono">Sources & Sinks:</strong> {currentDay.architecture.section3_RedTeamPerspective.jsDeconstructionGuide.sinkAndSourceIdentification}</p>
+                          <p><strong className="text-white font-mono">API Keys & Endpoints:</strong> {currentDay.architecture.section3_RedTeamPerspective.jsDeconstructionGuide.apiEndpointAndKeyMining}</p>
+                          <p><strong className="text-white font-mono">Client Logic Bypass:</strong> {currentDay.architecture.section3_RedTeamPerspective.jsDeconstructionGuide.clientSideLogicBypass}</p>
+                        </div>
+                      </div>
+
+                      {/* Section 4: Blue Team Perspective (Log Analysis & Secure Mitigation) */}
+                      <div className="bg-hacker-dark/80 border border-hacker-green/40 p-5 rounded-xl flex flex-col gap-3 shadow-lg font-mono text-xs">
+                        <div className="text-xs font-bold text-hacker-green flex items-center gap-2 uppercase tracking-wider border-b border-hacker-border/40 pb-2">
+                          <ShieldCheck size={18} /> SECTION 4: BLUE TEAM PERSPECTIVE (LOG ANALYSIS & MITIGATION)
+                        </div>
+
+                        <span className="font-bold text-hacker-amber">SERVER LOG ANALYSIS EXAMPLES:</span>
+                        <div className="grid grid-cols-1 gap-2">
+                          {currentDay.architecture.section4_BlueTeamPerspective.logAnalysisExamples.map((log, idx) => (
+                            <div key={idx} className="bg-black/70 p-3 rounded-lg border border-hacker-border/40 flex flex-col gap-1">
+                              <span className="font-bold text-sky-400">{log.serverType} Server Log:</span>
+                              <code className="bg-slate-950 p-1.5 rounded text-red-300 font-mono text-[11px] overflow-x-auto">{log.logSnippet}</code>
+                              <p className="text-[11px] text-gray-300 font-sans mt-0.5">{log.anomalyExplanation}</p>
+                            </div>
                           ))}
                         </div>
 
                         <div className="bg-black/60 p-3 rounded-lg border border-hacker-border/40 flex flex-col gap-1.5 mt-1">
-                          <span className="font-bold text-hacker-amber">ACTIVE GOOGLE DORKS:</span>
-                          {currentDay.framework.section7_LiveHuntingGrounds.searchDorks.map((dork, idx) => (
-                            <code key={idx} className="bg-slate-950 p-1.5 rounded border border-hacker-border/40 text-hacker-green">
-                              {dork}
-                            </code>
+                          <span className="font-bold text-hacker-amber">INDICATORS OF COMPROMISE (IoCs):</span>
+                          {currentDay.architecture.section4_BlueTeamPerspective.indicatorsOfCompromise.map((ioc, idx) => (
+                            <div key={idx} className="text-gray-300 text-[11px]">
+                              • {ioc}
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="bg-black/80 p-3.5 rounded-lg border border-hacker-green/30 flex flex-col gap-2 mt-1">
+                          <span className="font-bold text-hacker-green uppercase tracking-wider">{currentDay.architecture.section4_BlueTeamPerspective.remediationCodeSnippet.description}</span>
+                          <pre className="bg-slate-950 p-2.5 rounded text-hacker-green font-mono text-[11px] overflow-x-auto">
+                            {currentDay.architecture.section4_BlueTeamPerspective.remediationCodeSnippet.secureCode}
+                          </pre>
+                        </div>
+                      </div>
+
+                      {/* Section 5: Automation Workshop */}
+                      <div className="bg-hacker-dark/90 border border-sky-400/50 p-5 rounded-xl flex flex-col gap-3 shadow-lg font-mono text-xs">
+                        <div className="text-xs font-bold text-sky-400 flex items-center gap-2 uppercase tracking-wider border-b border-hacker-border/40 pb-2">
+                          <Terminal size={18} /> SECTION 5: AUTOMATION WORKSHOP ({currentDay.architecture.section5_AutomationWorkshop.scriptName})
+                        </div>
+                        <pre className="bg-slate-950 p-3 rounded text-sky-300 font-mono text-[11px] overflow-x-auto">
+                          {currentDay.architecture.section5_AutomationWorkshop.code}
+                        </pre>
+                        <div className="bg-black/60 p-3 rounded-lg border border-hacker-border/40 flex flex-col gap-1">
+                          <span className="font-bold text-hacker-amber">LINE-BY-LINE EXPLANATION:</span>
+                          {currentDay.architecture.section5_AutomationWorkshop.lineByLineExplanation.map((exp, idx) => (
+                            <p key={idx} className="text-[11px] text-gray-300 font-sans">{exp}</p>
                           ))}
                         </div>
                       </div>
 
-                      {/* Section 8: Expert Audit Note */}
-                      <div className="bg-hacker-dark/90 border border-hacker-amber/50 p-4 rounded-xl flex flex-col gap-2 shadow-lg">
-                        <div className="text-xs font-bold text-hacker-amber font-mono flex items-center gap-2 uppercase tracking-wider">
-                          <Sparkles size={16} /> SECTION 8: EXPERT AUDIT NOTE
+                      {/* Section 6: PortSwigger Links & Solving Guide */}
+                      <div className="bg-hacker-dark/90 border border-purple-400/50 p-5 rounded-xl flex flex-col gap-3 shadow-lg font-mono text-xs">
+                        <div className="text-xs font-bold text-purple-400 flex items-center gap-2 uppercase tracking-wider border-b border-hacker-border/40 pb-2">
+                          <ExternalLink size={18} /> SECTION 6: PORTSWIGGER LAB LINKS & SOLVING GUIDE
                         </div>
-                        <p className="text-xs text-white leading-relaxed font-sans font-medium whitespace-pre-wrap">
-                          {currentDay.framework.section8_ExpertAuditNote}
+                        <a
+                          href={currentDay.architecture.section6_PortSwiggerGuide.directLabUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="bg-purple-950/40 border border-purple-400/50 hover:bg-purple-900/50 text-white font-bold p-3 rounded-lg flex items-center justify-between transition-all"
+                        >
+                          <span>Open PortSwigger Web Security Academy Direct Module</span>
+                          <ExternalLink size={14} />
+                        </a>
+                        <div className="bg-black/60 p-3 rounded-lg border border-hacker-border/40 flex flex-col gap-1">
+                          <span className="font-bold text-hacker-amber">STRATEGIC SOLVING GUIDE:</span>
+                          {currentDay.architecture.section6_PortSwiggerGuide.strategicSolvingGuide.map((sg, idx) => (
+                            <p key={idx} className="text-[11px] text-gray-300 font-sans">{sg}</p>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Section 7: The Digital Playground (In-App Interactive Lab) */}
+                      <div className="bg-hacker-dark/90 border border-hacker-amber/50 p-5 rounded-xl flex flex-col gap-3 shadow-lg font-mono text-xs">
+                        <div className="text-xs font-bold text-hacker-amber flex items-center gap-2 uppercase tracking-wider border-b border-hacker-border/40 pb-2">
+                          <Cpu size={18} /> SECTION 7: THE DIGITAL PLAYGROUND (IN-APP INTERACTIVE LAB)
+                        </div>
+                        <p className="text-xs text-gray-200 font-sans leading-relaxed">
+                          {currentDay.architecture.section7_DigitalPlayground.instructions}
+                        </p>
+                        <pre className="bg-slate-950 border border-hacker-border/60 p-3 rounded text-hacker-green font-mono text-[11px] overflow-x-auto">
+                          {currentDay.architecture.section7_DigitalPlayground.initialCodeOrConsole}
+                        </pre>
+                      </div>
+
+                      {/* Section 8: Portfolio Integration */}
+                      <div className="bg-hacker-dark/90 border border-white/40 p-5 rounded-xl flex flex-col gap-3 shadow-lg font-mono text-xs">
+                        <div className="text-xs font-bold text-white flex items-center gap-2 uppercase tracking-wider border-b border-hacker-border/40 pb-2">
+                          <Award size={18} /> SECTION 8: GITHUB PORTFOLIO & LINKEDIN INTEGRATION
+                        </div>
+                        <p className="text-xs text-gray-200 font-sans leading-relaxed">
+                          {currentDay.architecture.section8_PortfolioIntegration.githubAssetDescription}
                         </p>
                       </div>
 
@@ -485,14 +518,14 @@ function App() {
                           onClick={() => setActiveTab("arena")}
                           className="bg-hacker-amber hover:bg-amber-400 text-black font-bold font-mono text-xs px-5 py-2.5 rounded-lg flex items-center gap-1.5 transition-all shadow"
                         >
-                          Proceed to CTF Arena (Practical Track) <ChevronRight size={14} />
+                          Proceed to Digital Arena (Interactive Verification) <ChevronRight size={14} />
                         </button>
                       </div>
                     </div>
                   )}
 
                   {/* Theoretical Principles & Auditing (Fallback) */}
-                  {activeTab === "theory" && !currentDay.framework && (
+                  {activeTab === "theory" && !currentDay.architecture && (
                     <div className="flex flex-col gap-5">
 
                       {/* Simple Beginner Analogy Card */}
@@ -978,7 +1011,9 @@ function App() {
                           ))}
                         </div>
                       </div>
-                      
+
+                      {/* In-App Screen Recorder & AI Voiceover Suite */}
+
                       {/* Social ledger sharing & GitHub pushes triggers */}
                       <SocialIntegrator
                         lessonTitle={currentDay.title}

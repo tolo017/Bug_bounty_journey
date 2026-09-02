@@ -51,92 +51,104 @@ export interface StudentVdpEvaluation {
   feedback: string;
 }
 
-export interface TheoreticalFoundation {
-  breakdown: string;
-  mappedBookChapters: { bookTitle: string; author: string; chapter: string; concept: string }[];
+export interface TextbookReference {
+  bookTitle: string;
+  author: string;
+  chapter: string;
+  authorMethodology: string;
+  adviceToSolveOrBypass: string;
 }
 
-export interface VideoWalkthroughAnalysis {
-  youtubeSearchTerms: string[];
-  instructorSteps: {
-    targetRecon: string;
-    discoveryAndPayload: string;
-    exploitation: string;
-    mitigation: string;
+export interface RedTeamPerspective {
+  discoveryAndWeaponization: string;
+  burpSuiteExecutionSteps: string[];
+  jsDeconstructionGuide: {
+    sourceMappingAndDevTools: string;
+    deobfuscationTechnique: string;
+    sinkAndSourceIdentification: string;
+    apiEndpointAndKeyMining: string;
+    clientSideLogicBypass: string;
   };
 }
 
-export interface CtfArenaTrack {
-  environmentName: string;
-  stepByStepLabGuide: string[];
-  terminalPayload: string;
+export interface BlueTeamPerspective {
+  logAnalysisExamples: {
+    serverType: "Nginx" | "Apache" | "AWS CloudWatch" | "Application Log";
+    logSnippet: string;
+    anomalyExplanation: string;
+  }[];
+  indicatorsOfCompromise: string[];
+  remediationCodeSnippet: {
+    language: string;
+    description: string;
+    secureCode: string;
+  };
 }
 
-export interface AutomationAndReconArea {
-  automationStrategy: string;
-  nucleiTemplateCommand: string;
-  ffufGobusterCommand: string;
-  customPythonScript: string;
-  customBashOneLiner: string;
+export interface AutomationWorkshop {
+  toolType: "Python" | "Bash" | "Nuclei YAML";
+  scriptName: string;
+  code: string;
+  lineByLineExplanation: string[];
 }
 
-export interface VdpReportWritingGuide {
+export interface PortSwiggerGuide {
+  directLabUrl: string;
+  strategicSolvingGuide: string[];
+}
+
+export interface DigitalPlaygroundLab {
   title: string;
-  cvssVector: string;
-  cvssScore: number;
-  description: string;
-  impact: string;
-  stepsToReproduce: string;
-  remediation: string;
+  mode: "Terminal Simulation" | "Mock DevTools" | "Raw Code Editor";
+  instructions: string;
+  initialCodeOrConsole: string;
+  expectedInputOrFlag: string;
+  hints: string[];
+  correctFeedback: string;
 }
 
-export interface RealWorldCaseStudy {
-  disclosedReportTitle: string;
-  platform: string;
-  bountyAwarded: string;
-  targetCompany: string;
-  hunterMethodology: string;
-}
-
-export interface LiveHuntingGrounds {
-  curatedProgramLinks: { name: string; url: string; platform: string }[];
-  searchDorks: string[];
-  scopeInclusionTips: string;
+export interface IntegrationPortfolio {
+  githubAssetName: string;
+  githubAssetType: string;
+  githubAssetDescription: string;
+  githubCodeOrMarkdown: string;
+  linkedInTemplate: string;
 }
 
 export interface DayLesson {
   id: string; // e.g. "week-1-monday"
-  weekIndex: number; // 0 to 11 (Week 1 to 12)
+  weekIndex: number; // 0 to 11
   dayName: string; // e.g. "Monday"
-  title: string; // e.g. "DOM Clobbering & Document Object Manipulation"
+  title: string;
   durationMinutes: number;
   unlocked: boolean;
   completed: boolean;
-  competency: string; // e.g. "Client-Side Security"
+  competency: string;
 
-  // Master Integration Hooks
+  // Master Integration Badges
   burpToolingUsed: string;
   portSwiggerLabLink: string;
-  githubPushAsset: {
-    name: string;
-    type: "Python Tool" | "Nuclei/ffuf Config" | "Markdown Report" | "Automation Suite";
-    description: string;
-    codeOrContent: string;
-  };
-  linkedInMilestoneTemplate: string;
 
-  // Exact 8-Part Architecture
-  framework: {
-    section1_TheoreticalFoundation: TheoreticalFoundation;
-    section2_VideoWalkthroughAnalysis: VideoWalkthroughAnalysis;
-    section3_CtfArenaTrack: CtfArenaTrack;
-    section4_AutomationAndReconArea: AutomationAndReconArea;
-    section5_VdpReportWritingGuide: VdpReportWritingGuide;
-    section6_RealWorldCaseStudy: RealWorldCaseStudy;
-    section7_LiveHuntingGrounds: LiveHuntingGrounds;
-    section8_ExpertAuditNote: string;
+  // Exact 8-Part Dual-Perspective Deep-Dive Architecture
+  architecture: {
+    section1_RootCause: {
+      foundationalArchitecture: string;
+      codingMistakeAndLogicFailure: string;
+      protocolAndCodeLevelImpact: string;
+    };
+    section2_TextbookCrossReference: {
+      textbookList: TextbookReference[];
+      overallResolutionStrategy: string;
+    };
+    section3_RedTeamPerspective: RedTeamPerspective;
+    section4_BlueTeamPerspective: BlueTeamPerspective;
+    section5_AutomationWorkshop: AutomationWorkshop;
+    section6_PortSwiggerGuide: PortSwiggerGuide;
+    section7_DigitalPlayground: DigitalPlaygroundLab;
+    section8_PortfolioIntegration: IntegrationPortfolio;
   };
 
+  // Backwards compatibility theory and automation fields
   theory: {
     title: string;
     duration: string;
@@ -183,7 +195,6 @@ export interface DayLesson {
       stepsToReproduce: string;
       remediation: string;
     };
-    studentVdpTestingConsole?: StudentVdpEvaluation;
     dailyAssignment?: {
       title: string;
       objective: string;
@@ -197,7 +208,7 @@ export interface DayLesson {
 }
 
 export interface BossLab {
-  id: string; // e.g. "week-1-boss"
+  id: string;
   weekIndex: number;
   title: string;
   scenario: string;
