@@ -409,7 +409,19 @@ const build8SectionArchitecture = (
       `2. Identify parameters handling input under ${schema.competency}.`,
       `3. Configure Burp Intruder (Ctrl+I) payload positions around candidate parameter values.`,
       `4. Load custom payload lists or use extensions like Autorize / Turbo Intruder to evaluate access controls or timing delays.`,
-      `5. Analyze response HTTP status codes, body diffs, and headers to confirm payload execution.`
+      `5. Set HTTP/2 Concurrency & Pipeline Settings to max limits for timing/race conditions.`
+    ],
+    googleDorks: [
+      `site:*.target.com inurl:api/v1 "Authorization: Bearer"`,
+      `site:*.target.com ext:json | ext:yaml "apiKey"`,
+      `site:*.target.com inurl:debug | inurl:env | inurl:config`,
+      `site:*.target.com intext:"syntax error" | intext:"SQL syntax"`
+    ],
+    wafBypassTricks: [
+      `Unicode Normalization: Replace standard characters with Unicode lookalikes (e.g., %u0027 for single quotes).`,
+      `Double URL Encoding: Pass %2527 or %2522 to bypass single-pass regex filters.`,
+      `Alternative HTTP Verbs: Switch GET requests to POST/PUT or HEAD with JSON bodies to bypass URI WAF rules.`,
+      `Header Splitting & Pollution: Inject X-Forwarded-For: 127.0.0.1 or X-Original-URL headers.`
     ],
     jsDeconstructionGuide: {
       sourceMappingAndDevTools: `Open Browser DevTools (F12) -> Network & Sources tab. Inspect loaded .js bundles (e.g., app.min.js, main.js). Enable Source Maps (.js.map) if present to view unminified source code.`,

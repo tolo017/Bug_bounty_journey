@@ -357,14 +357,104 @@ function App() {
                 {/* Tab content renderer */}
                 <div className="min-h-[300px]">
 
-                  {/* Exact 8-Part Framework Architecture Workspace */}
+                  {/* Exact 8-Part Framework Architecture Workspace - Prioritizing Red Team & Playground at Absolute Top */}
                   {activeTab === "theory" && currentDay.architecture && (
                     <div className="flex flex-col gap-6">
 
-                      {/* Section 1: The Root Cause (Why It Breaks) */}
+                      {/* TOP SECTION 1: RED TEAM ADVANCED EXPLOITATION (BURP, DORKS, WAF & JS DECONSTRUCTION) */}
+                      <div className="bg-hacker-dark/80 border border-red-500/50 p-5 rounded-xl flex flex-col gap-3 shadow-2xl font-mono text-xs">
+                        <div className="text-xs font-bold text-red-400 flex items-center justify-between border-b border-red-500/30 pb-2 uppercase tracking-wider">
+                          <div className="flex items-center gap-2">
+                            <Target size={18} className="text-red-400 animate-pulse" /> RED TEAM ADVANCED EXPLOITATION TRACK
+                          </div>
+                          <span className="text-[10px] bg-red-500/20 text-red-300 border border-red-500/40 px-2 py-0.5 rounded">
+                            TOP VIEWPORT PRIORITY
+                          </span>
+                        </div>
+
+                        <p className="text-xs text-gray-200 font-sans leading-relaxed">
+                          {currentDay.architecture.section3_RedTeamPerspective.discoveryAndWeaponization}
+                        </p>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-1">
+                          {/* Burp Suite Execution Steps */}
+                          <div className="bg-black/70 p-3.5 rounded-lg border border-red-500/30 flex flex-col gap-1.5">
+                            <span className="font-bold text-hacker-amber flex items-center gap-1.5 text-xs">
+                              <Terminal size={14} /> BURP SUITE WORKFLOW & INTERCEPTION STEPS:
+                            </span>
+                            {currentDay.architecture.section3_RedTeamPerspective.burpSuiteExecutionSteps.map((step, idx) => (
+                              <div key={idx} className="text-gray-300 text-[11px] font-mono leading-relaxed">
+                                {step}
+                              </div>
+                            ))}
+                          </div>
+
+                          {/* Google Dorks & Passive Recon */}
+                          <div className="bg-black/70 p-3.5 rounded-lg border border-sky-400/30 flex flex-col gap-1.5">
+                            <span className="font-bold text-sky-400 flex items-center gap-1.5 text-xs">
+                              <Search size={14} /> FUNCTIONAL GOOGLE DORKS & PASSIVE RECON:
+                            </span>
+                            {currentDay.architecture.section3_RedTeamPerspective.googleDorks?.map((dork, idx) => (
+                              <code key={idx} className="bg-slate-950 text-sky-300 p-1.5 rounded text-[10px] font-mono block overflow-x-auto">
+                                {dork}
+                              </code>
+                            )) || (
+                              <p className="text-[11px] text-gray-400 font-sans">site:*.target.com inurl:api "Authorization: Bearer"</p>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* WAF Bypass & Parameter Tricks */}
+                        {currentDay.architecture.section3_RedTeamPerspective.wafBypassTricks && (
+                          <div className="bg-black/80 p-3.5 rounded-lg border border-hacker-amber/40 flex flex-col gap-1.5 mt-1 font-sans text-xs">
+                            <span className="font-bold text-hacker-amber font-mono uppercase tracking-wider text-[11px]">
+                              ⚡ WAF BYPASS & ADVANCED PARAMETER TRICKS:
+                            </span>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                              {currentDay.architecture.section3_RedTeamPerspective.wafBypassTricks.map((trick, idx) => (
+                                <div key={idx} className="bg-black/60 p-2 rounded border border-hacker-border/40 text-[11px] text-gray-300 font-mono">
+                                  {trick}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* JS Deconstruction Deep Dive */}
+                        <div className="bg-black/90 p-4 rounded-lg border border-red-500/40 flex flex-col gap-2 mt-1 font-sans text-xs">
+                          <span className="font-bold text-red-400 font-mono uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+                            <Cpu size={14} /> CLIENT-SIDE JAVASCRIPT DECONSTRUCTION & SINK TRACING:
+                          </span>
+                          <p><strong className="text-white font-mono">Sources & DevTools:</strong> {currentDay.architecture.section3_RedTeamPerspective.jsDeconstructionGuide.sourceMappingAndDevTools}</p>
+                          <p><strong className="text-white font-mono">Deobfuscation Technique:</strong> {currentDay.architecture.section3_RedTeamPerspective.jsDeconstructionGuide.deobfuscationTechnique}</p>
+                          <p><strong className="text-white font-mono">Sources & Sinks:</strong> {currentDay.architecture.section3_RedTeamPerspective.jsDeconstructionGuide.sinkAndSourceIdentification}</p>
+                          <p><strong className="text-white font-mono">API Keys & Endpoints:</strong> {currentDay.architecture.section3_RedTeamPerspective.jsDeconstructionGuide.apiEndpointAndKeyMining}</p>
+                          <p><strong className="text-white font-mono">Client Logic Bypass:</strong> {currentDay.architecture.section3_RedTeamPerspective.jsDeconstructionGuide.clientSideLogicBypass}</p>
+                        </div>
+                      </div>
+
+                      {/* TOP SECTION 2: IN-APP DIGITAL PLAYGROUND (INTERACTIVE LAB CONSOLE) */}
+                      <div className="bg-hacker-dark/90 border border-hacker-amber/60 p-5 rounded-xl flex flex-col gap-3 shadow-2xl font-mono text-xs">
+                        <div className="flex items-center justify-between border-b border-hacker-amber/40 pb-2">
+                          <div className="text-xs font-bold text-hacker-amber flex items-center gap-2 uppercase tracking-wider">
+                            <Cpu size={18} className="animate-spin" /> IN-APP DIGITAL PLAYGROUND (FLAG HARVESTING CONSOLE)
+                          </div>
+                          <span className="text-[10px] bg-hacker-amber/20 text-hacker-amber border border-hacker-amber/40 px-2 py-0.5 rounded">
+                            INTERACTIVE AUDIT CHALLENGE
+                          </span>
+                        </div>
+                        <p className="text-xs text-gray-200 font-sans leading-relaxed">
+                          {currentDay.architecture.section7_DigitalPlayground.instructions}
+                        </p>
+                        <pre className="bg-slate-950 border border-hacker-amber/40 p-3.5 rounded-lg text-hacker-green font-mono text-[11px] overflow-x-auto shadow-inner">
+                          {currentDay.architecture.section7_DigitalPlayground.initialCodeOrConsole}
+                        </pre>
+                      </div>
+
+                      {/* DENSE CORE FOUNDATIONS (WHY IT BREAKS) */}
                       <div className="bg-gradient-to-r from-amber-950/40 via-hacker-card to-hacker-dark border border-hacker-amber/50 p-5 rounded-xl flex flex-col gap-3 shadow-lg">
                         <div className="text-xs font-bold text-hacker-amber font-mono flex items-center gap-2 uppercase tracking-wider border-b border-hacker-border/40 pb-2">
-                          <BookOpen size={18} /> SECTION 1: THE ROOT CAUSE (WHY IT BREAKS)
+                          <BookOpen size={18} /> DENSE CORE FOUNDATIONS (PROTOCOL & LOGIC FAILURE)
                         </div>
                         <div className="flex flex-col gap-2 font-sans text-xs leading-relaxed text-gray-200">
                           <p><strong className="text-white font-mono">Foundational Architecture:</strong> {currentDay.architecture.section1_RootCause.foundationalArchitecture}</p>
@@ -373,11 +463,11 @@ function App() {
                         </div>
                       </div>
 
-                      {/* Section 2: Granular Book Indexing Engine (Clickable Navigation) */}
+                      {/* GRANULAR BOOK INDEXING ENGINE (CLICKABLE NAVIGATION) */}
                       <div className="bg-hacker-dark/80 border border-sky-400/40 p-5 rounded-xl flex flex-col gap-3 shadow-lg font-mono text-xs">
                         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-hacker-border/40 pb-2">
                           <div className="text-xs font-bold text-sky-400 flex items-center gap-2 uppercase tracking-wider">
-                            <BookOpen size={18} /> SECTION 2: GRANULAR BOOK INDEXING ENGINE
+                            <BookOpen size={18} /> GRANULAR BOOK INDEXING ENGINE (CLICKABLE TEXTBOOK NAV)
                           </div>
                           <span className="text-[10px] text-hacker-amber bg-hacker-amber/10 border border-hacker-amber/30 px-2 py-0.5 rounded font-mono">
                             Click any textbook to inspect exact chapters, page ranges & bypasses
@@ -425,35 +515,6 @@ function App() {
                               </div>
                             </button>
                           ))}
-                        </div>
-                      </div>
-
-                      {/* Section 3: Red Team Perspective (Burp Execution & JS Deconstruction) */}
-                      <div className="bg-hacker-dark/80 border border-red-500/40 p-5 rounded-xl flex flex-col gap-3 shadow-lg font-mono text-xs">
-                        <div className="text-xs font-bold text-red-400 flex items-center gap-2 uppercase tracking-wider border-b border-hacker-border/40 pb-2">
-                          <Target size={18} /> SECTION 3: RED TEAM PERSPECTIVE (BURP & JS DECONSTRUCTION)
-                        </div>
-                        <p className="text-xs text-gray-200 font-sans leading-relaxed">
-                          {currentDay.architecture.section3_RedTeamPerspective.discoveryAndWeaponization}
-                        </p>
-
-                        <div className="bg-black/60 p-3 rounded-lg border border-hacker-border/40 flex flex-col gap-1.5 mt-1">
-                          <span className="font-bold text-hacker-amber">BURP SUITE EXECUTION STEPS:</span>
-                          {currentDay.architecture.section3_RedTeamPerspective.burpSuiteExecutionSteps.map((step, idx) => (
-                            <div key={idx} className="text-gray-300 text-[11px] font-mono">
-                              {step}
-                            </div>
-                          ))}
-                        </div>
-
-                        {/* JS Deconstruction Deep Dive */}
-                        <div className="bg-black/80 p-3.5 rounded-lg border border-red-500/30 flex flex-col gap-2 mt-1 font-sans text-xs">
-                          <span className="font-bold text-red-400 font-mono uppercase tracking-wider text-[11px]">Browser DevTools & JavaScript Deconstruction Walkthrough:</span>
-                          <p><strong className="text-white font-mono">Sources & DevTools:</strong> {currentDay.architecture.section3_RedTeamPerspective.jsDeconstructionGuide.sourceMappingAndDevTools}</p>
-                          <p><strong className="text-white font-mono">Deobfuscation Technique:</strong> {currentDay.architecture.section3_RedTeamPerspective.jsDeconstructionGuide.deobfuscationTechnique}</p>
-                          <p><strong className="text-white font-mono">Sources & Sinks:</strong> {currentDay.architecture.section3_RedTeamPerspective.jsDeconstructionGuide.sinkAndSourceIdentification}</p>
-                          <p><strong className="text-white font-mono">API Keys & Endpoints:</strong> {currentDay.architecture.section3_RedTeamPerspective.jsDeconstructionGuide.apiEndpointAndKeyMining}</p>
-                          <p><strong className="text-white font-mono">Client Logic Bypass:</strong> {currentDay.architecture.section3_RedTeamPerspective.jsDeconstructionGuide.clientSideLogicBypass}</p>
                         </div>
                       </div>
 

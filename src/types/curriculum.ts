@@ -68,6 +68,8 @@ export interface TextbookReference {
 export interface RedTeamPerspective {
   discoveryAndWeaponization: string;
   burpSuiteExecutionSteps: string[];
+  googleDorks: string[];
+  wafBypassTricks: string[];
   jsDeconstructionGuide: {
     sourceMappingAndDevTools: string;
     deobfuscationTechnique: string;
