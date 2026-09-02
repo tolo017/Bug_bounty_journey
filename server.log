@@ -1,0 +1,30 @@
+Watching for file changes with StatReloader
+[02/Sep/2026 11:51:57] "HEAD /login/ HTTP/1.1" 200 0
+[02/Sep/2026 11:53:50] "GET /register/ HTTP/1.1" 200 6148
+[02/Sep/2026 11:53:53] "POST /register/ HTTP/1.1" 302 0
+[02/Sep/2026 11:53:53] "GET / HTTP/1.1" 200 30897
+[02/Sep/2026 11:53:53] "GET /week/1/ HTTP/1.1" 200 49972
+/app/core/middleware.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+September 02, 2026 - 11:51:22
+Django version 6.1, using settings 'config.settings'
+Starting WSGI development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+
+WARNING: This is a development server. Do not use it in a production setting. Use a production WSGI or ASGI server instead.
+For more information on production servers see: https://docs.djangoproject.com/en/6.1/howto/deployment/
+Watching for file changes with StatReloader
+/app/core/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+September 02, 2026 - 11:58:13
+Django version 6.1, using settings 'config.settings'
+Starting WSGI development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+
+WARNING: This is a development server. Do not use it in a production setting. Use a production WSGI or ASGI server instead.
+For more information on production servers see: https://docs.djangoproject.com/en/6.1/howto/deployment/
+Watching for file changes with StatReloader
