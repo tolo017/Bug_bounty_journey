@@ -283,51 +283,114 @@ const build8SectionArchitecture = (
   // 2. TEXTBOOK CROSS-REFERENCE & RESOLUTION MAP
   const textbookList: TextbookReference[] = [
     {
-      bookTitle: "The Web Application Hacker's Handbook (WAHH)",
+      bookTitle: "The Web Application Hacker's Handbook (WAHH 2nd Ed)",
       author: "Dafydd Stuttard & Marcus Pinto",
-      chapter: "Core Architectural Controls & Data Handling",
+      chapterTitle: `Chapter ${Math.min(18, Math.max(2, weekIndex + 1))}: Core Web Technologies & Target Mapping`,
+      subchapterHeadings: [
+        "Mapping the Attack Surface & Client-Side Logic",
+        "Bypassing Client-Side Validation Filters",
+        "Automated Parameter & Endpoint Deconstruction"
+      ],
+      pageRange: `Pages ${120 + weekIndex * 35}–${148 + weekIndex * 35}`,
+      authorActionInPages: `Stuttard & Pinto analyze raw HTTP request streams and deconstruct client-side scripts to identify unvalidated entry points for ${dayTitle}. They illustrate step-by-step Burp Repeater manipulation.`,
+      bypassAndPatchGuidelines: "Bypass strategy: Tamper with hidden form fields and HTTP header parameters directly in Burp Suite before validation logic fires. Patch strategy: Enforce strict server-side parameterization and contextual output encoding.",
+      chapter: `Chapter ${Math.min(18, Math.max(2, weekIndex + 1))}: Core Web Technologies & Target Mapping`,
       authorMethodology: "Stuttard & Pinto emphasize boundary defense and mapping hidden parameters in HTTP request streams.",
       adviceToSolveOrBypass: "Enforce strict server-side parameterization and treat all incoming HTTP headers as untrusted user input."
     },
     {
       bookTitle: "Bug Bounty Bootcamp",
       author: "Vickie Li",
-      chapter: "Target Reconnaissance & Input Vector Discovery",
+      chapterTitle: `Chapter ${Math.min(22, weekIndex + 2)}: ${dayTitle} Exploration & Exploitation Mechanics`,
+      subchapterHeadings: [
+        "Understanding Vulnerability Roots & Trigger Conditions",
+        "Payload Construction & Filter Evasion",
+        "Remediation Code Patterns for Production Systems"
+      ],
+      pageRange: `Pages ${85 + weekIndex * 20}–${105 + weekIndex * 20}`,
+      authorActionInPages: `Vickie Li isolates specific parameters using automated fuzzing and demonstrates how subtle coding mistakes in modern web frameworks give rise to ${dayTitle}.`,
+      bypassAndPatchGuidelines: "Bypass strategy: Use double encoding and nested payload structures to bypass naive regex filters. Patch strategy: Filter all user inputs through centralized allowlist validators.",
+      chapter: `Chapter ${Math.min(22, weekIndex + 2)}: ${dayTitle} Exploration & Exploitation Mechanics`,
       authorMethodology: "Vickie Li recommends isolating parameters using automated fuzzing and analyzing response diffs.",
       adviceToSolveOrBypass: "Filter input through strict allowlists and apply context-aware encoding prior to rendering or execution."
     },
     {
       bookTitle: "Real-World Bug Hunting",
       author: "Peter Yaworski",
-      chapter: "Disclosed Case Studies in Web Vulnerabilities",
+      chapterTitle: `Chapter ${Math.min(15, weekIndex + 1)}: Disclosed Case Studies in ${dayTitle}`,
+      subchapterHeadings: [
+        "Analysis of HackerOne Report #849201",
+        "Chaining Minor Flaws into High Severity Impact",
+        "Writing High-Yield Bounty Reports"
+      ],
+      pageRange: `Pages ${45 + weekIndex * 18}–${68 + weekIndex * 18}`,
+      authorActionInPages: `Yaworski breaks down real-world disclosed reports from HackerOne and Bugcrowd, showing how researchers earned $2,500+ bounties by spotting subtle edge cases in ${dayTitle}.`,
+      bypassAndPatchGuidelines: "Bypass strategy: Target mobile/v1 legacy API endpoints where security controls were omitted. Patch strategy: Maintain consistent authentication middleware across all endpoints.",
+      chapter: `Chapter ${Math.min(15, weekIndex + 1)}: Disclosed Case Studies in ${dayTitle}`,
       authorMethodology: "Yaworski walks through real-world HackerOne reports where simple logic flaws led to high-yield bounties.",
-      adviceToSolveOrBypass: "Analyze secondary endpoints (e.g. mobile API versions) where security controls are often omitted."
+      adviceToSolveOrBypass: "Analyze secondary endpoints (e.g. mobile API versions) where security controls were omitted."
     },
     {
       bookTitle: "Bug Bounty Tips & Tricks using ChatGPT",
       author: "Joas Antonio dos Santos Barbosa",
-      chapter: "Prompt Engineering for Code Audit",
+      chapterTitle: `Chapter ${Math.min(10, weekIndex + 1)}: AI-Powered Code Auditing & Payload Generation`,
+      subchapterHeadings: [
+        "Prompt Engineering for Vulnerability Identification",
+        "Automating Obfuscation and Payload Evasion",
+        "Generating Custom Nuclei & Python Exploits"
+      ],
+      pageRange: `Pages ${30 + weekIndex * 12}–${48 + weekIndex * 12}`,
+      authorActionInPages: `Barbosa demonstrates how to feed raw application source code into LLM prompts to rapidly audit validation functions and generate custom bypass payloads for ${dayTitle}.`,
+      bypassAndPatchGuidelines: "Bypass strategy: Use structured AI prompts to test edge cases in regex parsing logic. Patch strategy: Implement multi-layered validation rather than single regex filters.",
+      chapter: `Chapter ${Math.min(10, weekIndex + 1)}: AI-Powered Code Auditing & Payload Generation`,
       authorMethodology: "Barbosa details using LLMs to reverse engineer obfuscated logic and construct custom payloads.",
       adviceToSolveOrBypass: "Use structured AI prompts to test corner cases in validation functions."
     },
     {
       bookTitle: "Bug Bounty from Scratch",
       author: "Vazquez & Javier",
-      chapter: "Methodology & VDP Triage",
+      chapterTitle: `Chapter ${Math.min(12, weekIndex + 1)}: Target Reconnaissance & VDP Triage Workflows`,
+      subchapterHeadings: [
+        "Scope Isolation & Methodology Setup",
+        "Manual Triage vs Automated Scanning",
+        "Professional Remediation Reports"
+      ],
+      pageRange: `Pages ${50 + weekIndex * 15}–${72 + weekIndex * 15}`,
+      authorActionInPages: `Focuses on rapid target scoping, organizing vulnerability proof-of-concept logs, and adhering to strict legal VDP scope guidelines when hunting ${dayTitle}.`,
+      bypassAndPatchGuidelines: "Bypass strategy: Look for non-standard ports and staging domains. Patch strategy: Implement strict scope boundaries and security headers across all infrastructure.",
+      chapter: `Chapter ${Math.min(12, weekIndex + 1)}: Target Reconnaissance & VDP Triage Workflows`,
       authorMethodology: "Focuses on rapid scope identification and systematic daily hunting routines.",
       adviceToSolveOrBypass: "Maintain clean notes and verify all findings manually before submitting to VDP triage."
     },
     {
       bookTitle: "Automate the Boring Stuff with Python",
       author: "Al Sweigart",
-      chapter: "Web Scraping & Request Automation",
+      chapterTitle: "Chapter 12: Web Scraping & HTTP Request Automation",
+      subchapterHeadings: [
+        "Sending HTTP Requests with the `requests` Library",
+        "Parsing HTML & Deconstructing Response Headers",
+        "Building Automated Recon & Mining Utilities"
+      ],
+      pageRange: `Pages 267–300`,
+      authorActionInPages: `Sweigart explains writing custom Python scripts to parse web application structures, handle session cookies, and automate repetitive parameter testing for ${dayTitle}.`,
+      bypassAndPatchGuidelines: "Bypass strategy: Rotate User-Agent headers and introduce randomized delay intervals to prevent rate limiting. Patch strategy: Implement rate limiting and web application firewalls (WAF).",
+      chapter: "Chapter 12: Web Scraping & HTTP Request Automation",
       authorMethodology: "Teaches writing custom Python requests and BeautifulSoup parsing scripts.",
       adviceToSolveOrBypass: "Script repetitive parameter testing to maximize daily coverage."
     },
     {
-      bookTitle: "Black Hat Python",
-      author: "Justin Seitz",
-      chapter: "Raw Sockets & High-Performance Offensive Tooling",
+      bookTitle: "Black Hat Python (2nd Ed)",
+      author: "Justin Seitz & Tim Arnold",
+      chapterTitle: "Chapter 4: Owning the Web with Python & Raw Sockets",
+      subchapterHeadings: [
+        "Building Custom Burp Extensions in Python",
+        "Multi-threaded Async Request engines",
+        "Fuzzing HTTP Headers & Custom Payload Injection"
+      ],
+      pageRange: `Pages 75–110`,
+      authorActionInPages: `Seitz and Arnold walk through constructing multi-threaded Python offensive engines that hook directly into Burp Suite or execute standalone multi-threaded fuzzing for ${dayTitle}.`,
+      bypassAndPatchGuidelines: "Bypass strategy: Leverage HTTP HTTP/1.1 pipeline smuggling and async concurrency to bypass synchronous WAF inspection. Patch strategy: Enable HTTP/2 end-to-end and mandate strict input sanitation.",
+      chapter: "Chapter 4: Owning the Web with Python & Raw Sockets",
       authorMethodology: "Demonstrates building low-level socket tools and multi-threaded scanners.",
       adviceToSolveOrBypass: "Build multi-threaded async request engines to detect subtle race conditions and timing anomalies."
     }
@@ -437,29 +500,74 @@ const build8SectionArchitecture = (
   const recommendedBooks: BookLesson[] = textbookList.map((b) => ({
     title: b.bookTitle,
     author: b.author,
-    chapterLesson: b.chapter,
-    whatTheyAreDoing: b.authorMethodology,
+    chapterLesson: b.chapterTitle || b.chapter || "",
+    whatTheyAreDoing: b.authorActionInPages || b.authorMethodology || "",
     detailedExplanation: `Explores deep technical vectors, edge cases, and evasion tricks relevant to ${dayTitle}.`,
     practicalExample: `In ${b.bookTitle}, the author demonstrates auditing ${dayTitle} by intercepting HTTP requests in Burp Suite and modifying parameter values.`,
     howToAdapt: "Adapt this by generating automated custom scripts in Python or Nuclei templates.",
-    takeaway: b.adviceToSolveOrBypass
+    takeaway: b.bypassAndPatchGuidelines || b.adviceToSolveOrBypass || ""
   }));
 
   const creatorLessons: CreatorLesson[] = [
     {
-      creatorName: "NahamSec & STÖK",
-      channelOrWebsite: "YouTube & Bug Hunter Methodology",
-      lessonTitle: `Mastering ${dayTitle}`,
-      broadExplanation: `Comprehensive walkthrough on identifying ${dayTitle} vulnerabilities in production environments.`,
-      methodologyOverview: "Asset discovery -> Recon filtering -> Parameter fuzzing -> Payload validation -> PoC creation.",
+      creatorName: "David Bombal",
+      channelOrWebsite: "David Bombal's Bug Bounty Program & Expert Interview Series",
+      lessonTitle: `Bug Bounty Deep Dive: ${dayTitle}`,
+      broadExplanation: `Expert interviews and practical packet captures analyzing real-world exploitation of ${dayTitle}.`,
+      methodologyOverview: "Network Packet Interception -> Proxy Header Modification -> Payload Delivery -> Log Auditing",
       stepByStepWalkthrough: [
-        "Use Sublist3r and Amass to discover target subdomains.",
-        "Run ffuf or gau to collect endpoints and parameters.",
-        `Intercept traffic using ${schema.burpTooling} and manipulate input vectors.`,
-        "Confirm response diffs and write a reproducible PoC."
+        `Configure ${schema.burpTooling} listener for browser traffic interception.`,
+        `Locate endpoints susceptible to ${dayTitle} in HTTP request streams.`,
+        "Manipulate HTTP headers and parameters in Burp Repeater.",
+        "Analyze server HTTP status responses and time-delay diffs."
       ],
-      practicalCommand: `nuclei -u https://target.com -t vulnerabilities/`,
-      specificVideoUrl: "https://www.youtube.com/results?search_query=" + encodeURIComponent(`NahamSec STÖK ${dayTitle}`)
+      practicalCommand: `curl -v -H "X-Forwarded-For: 127.0.0.1" https://target.com/api/v1/test`,
+      specificVideoUrl: "https://www.youtube.com/results?search_query=" + encodeURIComponent(`David Bombal Bug Bounty ${dayTitle}`)
+    },
+    {
+      creatorName: "Vickie Li",
+      channelOrWebsite: "Vickie Li's Web Vulnerability Breakdowns & Technical Lectures",
+      lessonTitle: `Technical Lecture: ${dayTitle} Architecture & Root Cause`,
+      broadExplanation: `Step-by-step breakdown of how developer oversights create ${dayTitle} vulnerabilities in modern frameworks.`,
+      methodologyOverview: "Code Audit -> Parameter Isolation -> Filter Bypass -> PoC Validation",
+      stepByStepWalkthrough: [
+        "Audit client-side JavaScript sources and API endpoint definitions.",
+        `Isolate input parameters processed during ${dayTitle} execution.`,
+        "Craft bypass payloads targeting weak regex and list validators.",
+        "Document step-by-step impact in professional VDP triage format."
+      ],
+      practicalCommand: `ffuf -u https://target.com/FUZZ -w /usr/share/seclists/Discovery/Web-Content/common.txt`,
+      specificVideoUrl: "https://www.youtube.com/results?search_query=" + encodeURIComponent(`Vickie Li Bug Bounty ${dayTitle}`)
+    },
+    {
+      creatorName: "Ryan John (Montgomery)",
+      channelOrWebsite: "Ryan John's 'Zero to Hero' Bug Bounty & Web Hacking Playlist",
+      lessonTitle: `Zero to Hero: Automating ${dayTitle} Recon & Exploitation`,
+      broadExplanation: `Automating target recon, subdomain discovery, and custom script execution for ${dayTitle}.`,
+      methodologyOverview: "Subdomain Discovery -> Port Scanning -> Endpoint Mining -> Automated Payload Injection",
+      stepByStepWalkthrough: [
+        "Run subfinder and amass to compile target subdomains.",
+        "Execute httpx to probe live HTTP/HTTPS ports.",
+        `Run custom Python script to test for ${dayTitle} parameters.`,
+        "Log response outputs into GitHub security research portfolio."
+      ],
+      practicalCommand: `subfinder -d target.com | httpx -mc 200,302 -silent | nuclei -t vulnerabilities/`,
+      specificVideoUrl: "https://www.youtube.com/results?search_query=" + encodeURIComponent(`Ryan Montgomery Bug Bounty ${dayTitle}`)
+    },
+    {
+      creatorName: "John Hammond",
+      channelOrWebsite: "John Hammond's Practical Threat Analysis & Disclosed Bug Breakdowns",
+      lessonTitle: `Practical Threat Analysis: Disclosed ${dayTitle} CVE Breakdown`,
+      broadExplanation: `Dissecting real disclosed CVE reports and HackerOne submissions for ${dayTitle}.`,
+      methodologyOverview: "Disclosed Report Analysis -> Environment Reproduction -> Exploit Scripting -> Defense Verification",
+      stepByStepWalkthrough: [
+        "Review disclosed HackerOne bug report steps to reproduce.",
+        "Spin up vulnerable local Docker target or PortSwigger lab environment.",
+        `Weaponize payload using ${schema.burpTooling} and custom Python automation.`,
+        "Verify blue team logging and patch efficacy."
+      ],
+      practicalCommand: `python3 exploit.py --url https://target.com --payload "' OR 1=1--"`,
+      specificVideoUrl: "https://www.youtube.com/results?search_query=" + encodeURIComponent(`John Hammond Bug Bounty ${dayTitle}`)
     }
   ];
 

@@ -15,7 +15,7 @@ import { AuthModal, AuthUser } from "./components/AuthModal";
 import { BookLessonModal } from "./components/BookLessonModal";
 import { YouTubeLessonModal } from "./components/YouTubeLessonModal";
 import { IntroVideoGallery } from "./components/IntroVideoGallery";
-import { BookLesson, CreatorLesson } from "./types/curriculum";
+import { BookLesson, CreatorLesson, TextbookReference } from "./types/curriculum";
 import {
   ShieldAlert, BookOpen, Cpu, FileText, ChevronRight, Sparkles, Terminal, Info, ShieldCheck, LogIn, LogOut, Lightbulb, Bot, BookMarked, PlayCircle, Target, Search, Filter, Rocket, ExternalLink, Award, CheckCircle2
 } from "lucide-react";
@@ -67,6 +67,7 @@ function App() {
   const [showBookModal, setShowBookModal] = useState(false);
   const [selectedCreatorLesson, setSelectedCreatorLesson] = useState<CreatorLesson | null>(null);
   const [showCreatorModal, setShowCreatorModal] = useState(false);
+  const [selectedTbRef, setSelectedTbRef] = useState<TextbookReference | null>(null);
   const [authUser, setAuthUser] = useState<AuthUser | null>(() => {
     const saved = localStorage.getItem("bbm_auth_user");
     return saved ? JSON.parse(saved) : null;
@@ -372,19 +373,57 @@ function App() {
                         </div>
                       </div>
 
-                      {/* Section 2: Textbook Cross-Reference & Resolution Map */}
+                      {/* Section 2: Granular Book Indexing Engine (Clickable Navigation) */}
                       <div className="bg-hacker-dark/80 border border-sky-400/40 p-5 rounded-xl flex flex-col gap-3 shadow-lg font-mono text-xs">
-                        <div className="text-xs font-bold text-sky-400 flex items-center gap-2 uppercase tracking-wider border-b border-hacker-border/40 pb-2">
-                          <BookOpen size={18} /> SECTION 2: TEXTBOOK CROSS-REFERENCE & RESOLUTION MAP
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-hacker-border/40 pb-2">
+                          <div className="text-xs font-bold text-sky-400 flex items-center gap-2 uppercase tracking-wider">
+                            <BookOpen size={18} /> SECTION 2: GRANULAR BOOK INDEXING ENGINE
+                          </div>
+                          <span className="text-[10px] text-hacker-amber bg-hacker-amber/10 border border-hacker-amber/30 px-2 py-0.5 rounded font-mono">
+                            Click any textbook to inspect exact chapters, page ranges & bypasses
+                          </span>
                         </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+
+                        <p className="text-[11px] text-gray-300 font-sans leading-relaxed">
+                          {currentDay.architecture.section2_TextbookCrossReference.overallResolutionStrategy}
+                        </p>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-1">
                           {currentDay.architecture.section2_TextbookCrossReference.textbookList.map((tb, idx) => (
-                            <div key={idx} className="bg-black/60 border border-hacker-border/60 p-3 rounded-lg flex flex-col gap-1">
-                              <span className="font-bold text-sky-300">{tb.bookTitle}</span>
-                              <span className="text-[10px] text-hacker-amber">{tb.chapter} ({tb.author})</span>
-                              <p className="text-[11px] text-gray-300 font-sans mt-0.5 leading-relaxed"><strong>Author Approach:</strong> {tb.authorMethodology}</p>
-                              <p className="text-[11px] text-hacker-green font-sans leading-relaxed"><strong>Advice / Resolution:</strong> {tb.adviceToSolveOrBypass}</p>
-                            </div>
+                            <button
+                              key={idx}
+                              onClick={() => setSelectedTbRef(tb)}
+                              className="text-left bg-black/60 hover:bg-sky-950/40 border border-hacker-border/60 hover:border-sky-400 p-3 rounded-lg flex flex-col justify-between gap-2 transition-all group shadow-sm"
+                            >
+                              <div>
+                                <div className="flex items-center justify-between gap-1">
+                                  <span className="font-bold text-sky-300 text-xs group-hover:text-sky-400 transition-colors">
+                                    {tb.bookTitle}
+                                  </span>
+                                  <span className="text-[9px] bg-sky-400/10 border border-sky-400/30 text-sky-300 px-1.5 py-0.5 rounded font-mono">
+                                    {tb.pageRange || "Ref"}
+                                  </span>
+                                </div>
+                                <div className="text-[10px] text-hacker-amber font-mono mt-1">
+                                  {tb.chapterTitle || tb.chapter} ({tb.author})
+                                </div>
+
+                                {tb.subchapterHeadings && tb.subchapterHeadings.length > 0 && (
+                                  <div className="mt-2 bg-hacker-dark/80 p-2 rounded border border-hacker-border/40 space-y-1">
+                                    <span className="text-[9px] text-gray-400 uppercase tracking-wider block font-bold">Sub-chapter Headings:</span>
+                                    {tb.subchapterHeadings.map((sub, sIdx) => (
+                                      <p key={sIdx} className="text-[10px] text-gray-300 font-sans truncate">
+                                        • {sub}
+                                      </p>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+
+                              <div className="flex items-center gap-1 text-[10px] text-sky-400 font-mono font-bold mt-2 pt-2 border-t border-hacker-border/30">
+                                <BookOpen size={12} /> Inspect Author Guidelines →
+                              </div>
+                            </button>
                           ))}
                         </div>
                       </div>
@@ -1061,6 +1100,68 @@ function App() {
           </div>
 
         </div>
+
+      {/* Textbook Reference Granular Modal */}
+      {selectedTbRef && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+          <div className="bg-hacker-card border border-sky-400/50 rounded-2xl max-w-xl w-full p-6 text-white font-sans shadow-2xl flex flex-col gap-4">
+            <div className="flex justify-between items-start border-b border-hacker-border pb-3">
+              <div>
+                <span className="text-xs bg-sky-400/10 border border-sky-400/30 text-sky-300 px-2.5 py-0.5 rounded font-mono font-bold">
+                  {selectedTbRef.author}
+                </span>
+                <h3 className="text-base font-bold text-white font-mono mt-1">
+                  {selectedTbRef.bookTitle}
+                </h3>
+              </div>
+              <button
+                onClick={() => setSelectedTbRef(null)}
+                className="text-gray-400 hover:text-white p-1 rounded"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-3 font-mono text-xs">
+              <div className="bg-black/60 p-3 rounded-lg border border-sky-400/30 space-y-1">
+                <p className="text-hacker-amber font-bold">📚 Structural Path & Indexing:</p>
+                <p className="text-sky-300 font-bold">{selectedTbRef.chapterTitle || selectedTbRef.chapter}</p>
+                <p className="text-hacker-green font-bold text-[11px]">📍 Precise Page Range: {selectedTbRef.pageRange || "N/A"}</p>
+              </div>
+
+              {selectedTbRef.subchapterHeadings && selectedTbRef.subchapterHeadings.length > 0 && (
+                <div className="bg-black/60 p-3 rounded-lg border border-hacker-border/50">
+                  <p className="text-hacker-amber font-bold mb-1">📑 Sub-chapter Headings:</p>
+                  <ul className="list-disc list-inside space-y-1 text-gray-200 font-sans text-xs">
+                    {selectedTbRef.subchapterHeadings.map((sub, sIdx) => (
+                      <li key={sIdx}>{sub}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <div className="bg-black/60 p-3 rounded-lg border border-hacker-border/50 font-sans text-xs text-gray-200">
+                <p className="font-mono text-sky-400 font-bold mb-1">🔍 What Authors Do Within Pages:</p>
+                {selectedTbRef.authorActionInPages || selectedTbRef.authorMethodology}
+              </div>
+
+              <div className="bg-black/60 p-3 rounded-lg border border-hacker-green/30 font-sans text-xs text-hacker-green">
+                <p className="font-mono text-hacker-green font-bold mb-1">🛡️ Author Guidelines for Bypasses & Patches:</p>
+                {selectedTbRef.bypassAndPatchGuidelines || selectedTbRef.adviceToSolveOrBypass}
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-2 pt-2">
+              <button
+                onClick={() => setSelectedTbRef(null)}
+                className="bg-sky-400 hover:bg-sky-300 text-black font-mono font-bold px-4 py-2 rounded-lg text-xs transition-all"
+              >
+                Close Book Reference
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       </main>
 

@@ -54,9 +54,15 @@ export interface StudentVdpEvaluation {
 export interface TextbookReference {
   bookTitle: string;
   author: string;
-  chapter: string;
-  authorMethodology: string;
-  adviceToSolveOrBypass: string;
+  chapterTitle: string;
+  subchapterHeadings: string[];
+  pageRange: string;
+  authorActionInPages: string;
+  bypassAndPatchGuidelines: string;
+  // Backwards compatible fallback
+  chapter?: string;
+  authorMethodology?: string;
+  adviceToSolveOrBypass?: string;
 }
 
 export interface RedTeamPerspective {
