@@ -114,6 +114,17 @@ export interface DayLesson {
   completed: boolean;
   competency: string; // e.g. "Client-Side Security"
 
+  // Master Integration Hooks
+  burpToolingUsed: string;
+  portSwiggerLabLink: string;
+  githubPushAsset: {
+    name: string;
+    type: "Python Tool" | "Nuclei/ffuf Config" | "Markdown Report" | "Automation Suite";
+    description: string;
+    codeOrContent: string;
+  };
+  linkedInMilestoneTemplate: string;
+
   // Exact 8-Part Architecture
   framework: {
     section1_TheoreticalFoundation: TheoreticalFoundation;

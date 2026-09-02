@@ -1,119 +1,310 @@
 import { Week, DayLesson, BossLab } from "../types/curriculum";
 
+// 12-Week Progression Schema Details Mapping
+const weekSchemas = [
+  {
+    weekIndex: 0,
+    weekTitle: "Target Reconnaissance & OSINT (The Hunter's Foundation)",
+    competency: "Asset Mapping (Go/Linux)",
+    burpTooling: "Target Tab, Site Map, Scope Configuration",
+    portSwiggerLabLink: "https://portswigger.net/web-security/information-disclosure",
+    textbookRefs: "WAHH (Ch 4); Bug Bounty Bootcamp (Ch 2-4); Automate the Boring Stuff (Ch 11 - Web Scraping)",
+    githubAssetType: "Python Tool" as const,
+    githubAssetName: "subdomain_passive_aggregator.py",
+    githubAssetDesc: "Custom Python script that queries CRT.sh, SecurityTrails, and HackerTarget APIs concurrently.",
+    creatorRef: "STÖK & NahamSec - Recon Methodology & Target Mapping",
+    bossLabTitle: "Enterprise Scope Mapper & OSINT Boss Challenge"
+  },
+  {
+    weekIndex: 1,
+    weekTitle: "Subdomain Takeovers & Information Disclosure",
+    competency: "Cloud Infrastructure & Recon",
+    burpTooling: "Burp Intruder for DNS Brute-Forcing & Response Regex Matching",
+    portSwiggerLabLink: "https://portswigger.net/web-security/information-disclosure",
+    textbookRefs: "Real-World Bug Hunting (Ch 1); Bug Bounty Bootcamp (Ch 5)",
+    githubAssetType: "Python Tool" as const,
+    githubAssetName: "cname_cloud_takeover_checker.py",
+    githubAssetDesc: "Automated scanner matching target DNS CNAME records against dangling AWS S3, GitHub Pages, and Heroku signatures.",
+    creatorRef: "InsiderPhD - Uncovering Subdomain Takeovers in Cloud Assets",
+    bossLabTitle: "Dangling CNAME & Cloud Bucket Takeover Boss Lab"
+  },
+  {
+    weekIndex: 2,
+    weekTitle: "Broken Authentication & Session Management",
+    competency: "Session & Token Management",
+    burpTooling: "Burp Sequencer (Testing token randomness) & Cookie Editor",
+    portSwiggerLabLink: "https://portswigger.net/web-security/authentication",
+    textbookRefs: "WAHH Ch 6 & 7; Bug Bounty Bootcamp Ch 13; ChatGPT Tips & Tricks (Prompting for logic bypasses)",
+    githubAssetType: "Python Tool" as const,
+    githubAssetName: "token_entropy_analyzer.py",
+    githubAssetDesc: "Python script testing session token entropy, bitwise randomness, and timestamp predictability.",
+    creatorRef: "LiveOverflow - Dissecting Auth Logic & Cookie Padding Oracles",
+    bossLabTitle: "OAuth2 & Multi-Factor Auth Bypass Boss Lab"
+  },
+  {
+    weekIndex: 3,
+    weekTitle: "IDOR & Broken Object Level Authentication (BOLA)",
+    competency: "Access Control (IDOR)",
+    burpTooling: "Match and Replace rules, Autorize Burp Extension",
+    portSwiggerLabLink: "https://portswigger.net/web-security/access-control",
+    textbookRefs: "Real-World Bug Hunting (Ch 3); Bug Bounty Bootcamp Ch 11; Bug Bounty from Scratch",
+    githubAssetType: "Python Tool" as const,
+    githubAssetName: "idor_parameter_bruteforcer.py",
+    githubAssetDesc: "Multi-threaded auto-incremental parameter brute-forcer using Python requests with dual auth headers.",
+    creatorRef: "NahamSec - Hunting High-Yield BOLA/IDOR in GraphQL and REST APIs",
+    bossLabTitle: "Multi-Tenant API BOLA Exploitation Boss Lab"
+  },
+  {
+    weekIndex: 4,
+    weekTitle: "Cross-Site Scripting (XSS) - Reflected, Stored, and DOM",
+    competency: "Client-Side Security",
+    burpTooling: "Burp Repeater, Custom Intruder payload lists, DOM Invader",
+    portSwiggerLabLink: "https://portswigger.net/web-security/cross-site-scripting",
+    textbookRefs: "WAHH Ch 12; Bug Bounty Bootcamp Ch 8; ChatGPT Tips & Tricks (WAF bypass payload generation)",
+    githubAssetType: "Python Tool" as const,
+    githubAssetName: "dom_xss_sink_identifier.py",
+    githubAssetDesc: "Regex-based source/sink identifier scanning JS bundles for document.write, innerHTML, and eval.",
+    creatorRef: "STÖK & LiveOverflow - Modern DOM XSS & CSP Bypasses",
+    bossLabTitle: "Stored XSS & Blind Payload Exfiltration Boss Lab"
+  },
+  {
+    weekIndex: 5,
+    weekTitle: "Cross-Site Request Forgery (CSRF) & SameSite Defenses",
+    competency: "Client-Side Security",
+    burpTooling: "Burp Engagement Tools -> Generate CSRF PoC",
+    portSwiggerLabLink: "https://portswigger.net/web-security/csrf",
+    textbookRefs: "WAHH Ch 13; Bug Bounty Bootcamp Ch 9; Real-World Bug Hunting (Ch 2)",
+    githubAssetType: "Automation Suite" as const,
+    githubAssetName: "csrf_poc_generator_suite.py",
+    githubAssetDesc: "Python utility generating automated HTML auto-submitting forms and iframe CSRF exploit delivery templates.",
+    creatorRef: "Vickie Li - CSRF Token Bypass Techniques in Modern Single Page Apps",
+    bossLabTitle: "Cross-Origin State Change & SameSite Lax Bypass Boss Lab"
+  },
+  {
+    weekIndex: 6,
+    weekTitle: "SQL Injection (SQLi) & Database Exfiltration",
+    competency: "Parameter & Logic Mining",
+    burpTooling: "Burp Collaborator (for Out-of-Band SQLi) & Repeater",
+    portSwiggerLabLink: "https://portswigger.net/web-security/sql-injection",
+    textbookRefs: "WAHH Ch 9; Bug Bounty Bootcamp Ch 6; Black Hat Python (Custom SQL blind infuser)",
+    githubAssetType: "Python Tool" as const,
+    githubAssetName: "blind_sqli_time_parser.py",
+    githubAssetDesc: "Custom blind SQL time-based response parser in Python using raw socket/requests thread pools.",
+    creatorRef: "John Hammond - Manual SQL Injection & Out-of-Band Exfiltration",
+    bossLabTitle: "Blind Time-Based SQLi Data Exfiltration Boss Lab"
+  },
+  {
+    weekIndex: 7,
+    weekTitle: "Server-Side Request Forgery (SSRF) & Cloud Metadata Attacks",
+    competency: "Cloud Infrastructure Auditing",
+    burpTooling: "Burp Collaborator Client interaction mapping",
+    portSwiggerLabLink: "https://portswigger.net/web-security/ssrf",
+    textbookRefs: "Real-World Bug Hunting Ch 6; Bug Bounty Bootcamp Ch 12",
+    githubAssetType: "Python Tool" as const,
+    githubAssetName: "ssrf_cloud_metadata_fuzzer.py",
+    githubAssetDesc: "Multi-protocol URL parser testing local loopbacks, DNS rebinding, and cloud metadata endpoints (169.254.169.254).",
+    creatorRef: "NahamSec - SSRF to Internal Cloud Compromise",
+    bossLabTitle: "AWS IMDSv1/v2 SSRF Metadata Exfiltration Boss Lab"
+  },
+  {
+    weekIndex: 8,
+    weekTitle: "XML External Entity (XXE) Injection",
+    competency: "API Security Auditing",
+    burpTooling: "Content-Type converter extension (JSON to XML conversion)",
+    portSwiggerLabLink: "https://portswigger.net/web-security/xxe",
+    textbookRefs: "Real-World Bug Hunting Ch 5; Bug Bounty Bootcamp Ch 10",
+    githubAssetType: "Python Tool" as const,
+    githubAssetName: "blind_xxe_svg_injector.py",
+    githubAssetDesc: "Automation script injecting blind XXE payloads into SVG vector image uploads and SOAP text data fields.",
+    creatorRef: "InsiderPhD - XXE Exploitation in File Upload Sinks",
+    bossLabTitle: "Blind OOB XXE System File Extraction Boss Lab"
+  },
+  {
+    weekIndex: 9,
+    weekTitle: "Server-Side Template Injection (SSTI) & Remote Code Execution (RCE)",
+    competency: "Advanced Chain Vulnerabilities",
+    burpTooling: "Burp Intruder (Fuzzing template engines with payload lists)",
+    portSwiggerLabLink: "https://portswigger.net/web-security/server-side-template-injection",
+    textbookRefs: "WAHH Ch 16; Black Hat Python (Creating reverse shells)",
+    githubAssetType: "Python Tool" as const,
+    githubAssetName: "multi_engine_ssti_fuzzer.py",
+    githubAssetDesc: "Python-driven multi-engine SSTI fuzzer template covering Jinja2, Twig, Freemarker, and MVEL.",
+    creatorRef: "LiveOverflow - Polyglot SSTI to RCE Exploitation",
+    bossLabTitle: "Jinja2 RCE & Reverse Shell Execution Boss Lab"
+  },
+  {
+    weekIndex: 10,
+    weekTitle: "Race Conditions & Business Logic Vulnerabilities",
+    competency: "Business Logic Security",
+    burpTooling: "Burp Repeater (Turbo Intruder extension or Single-packet attack HTTP/2 concurrency)",
+    portSwiggerLabLink: "https://portswigger.net/web-security/race-conditions",
+    textbookRefs: "WAHH Ch 11; Bug Bounty Bootcamp Ch 14",
+    githubAssetType: "Python Tool" as const,
+    githubAssetName: "race_condition_concurrency_hammer.py",
+    githubAssetDesc: "Multi-threaded asyncio Python race condition hammer tool sending simultaneous HTTP/2 single-packet requests.",
+    creatorRef: "STÖK & James Kettle - Single-Packet Attack Architecture",
+    bossLabTitle: "Coupon Over-Redemption & HTTP/2 Concurrency Boss Lab"
+  },
+  {
+    weekIndex: 11,
+    weekTitle: "API Hacking & Mass Assignment (The Final Hunt)",
+    competency: "API Security Auditing",
+    burpTooling: "Logger++, OpenAPI Parser, Postman integration",
+    portSwiggerLabLink: "https://portswigger.net/web-security/api-testing",
+    textbookRefs: "Bug Bounty Bootcamp Ch 17; Real-World Bug Hunting Ch 12",
+    githubAssetType: "Markdown Report" as const,
+    githubAssetName: "master_bounty_portfolio_repo_template.md",
+    githubAssetDesc: "Fully polished, unified 12-week GitHub portfolio index and enterprise VDP report repository template.",
+    creatorRef: "NahamSec & InsiderPhD - Final VDP Triage & Portfolio Presentation",
+    bossLabTitle: "Full-Scope Enterprise API VDP Capstone Audit"
+  }
+];
+
+const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
 // Helper generator creating broad, 100% independent 8-part Red/Blue Team lesson content entries across all 12 weeks
 const get8PartLessonContent = (
   weekIndex: number,
   dayIndex: number,
   dayTitle: string,
-  competency: string,
+  schema: typeof weekSchemas[0],
   dayName: string
 ) => {
   const globalLessonIndex = weekIndex * 6 + dayIndex;
 
   // 1. Theoretical Foundation & Book Integration
   const section1_TheoreticalFoundation = {
-    breakdown: `In modern web architectures, ${dayTitle} represents a fundamental vulnerability class where inputs handled under ${competency} bypass trust boundaries. Under rapid development deadlines, engineering teams assume client-originating data streams or secondary parameter inputs are inherently safe. When sanitization or object-level authorization is omitted, malicious actors alter application state, read unauthorized tenant records, or execute arbitrary commands.`,
+    breakdown: `In modern web architectures, ${dayTitle} represents a fundamental vulnerability class where inputs handled under ${schema.competency} bypass trust boundaries. Under rapid development deadlines, engineering teams assume client-originating data streams or secondary parameter inputs are inherently safe. When sanitization or object-level authorization is omitted, malicious actors alter application state, read unauthorized tenant records, or execute arbitrary commands.`,
     mappedBookChapters: [
       {
         bookTitle: "The Web Application Hacker's Handbook (WAHH)",
         author: "Dafydd Stuttard & Marcus Pinto",
-        chapter: "Chapter 9: Attacking Data Stores & Access Controls",
+        chapter: "Core Architectural Controls",
         concept: "Exploiting boundary flaws and parameter pollution in client-server data flows."
       },
       {
         bookTitle: "Bug Bounty Bootcamp",
         author: "Vickie Li",
-        chapter: "Chapter 7: Isolating Input Sinks & Parameter Discovery",
+        chapter: "Input Vectors & Attack Mapping",
         concept: "Systematic mapping of input vectors and testing for privilege escalation."
       },
       {
         bookTitle: "Real-World Bug Hunting",
         author: "Peter Yaworski",
-        chapter: "Chapter 4: Case Studies in Application Logic Flaws",
+        chapter: "Case Studies in Application Logic Flaws",
         concept: "Analyzing disclosed HackerOne/Bugcrowd reports to discover creative WAF bypasses."
       },
       {
         bookTitle: "Bug Bounty Tips & Tricks using ChatGPT",
         author: "Joas Antonio dos Santos Barbosa",
-        chapter: "Chapter 3: Prompt Engineering for Code Sinks",
-        concept: "Using AI models to audit source code and generate proof-of-concept payloads."
+        chapter: "Prompt Engineering for Code Sinks",
+        concept: "Leveraging LLMs to extract vulnerability logic and refine technical VDP reports."
+      },
+      {
+        bookTitle: "Bug Bounty from Scratch",
+        author: "Vazquez & Javier",
+        chapter: "Methodology & Scope Triage",
+        concept: "Establishing structured daily hunting workflows and fast scope validation."
+      },
+      {
+        bookTitle: "Automate the Boring Stuff with Python",
+        author: "Al Sweigart",
+        chapter: "Web Scraping & Request Parsing",
+        concept: "Writing custom Python scrapers and automated HTTP requests for bug bounty."
+      },
+      {
+        bookTitle: "Black Hat Python",
+        author: "Justin Seitz",
+        chapter: "Raw Sockets & Exploitation Utilities",
+        concept: "Building high-performance multi-threaded offensive automation scripts."
       }
     ]
   };
 
-  // 2. Video Walkthrough & Analysis
+  // 2. Video Walkthrough Analysis
   const section2_VideoWalkthroughAnalysis = {
     youtubeSearchTerms: [
-      `${dayTitle} PoC walkthrough bug bounty`,
-      `How to exploit ${dayTitle} in Burp Suite`,
-      `PortSwigger ${dayTitle} lab solution`
+      `${schema.creatorRef} ${dayTitle}`,
+      `PortSwigger ${dayTitle} tutorial`,
+      `Bug Bounty methodology ${schema.weekTitle}`
     ],
     instructorSteps: {
-      targetRecon: `1. Enumerate target subdomains using Subfinder and httpx.\n2. Filter HTTP traffic in Burp Suite for API endpoints handling ${competency}.\n3. Inspect client-side JavaScript assets for un-sanitized parameter sinks.`,
-      discoveryAndPayload: `1. Intercept target request in Burp Suite Repeater.\n2. Construct base payload targeting ${dayTitle}.\n3. Apply URL/Base64 encoding or duplicate parameter injection to bypass WAF filtering.`,
-      exploitation: `1. Send modified request to target application server.\n2. Observe response status code variations (HTTP 200 vs 403).\n3. Extract exfiltrated data or verify state mutation.`,
-      mitigation: `1. Implement strict server-side parameter sanitization and allowlists.\n2. Enforce object-level authorization on all API routes.\n3. Deploy Content Security Policy (CSP) headers.`
+      targetRecon: `1. Reconcile endpoint boundaries using ${schema.burpTooling}.\n2. Capture normal traffic in Burp Suite Proxy and identify parameter fields.`,
+      discoveryAndPayload: `3. Inject structured test vectors into parameters handling ${dayTitle}.\n4. Monitor HTTP response codes and response body variations.`,
+      exploitation: `5. Escalate initial anomaly into a full proof-of-concept payload.\n6. Verify impact by exfiltrating non-sensitive metadata or confirming state change.`,
+      mitigation: `7. Document reproduction steps and map findings to OWASP / CVSS benchmarks.`
     }
   };
 
-  // 3. CTF Arena (Practical Track)
+  // 3. CTF Arena Track
   const section3_CtfArenaTrack = {
-    environmentName: `PortSwigger Web Security Academy & Local Docker Arena (${dayTitle})`,
+    environmentName: `PortSwigger & Custom Arena: ${dayTitle}`,
     stepByStepLabGuide: [
-      `Step 1: Review the target code inspection box inside the Digital Arena panel below.`,
-      `Step 2: Identify where user input reaches dangerous sinks or missing authorization checks.`,
-      `Step 3: Write your custom exploit payload string in the local shell terminal workspace.`,
-      `Step 4: Click 'Execute Payload' in the local shell terminal to trigger simulation.`,
-      `Step 5: Copy the captured flag into the verification input to claim your XP and advance.`
+      `Navigate to PortSwigger Security Academy or target lab instance: ${schema.portSwiggerLabLink}`,
+      `Configure Burp Suite Proxy listener and import target scope rules.`,
+      `Trigger targeted endpoint using custom payload vectors.`,
+      `Exfiltrate system verification token or trigger alert popup flag.`,
+      `Submit the retrieved FLAG in the Digital Arena below to verify completion.`
     ],
-    terminalPayload: `FLAG{${dayName.toUpperCase()}_${competency.replace(/[\s&()\-]/g, "_").toUpperCase()}_SUCCESS}`
+    terminalPayload: `FLAG{BBM_W${weekIndex + 1}_D${dayIndex + 1}_${dayTitle.toUpperCase().replace(/[^A-Z0-0]/g, "")}}`
   };
 
   // 4. Automation & Recon Area
   const section4_AutomationAndReconArea = {
-    automationStrategy: `Automate discovery of ${dayTitle} across enterprise CIDR blocks using high-speed CLI scanners, custom Nuclei templates, and Python requests scripts.`,
-    nucleiTemplateCommand: `nuclei -u https://target.corp -t templates/vulnerabilities/${competency.toLowerCase().replace(/[\s&()\-]/g, "")}/ -severity high,critical`,
-    ffufGobusterCommand: `ffuf -u https://target.corp/FUZZ -w wordlists/api-endpoints.txt -mc 200,302`,
-    customPythonScript: `#!/usr/bin/env python3\n# Automate the Boring Stuff / Black Hat Python Style\nimport requests\nimport sys\n\ndef audit_target(url):\n    print(f"[*] Auditing ${dayTitle} on: {url}")\n    res = requests.get(f"{url}/api/v1/resource", headers={"X-Audit-Skill": "${competency}"}, timeout=5)\n    if res.status_code == 200:\n        print("[+] Vulnerability Verified! Response 200 OK.")\n\nif __name__ == "__main__":\n    audit_target(sys.argv[1] if len(sys.argv) > 1 else "http://sandbox-target.corp.internal")`,
-    customBashOneLiner: `subfinder -d target.com -silent | httpx -title -status-code | grep "200"`
+    automationStrategy: `Automating discovery of ${dayTitle} using custom Python requests and CLI fuzzing utilities.`,
+    nucleiTemplateCommand: `nuclei -u https://target.com -t templates/vulnerabilities/${dayTitle.toLowerCase().replace(/[^a-z0-9]/g, "-")}.yaml`,
+    ffufGobusterCommand: `ffuf -u https://target.com/FUZZ -w wordlists/parameters.txt -mc 200,302`,
+    customPythonScript: `import requests\nimport sys\n\ndef audit_target(url):\n    headers = {'User-Agent': 'BugBountyMastery-Scanner/1.0'}\n    payload = "' OR 1=1 -- "\n    try:\n        res = requests.get(url + "?id=" + payload, headers=headers, timeout=5)\n        if "error" in res.text.lower() or res.status_code == 200:\n            print(f"[+] Potential finding on {url}")
+    except Exception as e:\n        pass\n\nif __name__ == "__main__":\n    audit_target("https://example.com/api")`,
+    customBashOneLiner: `cat subdomains.txt | httpx -silent | waybackurls | grep "=" | nuclei -t vulnerabilities/ -o results.txt`
   };
 
   // 5. VDP Report Writing Guide
   const section5_VdpReportWritingGuide = {
-    title: `[HIGH] ${dayTitle} Identified in Core Application Endpoint`,
+    title: `${dayTitle} Vulnerability in Target System`,
     cvssVector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
-    cvssScore: 8.2,
-    description: `During a security assessment, an un-sanitized parameter flaw (${dayTitle}) was identified in ${competency}. An unauthenticated attacker can exploit this condition to read or modify sensitive user data.`,
-    impact: `An attacker can bypass authorization controls, access private tenant PII records, or execute arbitrary state changes, violating multi-tenant isolation boundaries.`,
-    stepsToReproduce: `1. Issue HTTP GET request to target endpoint: \`https://target.corp/api/v1/resource\`\n2. Supply parameter payload string.\n3. Observe HTTP 200 response returning unauthorized data.`,
-    remediation: `1. Implement strict server-side parameter validation.\n2. Enforce object-level access control on all backend API routes.`
+    cvssScore: 8.1,
+    description: `During a security audit under ${schema.competency}, a ${dayTitle} vulnerability was identified on the target host. The endpoint fails to adequately validate or sanitize user-supplied input prior to server processing.`,
+    impact: `An attacker can leverage this vulnerability to bypass access controls, read or modify sensitive database records, or achieve unauthorized state modifications.`,
+    stepsToReproduce: `1. Intercept HTTP request to target endpoint using Burp Suite.\n2. Inject payload into parameter handling input.\n3. Observe anomalous server response or unauthorized data return.`,
+    remediation: `Implement strict server-side parameter sanitization, object-level authorization checks, and parameterized queries.`
   };
 
   // 6. Real-World Case Study
   const section6_RealWorldCaseStudy = {
-    disclosedReportTitle: `[Disclosed Report] Critical ${dayTitle} in Corporate SaaS Platform`,
-    platform: "HackerOne / Bugcrowd",
-    bountyAwarded: "$4,500 USD",
-    targetCompany: "Fortune 500 Enterprise SaaS Target",
-    hunterMethodology: `The security researcher noticed that the target API endpoint trusted incoming client request parameters during profile configuration updates. By mutating parameter IDs in Burp Suite Repeater, the hunter bypassed tenant permission rules, accessing senior administrator credentials and earning a $4,500 bounty.`
+    disclosedReportTitle: `Disclosed HackerOne Report: ${dayTitle} on Enterprise Host`,
+    platform: "HackerOne",
+    bountyAwarded: "$3,500 USD",
+    targetCompany: "Fortune 500 Enterprise Target",
+    hunterMethodology: `The security researcher identified an exposed parameter during routine recon using ${schema.burpTooling}. By manipulating input payloads, the researcher demonstrated unauthorized access, earning a $3,500 bounty.`
   };
 
   // 7. Live Hunting Grounds
   const section7_LiveHuntingGrounds = {
     curatedProgramLinks: [
-      { name: "HackerOne Public Directory Scope", url: "https://hackerone.com/hacktivity", platform: "HackerOne" },
-      { name: "Bugcrowd Public Programs Scope", url: "https://bugcrowd.com/programs", platform: "Bugcrowd" },
-      { name: "Intigriti VDP Directory", url: "https://www.intigriti.com/programs", platform: "Intigriti" }
+      { name: "HackerOne Public Scope", url: "https://hackerone.com/bug-bounty-programs", platform: "HackerOne" },
+      { name: "Bugcrowd VDP Directory", url: "https://bugcrowd.com/programs", platform: "Bugcrowd" },
+      { name: "Intigriti European Targets", url: "https://www.intigriti.com/programs", platform: "Intigriti" }
     ],
     searchDorks: [
-      `site:target.corp inurl:api/v1/${competency.toLowerCase().replace(/[\s&()\-]/g, "")}`,
-      `site:*.target.corp ext:js "${dayTitle.split(" ")[0].toLowerCase()}"`
+      `site:*.target.com inurl:api`,
+      `site:*.target.com ext:php | ext:json`,
+      `site:*.target.com "admin" | "dashboard"`
     ],
-    scopeInclusionTips: `Look for broad-scope wildcards (*.target.com) handling microservice API calls. Test staging subdomains (staging-api.target.com) where WAF rules are less strict.`
+    scopeInclusionTips: `Ensure testing remains strictly within permitted wildcard subdomains. Respect rate limits and avoid destructive payloads.`
   };
 
   // 8. Expert Audit Note
-  const section8_ExpertAuditNote = `💡 EXPERT AUDIT NOTE (Day ${globalLessonIndex + 1}):\nAlways test parameter variations across GET, POST, and PUT HTTP verbs. If direct access returns HTTP 403 Forbidden, inject custom override headers like 'X-HTTP-Method-Override: PUT' or 'X-Forwarded-For: 127.0.0.1' to bypass reverse-proxy access filters!`;
+  const section8_ExpertAuditNote = `SENIOR AUDITOR REFLECTION:\nWhen hunting for ${dayTitle}, always inspect edge-case endpoints like mobile API handlers or older legacy subdomains. Enterprise targets often apply WAF protections on main web applications while leaving legacy microservices unprotected.`;
+
+  const githubAsset = {
+    name: schema.githubAssetName,
+    type: schema.githubAssetType,
+    description: schema.githubAssetDesc,
+    codeOrContent: section4_AutomationAndReconArea.customPythonScript
+  };
+
+  const linkedInMilestone = `🚀 Bug Bounty Mastery - Week ${weekIndex + 1} (${schema.weekTitle}) Completed!\n\nJust completed Day ${globalLessonIndex + 1}: ${dayTitle}.\n\n🔑 Key Achievements:\n• Mastered ${schema.burpTooling}\n• Practical Lab: PortSwigger (${schema.portSwiggerLabLink})\n• Built & Pushed GitHub Tool: ${schema.githubAssetName}\n• Mapped textbook theory from ${schema.textbookRefs}\n\nOnwards to mastering full-scope VDP triage! #BugBounty #Cybersecurity #EthicalHacking #InfoSec`;
 
   return {
     framework: {
@@ -126,29 +317,31 @@ const get8PartLessonContent = (
       section7_LiveHuntingGrounds,
       section8_ExpertAuditNote
     },
-
-    // Backwards compatibility mappings
+    burpToolingUsed: schema.burpTooling,
+    portSwiggerLabLink: schema.portSwiggerLabLink,
+    githubPushAsset: githubAsset,
+    linkedInMilestoneTemplate: linkedInMilestone,
     theory: {
       title: "Theoretical Principles & Auditing",
       duration: "30 Mins",
       beginnerAnalogy: {
-        story: `Imagine a bank vault where the teller relies on a piece of paper handed over by the customer rather than checking the central database. On Day ${globalLessonIndex + 1}, ${dayTitle} works similarly.`,
-        realWorldComparison: "The application trusts client-side state or parameter assumptions without validating object references or cryptographic signatures."
+        story: `Imagine an enterprise facility where guards check main entrance badges but leave side loading docks completely unmonitored. On Day ${globalLessonIndex + 1}, ${dayTitle} takes advantage of similar trust boundary gaps in application logic.`,
+        realWorldComparison: "The web application relies on implicit trust assumptions across parameter flows or client-side validation logic."
       },
-      chatGptPromptStrategy: `Prompt: "Act as a senior cybersecurity auditor. Review the following code snippet for ${dayTitle} vulnerabilities under ${competency}. Identify parameter pollution, missing authorization checks, and payload injection points:\n[PASTE CODE HERE]"`,
+      chatGptPromptStrategy: `Prompt: "Act as a senior cybersecurity auditor. Review the following code snippet for ${dayTitle} vulnerabilities under ${schema.competency}. Identify parameter pollution, missing authorization checks, and payload injection points:\n[PASTE CODE HERE]"`,
       recommendedBooks: section1_TheoreticalFoundation.mappedBookChapters.map(b => ({
         title: b.bookTitle,
         author: b.author,
         chapterLesson: b.chapter,
         whatTheyAreDoing: b.concept,
         detailedExplanation: `Explores deep technical vectors, edge cases, and evasion tricks relevant to ${dayTitle}.`,
-        practicalExample: `In ${b.bookTitle}, the author demonstrates exploiting ${dayTitle} by intercepting HTTP requests in Burp Suite and modifying parameters.`,
+        practicalExample: `In ${b.bookTitle}, the author demonstrates auditing ${dayTitle} by intercepting HTTP requests in Burp Suite and modifying parameter values.`,
         howToAdapt: "Adapt this by generating automated custom scripts in Python or Nuclei templates.",
         takeaway: "Never trust client inputs and always implement server-side validation and role-based access control."
       })),
       creatorLessons: [
         {
-          creatorName: "NahamSec & Jason Haddix",
+          creatorName: schema.creatorRef,
           channelOrWebsite: "YouTube & Bug Hunter Methodology",
           lessonTitle: `Mastering ${dayTitle}`,
           broadExplanation: `Comprehensive walkthrough on identifying ${dayTitle} vulnerabilities in production environments.`,
@@ -156,11 +349,11 @@ const get8PartLessonContent = (
           stepByStepWalkthrough: [
             "Use Sublist3r and Amass to discover target subdomains.",
             "Run ffuf or gau to collect endpoints and parameters.",
-            "Intercept traffic with Burp Suite and manipulate input vectors.",
+            `Intercept traffic using ${schema.burpTooling} and manipulate input vectors.`,
             "Confirm response diffs and write a reproducible PoC."
           ],
           practicalCommand: section4_AutomationAndReconArea.nucleiTemplateCommand,
-          specificVideoUrl: "https://www.youtube.com/results?search_query=" + encodeURIComponent(`NahamSec ${dayTitle} tutorial`)
+          specificVideoUrl: "https://www.youtube.com/results?search_query=" + encodeURIComponent(`${schema.creatorRef} ${dayTitle}`)
         }
       ],
       howToDoRealWorldHunting: {
@@ -174,7 +367,7 @@ const get8PartLessonContent = (
         aiAutomatedHuntingWorkflow: "Combine ChatGPT / Claude analysis with Nuclei scanning for high-confidence finding triage.",
         automatedScrapersAndDorks: section7_LiveHuntingGrounds.searchDorks
       },
-      whatYouAreDoing: `RED TEAM AUDIT (Day ${globalLessonIndex + 1} - ${dayName}):\nYou are auditing ${dayTitle} in a target web application under ${competency}.`,
+      whatYouAreDoing: `RED TEAM AUDIT (Day ${globalLessonIndex + 1} - ${dayName}):\nYou are auditing ${dayTitle} in a target web application under ${schema.competency}.`,
       vulnerabilityOrigin: section1_TheoreticalFoundation.breakdown,
       pentesterFocus: section2_VideoWalkthroughAnalysis.instructorSteps.targetRecon,
       payloadCrafting: section2_VideoWalkthroughAnalysis.instructorSteps.discoveryAndPayload,
@@ -183,8 +376,8 @@ const get8PartLessonContent = (
       developerMindset: "Developers often prioritize speed and feature delivery over input validation edge cases.",
       psychologicalError: "Assuming client-side controls or obscured endpoints are invisible to malicious actors.",
       usefulResources: [
-        { name: `OWASP Testing Guide: ${competency}`, url: "https://owasp.org/www-project-web-security-testing-guide/", category: "Standard" },
-        { name: `PortSwigger Web Security Academy: ${dayTitle}`, url: "https://portswigger.net/web-security", category: "Lab & Guide" }
+        { name: `OWASP Testing Guide: ${schema.competency}`, url: "https://owasp.org/www-project-web-security-testing-guide/", category: "Standard" },
+        { name: `PortSwigger Web Security Academy: ${dayTitle}`, url: schema.portSwiggerLabLink, category: "Lab & Guide" }
       ],
       industryInsight: section8_ExpertAuditNote
     },
@@ -192,8 +385,8 @@ const get8PartLessonContent = (
       title: "The Digital Arena Playground",
       duration: "90 Mins",
       stepByStepTutorial: section3_CtfArenaTrack.stepByStepLabGuide,
-      labLink: "https://portswigger.net/web-security",
-      instructions: "Execute payload in terminal shell and verify flag.",
+      labLink: schema.portSwiggerLabLink,
+      instructions: "Execute payload in terminal shell or Burp Repeater and verify flag.",
       interactiveConsolePlaceholder: "Enter captured FLAG",
       correctFlag: section3_CtfArenaTrack.terminalPayload,
       flagSubmitted: "",
@@ -209,7 +402,7 @@ const get8PartLessonContent = (
       vdpReportTemplate: section5_VdpReportWritingGuide,
       checklist: [
         { id: `check-1`, text: "Audit code origin and payload execution logic", completed: false },
-        { id: `check-2`, text: "Execute Python & Bash automation scripts", completed: false },
+        { id: `check-2`, text: `Execute Python script (${schema.githubAssetName})`, completed: false },
         { id: `check-3`, text: "Review CVSS calculations and submit VDP report", completed: false }
       ],
       committed: false,
@@ -218,251 +411,177 @@ const get8PartLessonContent = (
   };
 };
 
+// Daily titles per week to ensure 72 unique, highly relevant security topics
+const weekDailyTitles: string[][] = [
+  // Week 1: Target Reconnaissance & OSINT
+  [
+    "DNS Enumeration & Subdomain Discovery",
+    "Certificate Transparency Logs & CRT.sh Mining",
+    "Wayback & Gau Endpoint Harvesting",
+    "GitHub Secret Hunting & Leaked API Keys",
+    "Cloud Asset Discovery & AWS S3 Bucket Mining",
+    "Scope Mapping & Port Scanning (Nmap/Masscan)"
+  ],
+  // Week 2: Subdomain Takeovers & Information Disclosure
+  [
+    "Dangling CNAME Identification & DNS Querying",
+    "GitHub Pages & Heroku Takeover Auditing",
+    "AWS S3 & Cloudfront Misconfiguration Hunting",
+    "Exposed Environment Files (.env, .git/HEAD)",
+    "Server Status Pages & Trace Debug Leakage",
+    "Source Map Decompilation & JS Leak Mining"
+  ],
+  // Week 3: Broken Authentication & Session Management
+  [
+    "Session Token Predictability & Entropy Analysis",
+    "Cookie Flag Audit (HttpOnly, Secure, SameSite)",
+    "Password Reset Flow Flaws & Token Leakage",
+    "Multi-Factor Authentication (MFA) Bypasses",
+    "JWT Signature Stripping & Key Confusion Attacks",
+    "OAuth 2.0 Implicit Grant & Redirect URI Hijacking"
+  ],
+  // Week 4: IDOR & Broken Object Level Authentication (BOLA)
+  [
+    "Numeric IDOR Parameter Fuzzing & Auto-Increment",
+    "UUID / GUID Guessability & Entropy Analysis",
+    "GraphQL BOLA & Nested Query Exfiltration",
+    "HTTP Method Overriding (GET to POST IDOR)",
+    "Autorize Burp Extension Multi-Role Auditing",
+    "Second-Order IDOR & Indirect Object Reference"
+  ],
+  // Week 5: Cross-Site Scripting (XSS)
+  [
+    "Reflected XSS Filter Bypasses & HTML Injection",
+    "Stored XSS in Rich-Text & Profile Fields",
+    "DOM XSS Sink & Source Identification",
+    "CSP (Content Security Policy) Bypasses",
+    "DOM Clobbering & JS Prototype Pollution",
+    "Blind XSS Payload Injection & Callback Logging"
+  ],
+  // Week 6: Cross-Site Request Forgery (CSRF)
+  [
+    "Basic CSRF Form Generation & Auto-Submit Exploits",
+    "SameSite Cookie Lax/Strict Bypass Vectors",
+    "CSRF Token Manipulation & Stripping Tricks",
+    "Cross-Origin Resource Sharing (CORS) Misconfigurations",
+    "JSON CSRF via Content-Type Manipulation",
+    "Flash / WebSockets CSRF State Overriding"
+  ],
+  // Week 7: SQL Injection (SQLi)
+  [
+    "In-Band Error-Based SQL Injection",
+    "UNION-Based Data Extraction & Column Mapping",
+    "Blind Boolean-Based SQL Injection",
+    "Blind Time-Based Delay Injections",
+    "Out-of-Band (OOB) SQLi with Burp Collaborator",
+    "ORM Injection & NoSQL Injection Vectors"
+  ],
+  // Week 8: Server-Side Request Forgery (SSRF)
+  [
+    "Basic In-Band SSRF to Localhost (127.0.0.1)",
+    "AWS EC2 IMDSv1 Metadata Exfiltration",
+    "GCP & Azure Metadata Endpoint Attacks",
+    "DNS Rebinding & Local Loopback Bypasses",
+    "Blind Out-of-Band SSRF via Burp Collaborator",
+    "Protocol Smuggling (gopher://, dict://) via SSRF"
+  ],
+  // Week 9: XML External Entity (XXE) Injection
+  [
+    "Local File Inclusion via XML DTD Injections",
+    "Blind Out-of-Band XXE Data Exfiltration",
+    "XXE via SVG File Upload Injections",
+    "SOAP & Office Document (XLSX/DOCX) XXE",
+    "XInclude Attacks & XML Entity Expansion",
+    "Bypassing XML Parser Sanitizers & Encoding"
+  ],
+  // Week 10: Server-Side Template Injection (SSTI) & RCE
+  [
+    "Jinja2 & Python SSTI to Remote Code Execution",
+    "Twig & PHP Template Injection Vectors",
+    "Java Spring / Freemarker SSTI Exploitation",
+    "Node.js EJS & Jade Template Injection",
+    "Command Injection via Raw Shell Arguments",
+    "Insecure Deserialization to RCE (Python/Java)"
+  ],
+  // Week 11: Race Conditions & Business Logic Vulnerabilities
+  [
+    "HTTP/2 Single-Packet Attack Concurrency",
+    "Coupon & Discount Code Over-Redemption Race",
+    "Financial Transfer Double-Spend Race Conditions",
+    "Workflow Bypass & Step-Skipping Logic Flaws",
+    "Negative Value Input Logic Attacks",
+    "Rate Limit Bypasses via Header Manipulation"
+  ],
+  // Week 12: API Hacking & Mass Assignment
+  [
+    "REST API Parameter Mining & Mass Assignment",
+    "GraphQL Introspection & Schema Mapping",
+    "OpenAPI / Swagger Spec Parsing & Endpoint Discovery",
+    "API Key Scoping & Excessive Data Exposure",
+    "JWT Key Confusion & API Authorization Bypass",
+    "Full Enterprise VDP Report Synthesis & Portfolio Push"
+  ]
+];
+
 // Helper to generate weeks data
 export const generateDefaultCurriculum = (): Week[] => {
   const weeks: Week[] = [];
 
-  const topics = [
-    {
-      title: "Client-Side JS Deconstruction",
-      competency: "Client-Side Security",
-      days: [
-        { name: "Monday", title: "DOM Clobbering & Document Object Manipulation", lab: "https://portswigger.net/web-security/dom-based/dom-clobbering" },
-        { name: "Tuesday", title: "Client-Side Prototype Pollution in Wild JS Files", lab: "https://portswigger.net/web-security/prototype-pollution" },
-        { name: "Wednesday", title: "Source Map Reconstruction & JS Deobfuscation", lab: "https://portswigger.net/web-security/dom-based" },
-        { name: "Thursday", title: "Client-Side Storage Abuse (XSS via LocalStorage)", lab: "https://portswigger.net/web-security/cross-site-scripting" },
-        { name: "Friday", title: "WebSocket Message Manipulation & Race Conditions", lab: "https://portswigger.net/web-security/websockets" },
-        { name: "Saturday", title: "CORS Misconfigurations & Origin Reflection", lab: "https://portswigger.net/web-security/cors" }
-      ],
-      bossLabTitle: "Enterprise DOM & Prototype Pollution Chain Lab",
-      bossLabScenario: "Analyze an obfuscated, enterprise-grade client script dynamically loading user config files. Abuse a prototype pollution pattern to corrupt the document tree structure, clobber the global API config endpoint, and trigger an automated cross-origin token export flag.",
-      correctFlag: "FLAG{PROTOTYPE_CLOBBER_SUCCESS}"
-    },
-    {
-      title: "Secret Hunting & Reconnaissance",
-      competency: "Secret Hunting & Recon",
-      days: [
-        { name: "Monday", title: "Regex Deep-Dive for AWS and GCP Keys in JS", lab: "https://portswigger.net/web-security/information-disclosure" },
-        { name: "Tuesday", title: "Extracting Secrets from Docker Layers & Env Configs", lab: "https://portswigger.net/web-security/information-disclosure" },
-        { name: "Wednesday", title: "Parsing Public GitHub Archives & Commit Histories", lab: "https://portswigger.net/web-security/information-disclosure" },
-        { name: "Thursday", title: "Leaked Firebase Databases & Unauthenticated Endpoints", lab: "https://portswigger.net/web-security/information-disclosure" },
-        { name: "Friday", title: "Config File Discovery via Advanced Directory Brute-forcing", lab: "https://portswigger.net/web-security/file-path-traversal" },
-        { name: "Saturday", title: "Decompilation of Android APKs for Static Credentials", lab: "https://portswigger.net/web-security/information-disclosure" }
-      ],
-      bossLabTitle: "Multilayer Secret Extraction & Key Parsing Lab",
-      bossLabScenario: "Scan and parse dockerized asset layers. Reconstruct historical git logs to find hidden developer API keys, identify an unauthenticated Firebase endpoint with those credentials, and extract the system administrative access flag.",
-      correctFlag: "FLAG{SECRETS_UNCOVERED_IN_COMMIT_HIST}"
-    },
-    {
-      title: "Advanced Insecure Direct Object References (IDOR)",
-      competency: "Access Control (IDOR)",
-      days: [
-        { name: "Monday", title: "IDOR via Custom Header Tampering (X-User-ID)", lab: "https://portswigger.net/web-security/access-control" },
-        { name: "Tuesday", title: "Numeric ID Brute Force and Secondary IDOR validation", lab: "https://portswigger.net/web-security/access-control" },
-        { name: "Wednesday", title: "UUID vs Sequential ID Enumeration Strategies", lab: "https://portswigger.net/web-security/access-control" },
-        { name: "Thursday", title: "Bypassing IDOR via Parameter Pollution (HPP)", lab: "https://portswigger.net/web-security/access-control" },
-        { name: "Friday", title: "IDOR on Object Deletion & State Change Endpoints", lab: "https://portswigger.net/web-security/access-control" },
-        { name: "Saturday", title: "GraphQL IDORs via Query Introspection & Variables", lab: "https://portswigger.net/web-security/access-control" }
-      ],
-      bossLabTitle: "UUID-to-HPP Multi-tenant IDOR Escalation",
-      bossLabScenario: "Perform analysis on a multi-tenant corporate HR system. Bypass UUID-only security by implementing HTTP Parameter Pollution (HPP) to leak senior administrator data, accessing their private documents via parameter injection.",
-      correctFlag: "FLAG{UUID_HPP_IDOR_ESCALATED_SUCC}"
-    },
-    {
-      title: "Broken Business Logic Auditing",
-      competency: "Business Logic Security",
-      days: [
-        { name: "Monday", title: "Negative & Fractional Cart Quantities", lab: "https://portswigger.net/web-security/logic-flaws" },
-        { name: "Tuesday", title: "Discount Code & Gift Card Race Conditions", lab: "https://portswigger.net/web-security/logic-flaws" },
-        { name: "Wednesday", title: "Multi-Step Workflow Interception & Out-of-Order Execution", lab: "https://portswigger.net/web-security/logic-flaws" },
-        { name: "Thursday", title: "Trusting Client-side Controlled Pricing Parameters", lab: "https://portswigger.net/web-security/logic-flaws" },
-        { name: "Friday", title: "Bypassing Limit Restrictions on OTP Verification", lab: "https://portswigger.net/web-security/logic-flaws" },
-        { name: "Saturday", title: "Role Transition Flipping via Custom Header Override", lab: "https://portswigger.net/web-security/logic-flaws" }
-      ],
-      bossLabTitle: "Enterprise Multi-step Transaction Logic Exploit",
-      bossLabScenario: "Interfere with a high-stakes banking transaction flow. Reorder the transaction confirmation phase by bypassing step 2 (Verification) and jumping straight to step 3 (Disbursement) with manipulated transaction values.",
-      correctFlag: "FLAG{TRANSACTION_WORKFLOW_BYPASS}"
-    },
-    {
-      title: "Session Management & JWT Exploitation",
-      competency: "Session & Token Management",
-      days: [
-        { name: "Monday", title: "JWT None Algorithm Signature Forgery", lab: "https://portswigger.net/web-security/jwt" },
-        { name: "Tuesday", title: "Weak Secret Brute-forcing with Hashcat", lab: "https://portswigger.net/web-security/jwt" },
-        { name: "Wednesday", title: "JWT JWK Parameter Header Injection", lab: "https://portswigger.net/web-security/jwt" },
-        { name: "Thursday", title: "Session Fixation via Overlapping Domains & Subdomains", lab: "https://portswigger.net/web-security/jwt" },
-        { name: "Friday", title: "Bypassing SameSite Cookie Protections via CSRF Chain", lab: "https://portswigger.net/web-security/csrf" },
-        { name: "Saturday", title: "JWT Key ID (kid) SQL Injection & Command Exec", lab: "https://portswigger.net/web-security/jwt" }
-      ],
-      bossLabTitle: "JWT Header Injection & Secret Forgery Attack",
-      bossLabScenario: "Manipulate a JWT session token by injecting a self-signed key in the JWK header. Craft a matching token indicating your role is 'Administrator' and use it to execute restricted server controls.",
-      correctFlag: "FLAG{JWK_HEADER_INJECTION_Pwned}"
-    },
-    {
-      title: "Advanced Subdomain & Port Recon (Go/Linux-focused)",
-      competency: "Asset Mapping (Go/Linux)",
-      days: [
-        { name: "Monday", title: "Automated Subdomain Discovery with Subfinder & Amass", lab: "https://portswigger.net/web-security/information-disclosure" },
-        { name: "Tuesday", title: "Advanced DNS Resolution & Wildcard Filtering with Massdns", lab: "https://portswigger.net/web-security/information-disclosure" },
-        { name: "Wednesday", title: "Port Scanning at Scale with Naabu and Rustscan", lab: "https://portswigger.net/web-security/information-disclosure" },
-        { name: "Thursday", title: "Vhost Fuzzing with ffuf and Custom Wordlists", lab: "https://portswigger.net/web-security/information-disclosure" },
-        { name: "Friday", title: "HTTP Probe & Screen Capture Automation using httpx & gowitness", lab: "https://portswigger.net/web-security/information-disclosure" },
-        { name: "Saturday", title: "Extracting ASN Blocks & Subnets using whois & jq", lab: "https://portswigger.net/web-security/information-disclosure" }
-      ],
-      bossLabTitle: "Large Scale Recon & Service Fingerprinting Lab",
-      bossLabScenario: "Process raw reconnaissance data from a giant corporate IP range. Identify hidden internal-only web virtual hosts (VHosts), fingerprint outdated servers, and locate the unprotected admin administration port.",
-      correctFlag: "FLAG{RECON_VHOST_FFUF_FINGERPRINT}"
-    },
-    {
-      title: "API Reversing & Swagger Auditing",
-      competency: "API Security Auditing",
-      days: [
-        { name: "Monday", title: "Extracting Hidden API Endpoints from Swagger/OAS UI", lab: "https://portswigger.net/web-security/api-testing" },
-        { name: "Tuesday", title: "API Parameter Over-Posting & Mass Assignment Attacks", lab: "https://portswigger.net/web-security/api-testing" },
-        { name: "Wednesday", title: "Bypassing REST API Authentication Filters via Traversal", lab: "https://portswigger.net/web-security/api-testing" },
-        { name: "Thursday", title: "GraphQL Query Cost & Depth Exhaustion Denial of Service", lab: "https://portswigger.net/web-security/api-testing" },
-        { name: "Friday", title: "API Object Level Authorization (BOLA) Exploits", lab: "https://portswigger.net/web-security/api-testing" },
-        { name: "Saturday", title: "API Method Tampering (GET to PUT/POST Escalation)", lab: "https://portswigger.net/web-security/api-testing" }
-      ],
-      bossLabTitle: "Enterprise API Schema Reversing & BOLA Lab",
-      bossLabScenario: "Analyze an exposed Swagger spec and identify schema objects. Perform dynamic fuzzing to locate an Object Level Authorization vulnerability (BOLA), and change the administrative API configs using PUT method conversion.",
-      correctFlag: "FLAG{BOLA_PUT_API_OVERRIDE_VERIFIED}"
-    },
-    {
-      title: "Advanced Parameter Mining & Hidden Inputs",
-      competency: "Parameter & Logic Mining",
-      days: [
-        { name: "Monday", title: "Automated Parameter Mining with Arjun & Param Miner", lab: "https://portswigger.net/web-security/essential-skills" },
-        { name: "Tuesday", title: "Hidden Administrative Parameter Exploits (debug=true)", lab: "https://portswigger.net/web-security/essential-skills" },
-        { name: "Wednesday", title: "HTTP Header Mining for Custom Caching Frameworks", lab: "https://portswigger.net/web-security/web-cache-poisoning" },
-        { name: "Thursday", title: "Uncovering Hidden REST Method Overrides (X-HTTP-Method-Override)", lab: "https://portswigger.net/web-security/essential-skills" },
-        { name: "Friday", title: "Query String Manipulation for Host Header Injection", lab: "https://portswigger.net/web-security/host-header-attacks" },
-        { name: "Saturday", title: "Mining Hidden Cookies for Dynamic Theme & Template Parsing", lab: "https://portswigger.net/web-security/essential-skills" }
-      ],
-      bossLabTitle: "Multi-layered Parameter Discovery & Cache Attack",
-      bossLabScenario: "Execute a parameter-discovery payload against a cached cloud server front-end. Mine a secret caching header parameter that overrides server cache behavior, allowing you to inject poisoned javascript headers and steal user flags.",
-      correctFlag: "FLAG{PARAM_MINED_CACHE_POISON_SUCCESS}"
-    },
-    {
-      title: "Corporate-Grade VDP Reporting & Impact Analysis",
-      competency: "Corporate Reporting & VDP",
-      days: [
-        { name: "Monday", title: "Writing Professional Executive Vulnerability Summaries", lab: "https://portswigger.net/web-security/essential-skills" },
-        { name: "Tuesday", title: "CVSS v3.1/v4.0 Vector String Calculations", lab: "https://portswigger.net/web-security/essential-skills" },
-        { name: "Wednesday", title: "Drafting Standard Step-by-Step Proof of Concepts (PoC)", lab: "https://portswigger.net/web-security/essential-skills" },
-        { name: "Thursday", title: "Proposing Enterprise-grade Remediation & Root Cause Solutions", lab: "https://portswigger.net/web-security/essential-skills" },
-        { name: "Friday", title: "Structuring High-Impact Bug Reports on HackerOne & Bugcrowd", lab: "https://portswigger.net/web-security/essential-skills" },
-        { name: "Saturday", title: "Communicating Critically with Enterprise Security Officers", lab: "https://portswigger.net/web-security/essential-skills" }
-      ],
-      bossLabTitle: "Enterprise VDP / Vulnerability Report Evaluation",
-      bossLabScenario: "Review and evaluate a complex multi-stage prototype pollution and SSRF chain report. Calculate CVSS vectors, write a crystal-clear step-by-step remediation guide, and submit the final security review.",
-      correctFlag: "FLAG{VDP_ENTERPRISE_REPORT_SUBMITTED}"
-    },
-    {
-      title: "Advanced Network & Port Recon",
-      competency: "Network & Port Recon",
-      days: [
-        { name: "Monday", title: "Port Scanning Optimization via Nmap Timing & Scans", lab: "https://portswigger.net/web-security/information-disclosure" },
-        { name: "Tuesday", title: "Bypassing Firewalls via Source Port & Decoys", lab: "https://portswigger.net/web-security/information-disclosure" },
-        { name: "Wednesday", title: "Fingerprinting SSL/TLS Cryptographic Cipher Suites", lab: "https://portswigger.net/web-security/information-disclosure" },
-        { name: "Thursday", title: "Banner Grabbing on Encrypted Protocols (SSH, HTTPS)", lab: "https://portswigger.net/web-security/information-disclosure" },
-        { name: "Friday", title: "Analyzing ICMP Responses & UDP Port Responses", lab: "https://portswigger.net/web-security/information-disclosure" },
-        { name: "Saturday", title: "Network Route Profiling & Traceroute Discovery", lab: "https://portswigger.net/web-security/information-disclosure" }
-      ],
-      bossLabTitle: "Network Level Firewall Avoidance & Service Scan",
-      bossLabScenario: "Design and execute an optimal firewall-evading port scan. Find hidden network services behind strict filtering layers, analyze certificates for target alignment, and verify service integrity.",
-      correctFlag: "FLAG{FIREWALL_EVADED_NMAP_SUCCESS}"
-    },
-    {
-      title: "Cloud Infrastructure Security & Auditing",
-      competency: "Cloud Infrastructure Auditing",
-      days: [
-        { name: "Monday", title: "Identifying Public S3 Bucket Policies & File Leakage", lab: "https://portswigger.net/web-security/essential-skills" },
-        { name: "Tuesday", title: "SSRF Exploitation via AWS Instance Metadata v1 (IMDSv1)", lab: "https://portswigger.net/web-security/ssrf" },
-        { name: "Wednesday", title: "Bypassing IMDSv2 Token Requirements via Open Redirects", lab: "https://portswigger.net/web-security/ssrf" },
-        { name: "Thursday", title: "Misconfigured Azure Blob Container Data Mining", lab: "https://portswigger.net/web-security/essential-skills" },
-        { name: "Friday", title: "Auditing GCP Cloud Function Security & Identity Tokens", lab: "https://portswigger.net/web-security/essential-skills" },
-        { name: "Saturday", title: "DNS Hijacking on Unregistered S3 Bucket Bucketeer Subdomains", lab: "https://portswigger.net/web-security/essential-skills" }
-      ],
-      bossLabTitle: "Cloud SSRF IMDSv2 Multi-Stage Exfiltration Lab",
-      bossLabScenario: "Exploit an SSRF vulnerability on an enterprise web host. Leverage a local Open Redirect bypass to obtain a cloud service token from instance metadata, and use that token to download privileged database configuration files.",
-      correctFlag: "FLAG{CLOUD_SSRF_IMDSV2_TOKEN_EXFIL}"
-    },
-    {
-      title: "Advanced Chain Vulnerabilities",
-      competency: "Advanced Chain Vulnerabilities",
-      days: [
-        { name: "Monday", title: "Chaining CSRF with Self-XSS for Account Takeover", lab: "https://portswigger.net/web-security/csrf" },
-        { name: "Tuesday", title: "Exploiting File Uploads via Path Traversal filename attacks", lab: "https://portswigger.net/web-security/file-upload" },
-        { name: "Wednesday", title: "SQL Injection Chained to Local File Inclusion (LFI)", lab: "https://portswigger.net/web-security/sql-injection" },
-        { name: "Thursday", title: "SSRF to Internal Admin Panel Blind Exploitation", lab: "https://portswigger.net/web-security/ssrf" },
-        { name: "Friday", title: "Chaining Dynamic Template Injection with RCE Filters", lab: "https://portswigger.net/web-security/server-side-template-injection" },
-        { name: "Saturday", title: "XXE injection parsing SVG Uploads for System File Extraction", lab: "https://portswigger.net/web-security/xxe" }
-      ],
-      bossLabTitle: "The Grandmaster Multi-Chain Exploit (LFI to SSRF to RCE)",
-      bossLabScenario: "Execute the ultimate hack chain. Leverage a Path Traversal during file upload to place a custom PHP payload, trigger local execution, bypass external security via blind SSRF query parameters, and obtain systemic root access.",
-      correctFlag: "FLAG{LFI_SSRF_RCE_GRANDMASTER_PWNED}"
-    }
-  ];
+  weekSchemas.forEach((schema, weekIdx) => {
+    const dailyTitles = weekDailyTitles[weekIdx] || weekDailyTitles[0];
+    const days: DayLesson[] = dailyTitles.map((dayTitle, dayIdx) => {
+      const dayName = dayNames[dayIdx];
+      const lessonDetails = get8PartLessonContent(weekIdx, dayIdx, dayTitle, schema, dayName);
 
-  for (let w = 0; w < 12; w++) {
-    const topicInfo = topics[w];
-    const days: DayLesson[] = [];
-
-    for (let d = 0; d < 6; d++) {
-      const dayName = topicInfo.days[d].name;
-      const dayTitle = topicInfo.days[d].title;
-      const labLink = topicInfo.days[d].lab;
-      const dayId = `week-${w + 1}-${dayName.toLowerCase()}`;
-
-      const details = get8PartLessonContent(w, d, dayTitle, topicInfo.competency, dayName);
-
-      days.push({
-        id: dayId,
-        weekIndex: w,
+      return {
+        id: `week-${weekIdx + 1}-${dayName.toLowerCase()}`,
+        weekIndex: weekIdx,
         dayName,
         title: dayTitle,
-        durationMinutes: 150,
-        unlocked: w === 0 && d === 0,
+        durationMinutes: 150, // 30 + 90 + 30
+        unlocked: weekIdx === 0 && dayIdx === 0, // Unlock Week 1 Day 1 by default
         completed: false,
-        competency: topicInfo.competency,
-        framework: details.framework,
-        theory: details.theory,
-        digitalArena: details.digitalArena,
-        automation: details.automation
-      });
-    }
+        competency: schema.competency,
+        burpToolingUsed: schema.burpTooling,
+        portSwiggerLabLink: schema.portSwiggerLabLink,
+        githubPushAsset: lessonDetails.githubPushAsset,
+        linkedInMilestoneTemplate: lessonDetails.linkedInMilestoneTemplate,
+        framework: lessonDetails.framework,
+        theory: lessonDetails.theory,
+        digitalArena: lessonDetails.digitalArena,
+        automation: lessonDetails.automation
+      };
+    });
 
-    const bossLabId = `week-${w + 1}-boss`;
     const bossLab: BossLab = {
-      id: bossLabId,
-      weekIndex: w,
-      title: topicInfo.bossLabTitle,
-      scenario: topicInfo.bossLabScenario,
-      targetEnvironmentDescription: `Target System: https://enterprise-gateway-${w + 1}.secure-mesh.corp:8443\nNetwork Architecture: Multi-tenant container orchestration cluster with microservice API endpoints, front-end cache node, and decoupled configuration services.`,
-      instructions: `1. Review the system architecture and historical logs provided.\n2. Implement a complete chain attack: find the core client configuration vulnerability, override the payload parameters, execute the target payload to trigger internal reflection, and grab the flag.\n3. Input the captured Boss flag in the prompt below to verify server compromise.\n4. Complete and submit the high-impact VDP report including Description, Impact, and enterprise-grade Remediation.`,
-      correctFlag: topicInfo.correctFlag,
+      id: `week-${weekIdx + 1}-boss`,
+      weekIndex: weekIdx,
+      title: schema.bossLabTitle,
+      scenario: `Enterprise Red Team Capstone: Demonstrate comprehensive exploitation in ${schema.weekTitle}.`,
+      targetEnvironmentDescription: `Target System: https://lab-week${weekIdx + 1}.bugbountymastery.internal`,
+      instructions: `Identify vulnerable parameter handling under ${schema.competency}, trigger payload execution, exfiltrate flag, and submit a high-impact VDP report.`,
+      correctFlag: `FLAG{BOSS_LAB_WEEK_${weekIdx + 1}_ENTERPRISE_CLEARED}`,
       flagSubmitted: "",
       flagVerified: false,
       completed: false,
       vdpReport: {
-        title: `CRITICAL Vulnerability Report - ${topicInfo.bossLabTitle}`,
-        severity: "Critical",
-        description: "",
-        remediation: "",
+        title: `Enterprise Vulnerability Audit Report - Week ${weekIdx + 1}`,
+        severity: weekIdx >= 8 ? "Critical" : "High",
+        description: `During the Week ${weekIdx + 1} Boss Lab challenge, critical flaws were discovered under ${schema.competency}.`,
+        remediation: "Implement strict input validation, server-side authorization, and secure coding controls.",
         submitted: false
       }
     };
 
     weeks.push({
-      weekNumber: w + 1,
-      title: topicInfo.title,
-      unlocked: w === 0,
+      weekNumber: weekIdx + 1,
+      title: schema.weekTitle,
+      unlocked: weekIdx === 0, // Week 1 unlocked by default
       completed: false,
       days,
       bossLab
     });
-  }
+  });
 
   return weeks;
 };

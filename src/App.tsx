@@ -15,7 +15,6 @@ import { AuthModal, AuthUser } from "./components/AuthModal";
 import { BookLessonModal } from "./components/BookLessonModal";
 import { YouTubeLessonModal } from "./components/YouTubeLessonModal";
 import { IntroVideoGallery } from "./components/IntroVideoGallery";
-import { ScreenRecorder } from "./components/ScreenRecorder";
 import { BookLesson, CreatorLesson } from "./types/curriculum";
 import {
   ShieldAlert, BookOpen, Cpu, FileText, ChevronRight, Sparkles, Terminal, Info, ShieldCheck, LogIn, LogOut, Lightbulb, Bot, BookMarked, PlayCircle, Target, Search, Filter, Rocket, ExternalLink, Award, CheckCircle2
@@ -285,6 +284,33 @@ function App() {
                         ✓ Completed
                       </span>
                     )}
+                  </div>
+                </div>
+
+                {/* Master Integration Hooks Banner: Burp Tooling, PortSwigger, GitHub Asset, LinkedIn */}
+                <div className="bg-hacker-dark/90 border border-hacker-border p-3.5 rounded-lg grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-mono">
+                  <div className="flex items-center gap-2 text-hacker-muted">
+                    <Terminal size={14} className="text-hacker-amber shrink-0" />
+                    <span><strong className="text-white">Burp Tooling:</strong> {currentDay.burpToolingUsed}</span>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-2 bg-hacker-card border border-hacker-border px-3 py-1.5 rounded">
+                    <span className="text-gray-300 truncate"><strong className="text-white">PortSwigger Lab:</strong> Hands-On Academy</span>
+                    <a
+                      href={currentDay.portSwiggerLabLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-hacker-amber hover:text-white font-bold flex items-center gap-1 shrink-0 bg-hacker-amber/10 px-2 py-0.5 rounded border border-hacker-amber/20 hover:bg-hacker-amber/20 transition-all"
+                    >
+                      Open Lab <ExternalLink size={12} />
+                    </a>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-2 bg-hacker-card border border-hacker-border px-3 py-1.5 rounded">
+                    <span className="text-gray-300 truncate"><strong className="text-white">GitHub Asset:</strong> {currentDay.githubPushAsset?.name}</span>
+                    <span className="text-[10px] bg-white/10 text-white px-2 py-0.5 rounded font-bold shrink-0">
+                      {currentDay.githubPushAsset?.type}
+                    </span>
                   </div>
                 </div>
 
@@ -952,10 +978,7 @@ function App() {
                           ))}
                         </div>
                       </div>
-
-                      {/* In-App Screen Recorder & AI Voiceover Suite */}
-                      <ScreenRecorder lessonTitle={currentDay.title} />
-
+                      
                       {/* Social ledger sharing & GitHub pushes triggers */}
                       <SocialIntegrator
                         lessonTitle={currentDay.title}
