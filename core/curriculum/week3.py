@@ -170,7 +170,7 @@ WEEK_3_DATA = {
     },
 
     "automation_scripts": {
-        "python_script": """# Python JWT Alg-None Forgery Script (exploit_week3.py)
+        "python_script": r"""# Python JWT Alg-None Forgery Script (exploit_week3.py)
 import base64
 import json
 import requests

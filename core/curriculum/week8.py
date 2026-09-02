@@ -169,7 +169,7 @@ WEEK_8_DATA = {
     },
 
     "automation_scripts": {
-        "python_script": """# Python SSRF Metadata Extractor (exploit_week8.py)
+        "python_script": r"""# Python SSRF Metadata Extractor (exploit_week8.py)
 import requests
 import urllib.parse
 import sys

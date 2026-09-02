@@ -169,7 +169,7 @@ WEEK_2_DATA = {
     },
 
     "automation_scripts": {
-        "python_script": """# Python Subdomain CNAME Takeover Scanner (exploit_week2.py)
+        "python_script": r"""# Python Subdomain CNAME Takeover Scanner (exploit_week2.py)
 import socket
 import requests
 import sys

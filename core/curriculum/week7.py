@@ -169,7 +169,7 @@ WEEK_7_DATA = {
     },
 
     "automation_scripts": {
-        "python_script": """# Python Manual UNION SQLi Extractor (exploit_week7.py)
+        "python_script": r"""# Python Manual UNION SQLi Extractor (exploit_week7.py)
 import requests
 import urllib.parse
 import sys

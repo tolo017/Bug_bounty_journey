@@ -169,7 +169,7 @@ WEEK_11_DATA = {
     },
 
     "automation_scripts": {
-        "python_script": """# Python Concurrent Race Condition Tester (exploit_week11.py)
+        "python_script": r"""# Python Concurrent Race Condition Tester (exploit_week11.py)
 import concurrent.futures
 import requests
 import sys

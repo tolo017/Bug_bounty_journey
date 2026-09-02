@@ -170,7 +170,7 @@ WEEK_5_DATA = {
     },
 
     "automation_scripts": {
-        "python_script": """# Python XSS Reflected Parameter Scanner (exploit_week5.py)
+        "python_script": r"""# Python XSS Reflected Parameter Scanner (exploit_week5.py)
 import requests
 import urllib.parse
 import sys

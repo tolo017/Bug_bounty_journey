@@ -169,7 +169,7 @@ WEEK_6_DATA = {
     },
 
     "automation_scripts": {
-        "python_script": """# Python CSRF Exploit Generator & Tester (exploit_week6.py)
+        "python_script": r"""# Python CSRF Exploit Generator & Tester (exploit_week6.py)
 import requests
 import sys
 

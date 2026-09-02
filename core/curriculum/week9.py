@@ -168,7 +168,7 @@ WEEK_9_DATA = {
     },
 
     "automation_scripts": {
-        "python_script": """# Python XXE Payload Injector (exploit_week9.py)
+        "python_script": r"""# Python XXE Payload Injector (exploit_week9.py)
 import requests
 import sys
 

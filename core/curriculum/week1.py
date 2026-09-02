@@ -170,7 +170,7 @@ WEEK_1_DATA = {
     },
 
     "automation_scripts": {
-        "python_script": """# Python Asset & Secret Scanner (exploit_week1.py)
+        "python_script": r"""# Python Asset & Secret Scanner (exploit_week1.py)
 import requests
 import re
 import sys

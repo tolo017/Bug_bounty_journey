@@ -169,7 +169,7 @@ WEEK_10_DATA = {
     },
 
     "automation_scripts": {
-        "python_script": """# Python SSTI RCE Exploiter (exploit_week10.py)
+        "python_script": r"""# Python SSTI RCE Exploiter (exploit_week10.py)
 import requests
 import urllib.parse
 import sys

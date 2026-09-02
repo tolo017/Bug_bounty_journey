@@ -168,7 +168,7 @@ WEEK_12_DATA = {
     },
 
     "automation_scripts": {
-        "python_script": """# Python API Mass Assignment Exploiter (exploit_week12.py)
+        "python_script": r"""# Python API Mass Assignment Exploiter (exploit_week12.py)
 import requests
 import sys
 

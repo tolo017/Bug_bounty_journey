@@ -170,7 +170,7 @@ WEEK_4_DATA = {
     },
 
     "automation_scripts": {
-        "python_script": """# Python IDOR / BOLA Parameter Tamperer (exploit_week4.py)
+        "python_script": r"""# Python IDOR / BOLA Parameter Tamperer (exploit_week4.py)
 import requests
 import sys
 
