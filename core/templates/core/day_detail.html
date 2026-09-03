@@ -1,0 +1,387 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Week {{ week_number }} Day {{ day_number }}: {{ day_data.title }} - Bug Bounty Mastery{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- Header Banner & Day Workspace Navigation -->
+    <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+            <div>
+                <div class="flex items-center space-x-3 mb-2">
+                    <span class="px-3 py-1 rounded-md text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                        GLOBAL DAY {{ global_day_number }} / 60
+                    </span>
+                    <span class="px-3 py-1 rounded-md text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                        WEEK {{ week_number }} DAY {{ day_number }}
+                    </span>
+                </div>
+                <h1 class="text-3xl font-extrabold text-white">
+                    WEEK {{ week_number }}: {{ day_data.title }}
+                </h1>
+                <p class="text-slate-400 text-sm mt-1">
+                    {{ day_data.short_desc }}
+                </p>
+            </div>
+
+            <div class="flex items-center space-x-3">
+                <a href="{% url 'week_detail' week_number %}" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold transition">
+                    <i class="fas fa-arrow-left mr-1"></i> Week {{ week_number }} Overview
+                </a>
+            </div>
+        </div>
+
+        <!-- Sticky Navigation Anchor Bar -->
+        <div class="bg-slate-950 p-2 rounded-xl border border-slate-800 flex overflow-x-auto space-x-2 text-xs font-medium sticky top-16 z-40">
+            <a href="#section-1" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-amber-500/20 text-slate-300 hover:text-amber-400 transition whitespace-nowrap">1. Analogy</a>
+            <a href="#section-2" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-amber-500/20 text-slate-300 hover:text-amber-400 transition whitespace-nowrap">2. Overview</a>
+            <a href="#section-3" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-amber-500/20 text-slate-300 hover:text-amber-400 transition whitespace-nowrap">3. Objectives</a>
+            <a href="#section-4" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-amber-500/20 text-slate-300 hover:text-amber-400 transition whitespace-nowrap">4. Hunter's Perspective</a>
+            <a href="#section-5" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-amber-500/20 text-slate-300 hover:text-amber-400 transition whitespace-nowrap">5. Root Cause</a>
+            <a href="#section-6" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-amber-500/20 text-slate-300 hover:text-amber-400 transition whitespace-nowrap">6. Code Audit</a>
+            <a href="#section-7" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-amber-500/20 text-slate-300 hover:text-amber-400 transition whitespace-nowrap">7. Payloads</a>
+            <a href="#section-8" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-amber-500/20 text-slate-300 hover:text-amber-400 transition whitespace-nowrap">8. Burp Masterclass</a>
+            <a href="#section-9" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-amber-500/20 text-slate-300 hover:text-amber-400 transition whitespace-nowrap">9. Red vs Blue</a>
+            <a href="#section-10" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-amber-500/20 text-slate-300 hover:text-amber-400 transition whitespace-nowrap">10. Textbooks</a>
+            <a href="#section-11" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-amber-500/20 text-slate-300 hover:text-amber-400 transition whitespace-nowrap">11. YouTube Search</a>
+            <a href="#section-12" class="px-3 py-1.5 rounded-lg bg-emerald-500 text-slate-950 font-bold hover:bg-emerald-400 transition whitespace-nowrap">12. CTF Playground</a>
+            <a href="#section-13" class="px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-bold hover:bg-indigo-500 transition whitespace-nowrap">13. VDP Workstation</a>
+            <a href="#section-14" class="px-3 py-1.5 rounded-lg bg-purple-600 text-white font-bold hover:bg-purple-500 transition whitespace-nowrap">14. Portfolio Sync</a>
+        </div>
+    </div>
+
+    <!-- 14 DEEP FOUNDATION BLOCKS -->
+    <div class="space-y-8 text-slate-200">
+
+        <!-- 1. BEGINNER ANALOGY -->
+        <section id="section-1" class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+            <h2 class="text-xl font-bold text-amber-400 mb-3 flex items-center space-x-2">
+                <i class="fas fa-lightbulb"></i>
+                <span>1. BEGINNER ANALOGY (ELI5 Concept)</span>
+            </h2>
+            <div class="p-4 bg-slate-950 rounded-xl border border-amber-500/20 text-sm leading-relaxed text-slate-300">
+                {{ day_data.analogy|linebreaks }}
+            </div>
+        </section>
+
+        <!-- 2. LESSON OVERVIEW -->
+        <section id="section-2" class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+            <h2 class="text-xl font-bold text-cyan-400 mb-3 flex items-center space-x-2">
+                <i class="fas fa-book-open"></i>
+                <span>2. LESSON OVERVIEW</span>
+            </h2>
+            <div class="text-sm leading-relaxed text-slate-300 space-y-2">
+                {{ day_data.overview|linebreaks }}
+            </div>
+        </section>
+
+        <!-- 3. DAILY LEARNING OBJECTIVES -->
+        <section id="section-3" class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+            <h2 class="text-xl font-bold text-teal-400 mb-3 flex items-center space-x-2">
+                <i class="fas fa-bullseye"></i>
+                <span>3. DAILY LEARNING OBJECTIVES</span>
+            </h2>
+            <ul class="list-disc list-inside space-y-2 text-sm text-slate-300">
+                {% for obj in day_data.learning_objectives %}
+                    <li>{{ obj }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <!-- 4. THE HUNTER'S PERSPECTIVE -->
+        <section id="section-4" class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+            <h2 class="text-xl font-bold text-amber-400 mb-3 flex items-center space-x-2">
+                <i class="fas fa-crosshairs"></i>
+                <span>4. THE HUNTER's PERSPECTIVE</span>
+            </h2>
+            <div class="text-sm leading-relaxed text-slate-300">
+                {{ day_data.hunters_perspective|linebreaks }}
+            </div>
+        </section>
+
+        <!-- 5. THE ROOT CAUSE -->
+        <section id="section-5" class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+            <h2 class="text-xl font-bold text-rose-400 mb-3 flex items-center space-x-2">
+                <i class="fas fa-bug"></i>
+                <span>5. THE ROOT CAUSE</span>
+            </h2>
+            <div class="text-sm leading-relaxed text-slate-300">
+                {{ day_data.root_cause|linebreaks }}
+            </div>
+        </section>
+
+        <!-- 6. CODE AUDIT MANUAL -->
+        <section id="section-6" class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+            <h2 class="text-xl font-bold text-purple-400 mb-3 flex items-center space-x-2">
+                <i class="fas fa-code-branch"></i>
+                <span>6. CODE AUDIT MANUAL</span>
+            </h2>
+            <div class="p-4 bg-slate-950 rounded-xl border border-slate-800 font-mono text-xs text-purple-300 whitespace-pre-wrap leading-relaxed">
+{{ day_data.code_audit_manual }}
+            </div>
+        </section>
+
+        <!-- 7. PAYLOAD CRAFTING LOGIC -->
+        <section id="section-7" class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+            <h2 class="text-xl font-bold text-indigo-400 mb-3 flex items-center space-x-2">
+                <i class="fas fa-terminal"></i>
+                <span>7. PAYLOAD CRAFTING LOGIC & EXPLOIT MATRIX</span>
+            </h2>
+            <div class="text-sm leading-relaxed text-slate-300 mb-4">
+                {{ day_data.payload_logic.explanation|linebreaks }}
+            </div>
+            <div class="space-y-3">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Weaponized Payload Variants:</span>
+                {% for p in day_data.payload_logic.payloads %}
+                <div class="p-3 bg-slate-950 rounded-lg border border-slate-800 flex items-center justify-between font-mono text-xs text-emerald-400">
+                    <span>{{ p }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- 8. UNPUBLISHED BURP SUITE MASTERCLASS TECHS -->
+        <section id="section-8" class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+            <h2 class="text-xl font-bold text-orange-400 mb-3 flex items-center space-x-2">
+                <i class="fas fa-tools"></i>
+                <span>8. UNPUBLISHED BURP SUITE MASTERCLASS TECHS</span>
+            </h2>
+            <div class="text-sm leading-relaxed text-slate-300 space-y-2">
+                {{ day_data.burp_suite_masterclass|linebreaks }}
+            </div>
+        </section>
+
+        <!-- 9. DUAL-PERSPECTIVE EMULATION -->
+        <section id="section-9" class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-6">
+            <h2 class="text-xl font-bold text-white flex items-center space-x-2">
+                <i class="fas fa-shield-alt text-emerald-400"></i>
+                <span>9. DUAL-PERSPECTIVE EMULATION</span>
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- RED TEAM -->
+                <div class="bg-rose-950/20 border border-rose-500/30 p-5 rounded-xl">
+                    <h3 class="text-base font-bold text-rose-400 mb-2 flex items-center space-x-2">
+                        <i class="fas fa-skull"></i>
+                        <span>RED TEAM: Offensive Tactics & Exploitation</span>
+                    </h3>
+                    <div class="text-xs text-slate-300 leading-relaxed">
+                        {{ day_data.dual_perspective.red_team|linebreaks }}
+                    </div>
+                </div>
+
+                <!-- BLUE TEAM -->
+                <div class="bg-sky-950/20 border border-sky-500/30 p-5 rounded-xl">
+                    <h3 class="text-base font-bold text-sky-400 mb-2 flex items-center space-x-2">
+                        <i class="fas fa-user-shield"></i>
+                        <span>BLUE TEAM: Defensive Hardening & Log Auditing</span>
+                    </h3>
+                    <div class="text-xs text-slate-300 leading-relaxed">
+                        {{ day_data.dual_perspective.blue_team|linebreaks }}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10. TEXTBOOK CROSS-REFERENCE ENGINE -->
+        <section id="section-10" class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+            <h2 class="text-xl font-bold text-amber-400 mb-3 flex items-center space-x-2">
+                <i class="fas fa-book"></i>
+                <span>10. TEXTBOOK CROSS-REFERENCE ENGINE</span>
+            </h2>
+            <div class="space-y-4">
+                {% for book in day_data.textbook_cross_references %}
+                <div class="p-4 bg-slate-950 rounded-xl border border-slate-800">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
+                        <span class="font-bold text-sm text-emerald-300">{{ book.book_name }}</span>
+                        <span class="text-xs px-2 py-0.5 rounded bg-slate-800 text-slate-400 font-mono">{{ book.chapter_and_pages }}</span>
+                    </div>
+                    <div class="text-xs text-slate-300 leading-relaxed">
+                        <strong class="text-slate-400">Sub-Chapter:</strong> {{ book.sub_chapter }}<br>
+                        <strong class="text-slate-400">Author Workflow & Analysis:</strong> {{ book.analysis }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- 11. REPUTABLE OPEN WEB SEARCH CONNECTIONS & CASE STUDIES -->
+        <section id="section-11" class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-6">
+            <h2 class="text-xl font-bold text-red-400 flex items-center space-x-2">
+                <i class="fab fa-youtube"></i>
+                <span>11. REPUTABLE OPEN WEB SEARCH CONNECTIONS & WORKSTATION</span>
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {% for video in day_data.video_workstation %}
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-red-400 uppercase tracking-wider">{{ video.creator }}</span>
+                        </div>
+                        <h4 class="font-bold text-sm text-white mb-2">{{ video.title }}</h4>
+                        <a href="{{ video.youtube_url }}" target="_blank" class="inline-flex items-center space-x-2 text-xs text-red-400 hover:text-red-300 font-semibold mb-3">
+                            <i class="fab fa-youtube text-base"></i>
+                            <span>Watch Technical PoC Video</span>
+                        </a>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            {{ video.analysis_text }}
+                        </p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Disclosed Reports & Hunting Grounds -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-slate-800">
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Disclosed Case Studies:</h3>
+                    {% for case in day_data.case_studies.reports %}
+                    <div class="p-3 bg-slate-950 rounded-lg border border-slate-800 mb-2">
+                        <div class="flex items-center justify-between text-xs mb-1">
+                            <span class="font-bold text-emerald-400">{{ case.target }}</span>
+                            <span class="font-bold text-amber-400">{{ case.bounty }}</span>
+                        </div>
+                        <h4 class="text-xs font-bold text-white">{{ case.title }}</h4>
+                        <p class="text-[11px] text-slate-400 mt-1">{{ case.summary }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Live Hunting Grounds:</h3>
+                    {% for prog in day_data.case_studies.programs %}
+                    <div class="p-3 bg-slate-950 rounded-lg border border-slate-800 mb-2 flex items-center justify-between">
+                        <div>
+                            <span class="font-bold text-xs text-white">{{ prog.name }}</span>
+                            <span class="text-[10px] text-slate-400 block">{{ prog.platform }} &bull; Scope: {{ prog.scope }}</span>
+                        </div>
+                        {% if prog.beginner_friendly %}
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                            BEGINNER FRIENDLY
+                        </span>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <!-- 12. HANDS-ON PRACTICAL LABS & QUIZ PLUGIN -->
+        <section id="section-12" class="bg-slate-900 p-6 rounded-2xl border-2 border-emerald-500/40 space-y-6">
+            <h2 class="text-xl font-bold text-emerald-400 flex items-center space-x-2">
+                <i class="fas fa-terminal"></i>
+                <span>12. HANDS-ON PRACTICAL LABS & CODES</span>
+            </h2>
+
+            <!-- Interactive Target Playground Link -->
+            <div class="p-4 bg-slate-950 rounded-xl border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div>
+                    <span class="text-xs font-bold text-slate-400 uppercase">Live Target Endpoint Sandbox</span>
+                    <div class="text-sm font-mono text-emerald-400 mt-0.5">/lab-playground/week-{{ week_number }}/target/</div>
+                </div>
+                <a href="{% url 'lab_playground_target' week_number %}" target="_blank" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition shadow-md">
+                    <i class="fas fa-external-link-alt mr-1"></i> Open Interactive Lab Container
+                </a>
+            </div>
+
+            <!-- Quiz Verification Component -->
+            <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-4">
+                <h3 class="text-sm font-bold text-white uppercase tracking-wider">Day {{ day_number }} Code Review Testbed:</h3>
+                <p class="text-sm text-slate-200 font-semibold">{{ day_data.quiz.question }}</p>
+
+                <form method="post" action="{% url 'submit_quiz' week_number day_number %}" class="space-y-3">
+                    {% csrf_token %}
+                    {% for opt in day_data.quiz.options %}
+                    <label class="flex items-center space-x-3 p-3 bg-slate-900 rounded-lg border border-slate-800 hover:border-emerald-500/50 cursor-pointer transition">
+                        <input type="radio" name="quiz_answer" value="{{ opt }}" required class="text-emerald-500 focus:ring-emerald-500">
+                        <span class="text-xs text-slate-300">{{ opt }}</span>
+                    </label>
+                    {% endfor %}
+
+                    <button type="submit" class="mt-4 px-6 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition shadow-lg shadow-emerald-500/20">
+                        Submit Verification Answer & Pass Day {{ day_number }}
+                    </button>
+                </form>
+
+                {% if daily_progress.is_completed %}
+                <div class="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-emerald-300 text-xs font-semibold flex items-center space-x-2">
+                    <i class="fas fa-check-circle text-emerald-400"></i>
+                    <span>Verification Complete! Global Day {{ global_day_number }} is marked completed.</span>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Custom Automation Code Workbench -->
+            <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-4">
+                <h3 class="text-sm font-bold text-cyan-400 flex items-center space-x-2">
+                    <i class="fas fa-robot"></i>
+                    <span>Day {{ day_number }} Custom Python & Bash Automation Workbench</span>
+                </h3>
+                <span class="text-xs font-bold text-emerald-400 block mb-1">Python Exploit Tool (exploit_w{{ week_number }}d{{ day_number }}.py):</span>
+                <pre class="p-4 bg-slate-900 rounded-lg border border-slate-800 text-xs text-emerald-300 font-mono overflow-x-auto whitespace-pre leading-relaxed">{{ day_data.automation_scripts.python_script }}</pre>
+
+                <span class="text-xs font-bold text-cyan-400 block mb-1 mt-3">Bash Recon Tool (recon_w{{ week_number }}d{{ day_number }}.sh):</span>
+                <pre class="p-4 bg-slate-900 rounded-lg border border-slate-800 text-xs text-cyan-300 font-mono overflow-x-auto whitespace-pre leading-relaxed">{{ day_data.automation_scripts.bash_script }}</pre>
+            </div>
+        </section>
+
+        <!-- 13. PROFESSIONAL VDP REPORT WORKSTATION -->
+        <section id="section-13" class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
+            <h2 class="text-xl font-bold text-indigo-400 flex items-center space-x-2">
+                <i class="fas fa-file-contract"></i>
+                <span>13. PROFESSIONAL VDP REPORT WORKSTATION</span>
+            </h2>
+            <p class="text-xs text-slate-300">
+                Compose an original vulnerability report for Day {{ day_number }}. The automated validation engine checks formatting layout, reproduction notes, CVSS scores, and mitigation steps.
+            </p>
+
+            <form method="post" action="{% url 'submit_daily_report' week_number day_number %}" class="space-y-4">
+                {% csrf_token %}
+                <textarea name="report_text" rows="8" placeholder="Format:
+### Title: Day {{ day_number }} Security Finding
+### Severity: High (CVSS 7.5)
+### Vulnerability Description:
+...
+### Impact:
+...
+### Proof of Concept (PoC):
+...
+### Remediation:
+..." required class="w-full p-4 bg-slate-950 border border-slate-800 rounded-lg text-xs font-mono text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 leading-relaxed">{{ daily_progress.report_submitted }}</textarea>
+
+                <div class="flex items-center justify-between">
+                    <button type="submit" class="px-6 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition shadow-md shadow-indigo-600/20">
+                        Validate & Submit Report
+                    </button>
+                    {% if daily_progress.report_score > 0 %}
+                    <span class="text-xs font-bold text-indigo-400 px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded-lg">
+                        VDP Report Assessed Score: {{ daily_progress.report_score }}/100
+                    </span>
+                    {% endif %}
+                </div>
+            </form>
+        </section>
+
+        <!-- 14. DYNAMIC SYSTEM INTEGRATION (GITHUB & LINKEDIN) -->
+        <section id="section-14" class="bg-slate-900 p-6 rounded-2xl border border-purple-500/30 space-y-4">
+            <h2 class="text-xl font-bold text-purple-400 flex items-center space-x-2">
+                <i class="fab fa-github"></i>
+                <span>14. DYNAMIC SYSTEM INTEGRATION (GITHUB & LINKEDIN PORTFOLIO SYNC)</span>
+            </h2>
+            <p class="text-xs text-slate-300">
+                Automatically package your Day {{ day_number }} research logs and automation scripts for direct single-click sync to your GitHub portfolio repository and LinkedIn milestone post.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center gap-4">
+                <a href="{% url 'portfolio_export' %}" class="px-6 py-2.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition shadow-md flex items-center space-x-2">
+                    <i class="fab fa-github text-base"></i>
+                    <span>Open Portfolio Sync Workstation</span>
+                </a>
+            </div>
+        </section>
+
+    </div>
+</div>
+{% endblock %}
