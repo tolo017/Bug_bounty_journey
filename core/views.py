@@ -542,6 +542,52 @@ def youtube_search_api_view(request):
     return JsonResponse({'query': query, 'results': results})
 
 
+@login_required
+def lab_playground_daily_target_view(request, week_number, day_number):
+    try:
+        week_number = int(week_number)
+        day_number = int(day_number)
+    except ValueError:
+        return JsonResponse({'error': 'Invalid parameters'}, status=400)
+
+    lesson = get_week_data(week_number)
+    if not lesson or 'days' not in lesson or day_number not in lesson['days']:
+        return JsonResponse({'error': 'Target module not found'}, status=404)
+
+    day_data = lesson['days'][day_number]
+    flag = day_data['flag']
+
+    return HttpResponse(f"""
+    <html>
+    <head><title>Week {week_number} Day {day_number} Target Instance</title></head>
+    <body style="background:#0f172a; color:#f8fafc; font-family:monospace; padding:2rem;">
+        <h1 style="color:#38bdf8;">🎯 Live Target Instance - Week {week_number} Day {day_number}</h1>
+        <p style="color:#94a3b8;">Module: {day_data['title']}</p>
+        <div style="background:#020617; border:1px solid #334155; padding:1.5rem; border-radius:0.75rem; margin-top:1rem;">
+            <p style="color:#22c55e;">[SYSTEM STATUS: ONLINE]</p>
+            <p>Target Bundle Endpoint: /public/assets/js/main.app.bundle.js</p>
+            <script>
+                // LIVE TARGET APPLICATION ENVIRONMENT BUNDLE
+                window.appEnv = {{
+                    tier: "stage-dev",
+                    active_module: "W{week_number}D{day_number}",
+                    flag: "{flag}"
+                }};
+                window.userRole = "guest_anonymous";
+                function processAdminCheck() {{
+                    if (window.userRole === "root_sec_admin") {{
+                        return "{flag}";
+                    }}
+                    return "Access Denied: Role must be root_sec_admin";
+                }}
+            </script>
+            <p style="color:#e2e8f0; margin-top:1rem;">Inspect page source or DevTools console (<code style="color:#38bdf8;">F12</code>) to extract the active flag variable.</p>
+        </div>
+    </body>
+    </html>
+    """)
+
+
 # Target Playground Endpoints for Interactive CTF Simulations
 def lab_playground_target_view(request, week_number):
     try:

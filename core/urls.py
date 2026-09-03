@@ -24,4 +24,5 @@ urlpatterns = [
 
     # Interactive CTF Target Playground Endpoints
     path('lab-playground/week-<int:week_number>/target/', views.lab_playground_target_view, name='lab_playground_target'),
+    path('lab-playground/week-<int:week_number>/day-<int:day_number>/target/', views.lab_playground_daily_target_view, name='lab_playground_daily_target'),
 ]
