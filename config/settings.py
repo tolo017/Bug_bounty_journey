@@ -26,7 +26,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-ko*b&f4c_!hla#hqp8x*b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "True").lower() in ("true", "1", "t")
 
-ALLOWED_HOSTS = ['.vercel.app', 'now.sh', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['.vercel.app', 'now.sh', 'localhost', '127.0.0.1', '*']
 
 
 # Application definition
@@ -95,10 +95,11 @@ try:
     import dj_database_url
     db_config = dj_database_url.config(
         default=f"sqlite:///{SQLITE_DB_PATH}",
-        conn_max_age=600
+        conn_max_age=600,
+        ssl_require=False
     )
     DATABASES = {"default": db_config}
-except ImportError:
+except Exception:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
