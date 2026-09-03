@@ -12,6 +12,9 @@ urlpatterns = [
     path('paypal/process/', views.paypal_process_view, name='paypal_process'),
 
     path('week/<int:week_number>/', views.week_detail_view, name='week_detail'),
+    path('week/<int:week_number>/day/<int:day_number>/', views.day_detail_view, name='day_detail'),
+    path('week/<int:week_number>/day/<int:day_number>/submit-quiz/', views.submit_quiz_view, name='submit_quiz'),
+    path('week/<int:week_number>/day/<int:day_number>/submit-report/', views.submit_daily_report_view, name='submit_daily_report'),
     path('week/<int:week_number>/submit-flag/', views.submit_flag_view, name='submit_flag'),
     path('week/<int:week_number>/submit-report/', views.submit_report_view, name='submit_report'),
 

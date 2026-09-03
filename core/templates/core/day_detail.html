@@ -1,0 +1,214 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Week {{ week_number }} Day {{ day_number }}: {{ day_data.title }} - Bug Bounty Mastery{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- Header Banner -->
+    <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <div class="flex items-center space-x-3 mb-2">
+                <span class="px-3 py-1 rounded-md text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                    GLOBAL DAY {{ global_day_number }} / 60
+                </span>
+                <span class="px-3 py-1 rounded-md text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                    WEEK {{ week_number }} DAY {{ day_number }}
+                </span>
+            </div>
+            <h1 class="text-3xl font-extrabold text-white">
+                {{ day_data.title }}
+            </h1>
+            <p class="text-slate-400 text-sm mt-1">
+                {{ day_data.short_desc }}
+            </p>
+        </div>
+
+        <div class="flex items-center space-x-3">
+            <a href="{% url 'week_detail' week_number %}" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold transition">
+                <i class="fas fa-arrow-left mr-1"></i> Week {{ week_number }} Modules
+            </a>
+            <a href="#quiz-section" class="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-sm font-bold transition shadow-lg shadow-emerald-500/20">
+                <i class="fas fa-check-circle mr-1"></i> Pass Day Quiz
+            </a>
+        </div>
+    </div>
+
+    <!-- Daily Content Sections -->
+    <div class="space-y-8 text-slate-200">
+
+        <!-- SECTION 1: BEGINNER ANALOGY -->
+        <section class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+            <h2 class="text-xl font-bold text-amber-400 mb-3 flex items-center space-x-2">
+                <i class="fas fa-lightbulb"></i>
+                <span>1. BEGINNER ANALOGY (ELI5 Concept)</span>
+            </h2>
+            <div class="p-4 bg-slate-950 rounded-xl border border-amber-500/20 text-sm leading-relaxed text-slate-300">
+                {{ day_data.analogy|linebreaks }}
+            </div>
+        </section>
+
+        <!-- SECTION 2: TECHNICAL OVERVIEW & LEARNING OBJECTIVES -->
+        <section class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
+            <h2 class="text-xl font-bold text-cyan-400 flex items-center space-x-2">
+                <i class="fas fa-book-open"></i>
+                <span>2. TECHNICAL OVERVIEW & OBJECTIVES</span>
+            </h2>
+            <div class="text-sm leading-relaxed text-slate-300">
+                {{ day_data.overview|linebreaks }}
+            </div>
+            <div class="p-4 bg-slate-950 rounded-xl border border-slate-800">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-cyan-400 mb-2">Learning Objectives for Today:</h3>
+                <ul class="list-disc list-inside space-y-1.5 text-xs text-slate-300">
+                    {% for obj in day_data.learning_objectives %}
+                        <li>{{ obj }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+
+        <!-- SECTION 3: CODE AUDIT MANUAL & PAYLOAD CRAFTING -->
+        <section class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
+            <h2 class="text-xl font-bold text-purple-400 flex items-center space-x-2">
+                <i class="fas fa-code"></i>
+                <span>3. CODE AUDIT MANUAL & PAYLOAD CRAFTING</span>
+            </h2>
+            <div class="p-4 bg-slate-950 rounded-xl border border-slate-800 font-mono text-xs text-purple-300 whitespace-pre-wrap leading-relaxed">
+{{ day_data.code_audit_manual }}
+            </div>
+
+            <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2">Weaponized Payload Matrix:</span>
+                <div class="space-y-2">
+                    {% for p in day_data.payload_logic.payloads %}
+                    <div class="p-3 bg-slate-950 rounded-lg border border-slate-800 font-mono text-xs text-emerald-400">
+                        {{ p }}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: UNPUBLISHED BURP SUITE MASTERCLASS -->
+        <section class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+            <h2 class="text-xl font-bold text-orange-400 mb-3 flex items-center space-x-2">
+                <i class="fas fa-tools"></i>
+                <span>4. BURP SUITE MASTERCLASS WORKFLOW</span>
+            </h2>
+            <div class="text-sm leading-relaxed text-slate-300">
+                {{ day_data.burp_suite_masterclass|linebreaks }}
+            </div>
+        </section>
+
+        <!-- SECTION 5: DUAL-PERSPECTIVE EMULATION -->
+        <section class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
+            <h2 class="text-xl font-bold text-white flex items-center space-x-2">
+                <i class="fas fa-shield-alt text-emerald-400"></i>
+                <span>5. DUAL-PERSPECTIVE EMULATION</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-rose-950/20 border border-rose-500/30 p-4 rounded-xl">
+                    <h3 class="text-sm font-bold text-rose-400 mb-2"><i class="fas fa-skull mr-1"></i> RED TEAM</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">{{ day_data.dual_perspective.red_team }}</p>
+                </div>
+                <div class="bg-sky-950/20 border border-sky-500/30 p-4 rounded-xl">
+                    <h3 class="text-sm font-bold text-sky-400 mb-2"><i class="fas fa-user-shield mr-1"></i> BLUE TEAM</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">{{ day_data.dual_perspective.blue_team }}</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: EXACT TEXTBOOK COMPREHENSION MATRIX -->
+        <section class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
+            <h2 class="text-xl font-bold text-amber-400 flex items-center space-x-2">
+                <i class="fas fa-book"></i>
+                <span>6. EXACT TEXTBOOK COMPREHENSION MATRIX</span>
+            </h2>
+            <div class="space-y-3">
+                {% for book in day_data.textbook_cross_references %}
+                <div class="p-4 bg-slate-950 rounded-xl border border-slate-800">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
+                        <span class="font-bold text-sm text-emerald-300">{{ book.book_name }}</span>
+                        <span class="text-xs px-2 py-0.5 rounded bg-slate-800 text-slate-400 font-mono">{{ book.chapter_and_pages }}</span>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">{{ book.analysis }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- SECTION 7: LIVE CODE SANDBOX & UNGUIDED QUIZ PLUGIN -->
+        <section id="quiz-section" class="bg-slate-900 p-6 rounded-2xl border-2 border-emerald-500/40 space-y-6">
+            <h2 class="text-xl font-bold text-emerald-400 flex items-center space-x-2">
+                <i class="fas fa-gamepad"></i>
+                <span>7. UNGUIDED QUIZ PLUGIN & DAY COMPLETION</span>
+            </h2>
+
+            <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-4">
+                <h3 class="text-sm font-bold text-white uppercase tracking-wider">Day {{ day_number }} Verification Quiz:</h3>
+                <p class="text-sm text-slate-200 font-semibold">{{ day_data.quiz.question }}</p>
+
+                <form method="post" action="{% url 'submit_quiz' week_number day_number %}" class="space-y-3">
+                    {% csrf_token %}
+                    {% for opt in day_data.quiz.options %}
+                    <label class="flex items-center space-x-3 p-3 bg-slate-900 rounded-lg border border-slate-800 hover:border-emerald-500/50 cursor-pointer transition">
+                        <input type="radio" name="quiz_answer" value="{{ opt }}" required class="text-emerald-500 focus:ring-emerald-500">
+                        <span class="text-xs text-slate-300">{{ opt }}</span>
+                    </label>
+                    {% endfor %}
+
+                    <button type="submit" class="mt-4 px-6 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition shadow-lg shadow-emerald-500/20">
+                        Submit Answer & Progress Day {{ day_number }}
+                    </button>
+                </form>
+
+                {% if daily_progress.is_completed %}
+                <div class="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-emerald-300 text-xs font-semibold flex items-center space-x-2">
+                    <i class="fas fa-check-circle text-emerald-400"></i>
+                    <span>Day {{ day_number }} Passed! Global Day {{ global_day_number }} is marked completed.</span>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Custom Automation Code Area -->
+            <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-4">
+                <h3 class="text-sm font-bold text-cyan-400 flex items-center space-x-2">
+                    <i class="fas fa-robot"></i>
+                    <span>Day {{ day_number }} Custom Automation Scripts</span>
+                </h3>
+                <pre class="p-4 bg-slate-900 rounded-lg border border-slate-800 text-xs text-emerald-300 font-mono overflow-x-auto whitespace-pre leading-relaxed">{{ day_data.automation_scripts.python_script }}</pre>
+            </div>
+        </section>
+
+        <!-- SECTION 8: PROFESSIONAL VDP REPORT WRITING -->
+        <section class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
+            <h2 class="text-xl font-bold text-indigo-400 flex items-center space-x-2">
+                <i class="fas fa-file-contract"></i>
+                <span>8. DAY {{ day_number }} VDP REPORT WRITING PORTAL</span>
+            </h2>
+            <form method="post" action="{% url 'submit_daily_report' week_number day_number %}" class="space-y-4">
+                {% csrf_token %}
+                <textarea name="report_text" rows="6" placeholder="Format:
+### Title: Day {{ day_number }} Finding
+### Severity: High
+### Description: ...
+### Impact: ...
+### Proof of Concept: ...
+### Remediation: ..." required class="w-full p-4 bg-slate-950 border border-slate-800 rounded-lg text-xs font-mono text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 leading-relaxed">{{ daily_progress.report_submitted }}</textarea>
+
+                <div class="flex items-center justify-between">
+                    <button type="submit" class="px-6 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition shadow-md shadow-indigo-600/20">
+                        Evaluate & Save Daily Report
+                    </button>
+                    {% if daily_progress.report_score > 0 %}
+                    <span class="text-xs font-bold text-indigo-400 px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded-lg">
+                        Daily Report Score: {{ daily_progress.report_score }}/100
+                    </span>
+                    {% endif %}
+                </div>
+            </form>
+        </section>
+
+    </div>
+</div>
+{% endblock %}

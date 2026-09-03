@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
 from django.utils import timezone
-from .models import UserProfile, UserWeekProgress, Badge
+from .models import UserProfile, UserWeekProgress, UserDailyProgress, Badge
 from .curriculum.registry import get_week_data, get_all_weeks_summary, WEEKS_DATA
 from .paypal_config import get_paypal_context
 
@@ -108,12 +108,160 @@ def week_detail_view(request, week_number):
         messages.error(request, f"Week {week_number} is locked! Complete Week {week_number - 1} CTF flag to unlock.")
         return redirect('dashboard')
 
+    # Get 5-day daily progress objects for this week
+    days_data = lesson.get('days', {})
+    daily_progress_list = []
+    for d_num in range(1, 6):
+        global_d = (week_number - 1) * 5 + d_num
+        d_prog, _ = UserDailyProgress.objects.get_or_create(
+            user=request.user,
+            global_day_number=global_d,
+            defaults={'week_number': week_number, 'day_number': d_num, 'is_unlocked': (global_d == 1)}
+        )
+        day_info = days_data.get(d_num, {})
+        daily_progress_list.append({
+            'day_number': d_num,
+            'global_day_number': global_d,
+            'title': day_info.get('title', f'Day {d_num} Module'),
+            'short_desc': day_info.get('short_desc', ''),
+            'is_unlocked': d_prog.is_unlocked or request.user.is_superuser,
+            'is_completed': d_prog.is_completed,
+            'quiz_score': d_prog.quiz_score,
+            'report_score': d_prog.report_score,
+        })
+
     context = {
         'week_number': week_number,
         'lesson': lesson,
         'progress': progress,
+        'daily_progress_list': daily_progress_list,
     }
     return render(request, 'core/week_detail.html', context)
+
+
+@login_required
+def day_detail_view(request, week_number, day_number):
+    try:
+        week_number = int(week_number)
+        day_number = int(day_number)
+    except ValueError:
+        return redirect('dashboard')
+
+    lesson = get_week_data(week_number)
+    if not lesson or 'days' not in lesson or day_number not in lesson['days']:
+        messages.error(request, f"Week {week_number} Day {day_number} content not found.")
+        return redirect('week_detail', week_number=week_number)
+
+    day_data = lesson['days'][day_number]
+    global_day = (week_number - 1) * 5 + day_number
+
+    d_prog, _ = UserDailyProgress.objects.get_or_create(
+        user=request.user,
+        global_day_number=global_day,
+        defaults={'week_number': week_number, 'day_number': day_number, 'is_unlocked': (global_day == 1)}
+    )
+
+    if not d_prog.is_unlocked and not request.user.is_superuser:
+        messages.error(request, f"Day {day_number} is locked! Complete Global Day {global_day - 1} first.")
+        return redirect('week_detail', week_number=week_number)
+
+    context = {
+        'week_number': week_number,
+        'day_number': day_number,
+        'global_day_number': global_day,
+        'day_data': day_data,
+        'daily_progress': d_prog,
+    }
+    return render(request, 'core/day_detail.html', context)
+
+
+@login_required
+def submit_quiz_view(request, week_number, day_number):
+    if request.method != 'POST':
+        return redirect('day_detail', week_number=week_number, day_number=day_number)
+
+    submitted_answer = request.POST.get('quiz_answer', '').strip()
+    lesson = get_week_data(week_number)
+
+    if not lesson or 'days' not in lesson or day_number not in lesson['days']:
+        return redirect('dashboard')
+
+    day_data = lesson['days'][day_number]
+    correct_answer = day_data.get('quiz', {}).get('correct_answer', '').strip()
+    global_day = (week_number - 1) * 5 + day_number
+
+    d_prog, _ = UserDailyProgress.objects.get_or_create(
+        user=request.user,
+        global_day_number=global_day,
+        defaults={'week_number': week_number, 'day_number': day_number}
+    )
+
+    if submitted_answer.lower() == correct_answer.lower():
+        d_prog.is_completed = True
+        d_prog.quiz_score = 100
+        d_prog.completed_at = timezone.now()
+        d_prog.save()
+
+        # Update streak counter engine
+        profile = request.user.profile
+        profile.record_day_completion()
+
+        # Unlock next day if available
+        next_global_day = global_day + 1
+        if next_global_day <= 60:
+            next_w = (next_global_day - 1) // 5 + 1
+            next_d = (next_global_day - 1) % 5 + 1
+            next_d_prog, _ = UserDailyProgress.objects.get_or_create(
+                user=request.user,
+                global_day_number=next_global_day,
+                defaults={'week_number': next_w, 'day_number': next_d}
+            )
+            next_d_prog.is_unlocked = True
+            next_d_prog.save()
+
+            # If unlocking new week, update UserWeekProgress
+            if next_w > week_number:
+                next_w_prog, _ = UserWeekProgress.objects.get_or_create(user=request.user, week_number=next_w)
+                next_w_prog.is_unlocked = True
+                next_w_prog.save()
+
+        messages.success(request, f"🎉 Correct Answer! Day {day_number} completed. Running Streak: {profile.current_streak} Days 🔥")
+    else:
+        messages.error(request, "❌ Incorrect quiz answer. Review the day's curriculum and try again.")
+
+    return redirect('day_detail', week_number=week_number, day_number=day_number)
+
+
+@login_required
+def submit_daily_report_view(request, week_number, day_number):
+    if request.method != 'POST':
+        return redirect('day_detail', week_number=week_number, day_number=day_number)
+
+    report_text = request.POST.get('report_text', '').strip()
+    global_day = (week_number - 1) * 5 + day_number
+
+    d_prog, _ = UserDailyProgress.objects.get_or_create(
+        user=request.user,
+        global_day_number=global_day,
+        defaults={'week_number': week_number, 'day_number': day_number}
+    )
+    d_prog.report_submitted = report_text
+
+    # Programmatic Assessment Engine
+    score = 0
+    checks = ['title:', 'severity:', 'description:', 'impact:', 'proof of concept', 'remediation:']
+    report_lower = report_text.lower()
+    for c in checks:
+        if c in report_lower:
+            score += 15
+    if len(report_text.split()) > 50:
+        score += 10
+
+    d_prog.report_score = min(100, score)
+    d_prog.save()
+
+    messages.success(request, f"Daily Security Report Assessed! Impact Score: {d_prog.report_score}/100")
+    return redirect('day_detail', week_number=week_number, day_number=day_number)
 
 
 @login_required

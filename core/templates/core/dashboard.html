@@ -26,12 +26,29 @@
     </div>
 
     <!-- Gamification Metrics Dashboard Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- Metric 1: Job Readiness Metric -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Metric 1: Running Streak Engine -->
+        <div class="bg-slate-900 p-6 rounded-2xl border border-amber-500/30 flex flex-col justify-between relative overflow-hidden">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-amber-400">Streak Engine</span>
+                    <div class="text-3xl font-extrabold text-amber-400 mt-2 flex items-center space-x-1">
+                        <span>{{ profile.current_streak }} Days</span>
+                        <span class="text-xl">🔥</span>
+                    </div>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xl">
+                    <i class="fas fa-fire"></i>
+                </div>
+            </div>
+            <p class="text-[11px] text-slate-400 mt-4">Longest streak: {{ profile.longest_streak }} Days. Completed: {{ profile.total_completed_days }}/60 Days</p>
+        </div>
+
+        <!-- Metric 2: Job Readiness Metric -->
         <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 flex flex-col justify-between relative overflow-hidden">
             <div class="flex items-center justify-between">
                 <div>
-                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Job Readiness Metric</span>
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Job Readiness</span>
                     <div class="text-3xl font-extrabold text-emerald-400 mt-2">{{ job_readiness }}%</div>
                 </div>
                 <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl">
@@ -39,44 +56,40 @@
                 </div>
             </div>
             <!-- Progress Bar -->
-            <div class="w-full bg-slate-950 rounded-full h-3 mt-4 overflow-hidden border border-slate-800">
-                <div class="bg-gradient-to-r from-emerald-500 to-teal-400 h-3 rounded-full transition-all duration-500" style="width: {{ job_readiness }}%;"></div>
+            <div class="w-full bg-slate-950 rounded-full h-2 mt-4 overflow-hidden border border-slate-800">
+                <div class="bg-gradient-to-r from-emerald-500 to-teal-400 h-2 rounded-full transition-all duration-500" style="width: {{ job_readiness }}%;"></div>
             </div>
-            <p class="text-[11px] text-slate-500 mt-2">Calculated from verified CTF flags and graded security reports.</p>
         </div>
 
-        <!-- Metric 2: Total Acquired Skills -->
+        <!-- Metric 3: Total Acquired Skills -->
         <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 flex flex-col justify-between">
             <div class="flex items-center justify-between">
                 <div>
-                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Total Acquired Skills</span>
-                    <div class="text-3xl font-extrabold text-cyan-400 mt-2">{{ total_skills }} Competencies</div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Skills Acquired</span>
+                    <div class="text-3xl font-extrabold text-cyan-400 mt-2">{{ total_skills }}</div>
                 </div>
                 <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-xl">
                     <i class="fas fa-brain"></i>
                 </div>
             </div>
-            <p class="text-xs text-slate-400 mt-4">
-                Mastery spanning Recon, Auth, IDOR, XSS, CSRF, SQLi, SSRF, XXE, SSTI, Race Conditions, and API Hacking.
-            </p>
+            <p class="text-xs text-slate-400 mt-4">Mastery across 60 daily vulnerability lessons.</p>
         </div>
 
-        <!-- Metric 3: Earned Badges -->
+        <!-- Metric 4: Earned Badges -->
         <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 flex flex-col justify-between">
             <div class="flex items-center justify-between">
                 <div>
                     <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Unlocked Badges</span>
-                    <div class="text-3xl font-extrabold text-amber-400 mt-2">{{ badges.count }} Badges</div>
+                    <div class="text-3xl font-extrabold text-purple-400 mt-2">{{ badges.count }}</div>
                 </div>
-                <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xl">
+                <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 text-xl">
                     <i class="fas fa-award"></i>
                 </div>
             </div>
-            <div class="flex flex-wrap gap-2 mt-3">
+            <div class="flex flex-wrap gap-1 mt-3">
                 {% for badge in badges %}
-                    <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-800 text-amber-300 border border-amber-500/20 flex items-center space-x-1" title="{{ badge.description }}">
-                        <i class="fas fa-certificate text-[10px]"></i>
-                        <span>{{ badge.title }}</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-purple-300 border border-purple-500/20" title="{{ badge.description }}">
+                        {{ badge.title }}
                     </span>
                 {% endfor %}
             </div>

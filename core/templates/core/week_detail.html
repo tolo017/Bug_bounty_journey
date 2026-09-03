@@ -28,9 +28,60 @@
             <a href="{% url 'dashboard' %}" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold transition">
                 <i class="fas fa-arrow-left mr-1"></i> Dashboard
             </a>
-            <a href="#playground-section" class="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-sm font-bold transition shadow-lg shadow-emerald-500/20">
-                <i class="fas fa-flag mr-1"></i> Jump to Lab & Flag
+            <a href="#daily-tracker" class="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-sm font-bold transition shadow-lg shadow-amber-500/20">
+                <i class="fas fa-calendar-day mr-1"></i> 5-Day Curriculum Track
             </a>
+        </div>
+    </div>
+
+    <!-- 5-DAY DAILY MICRO-CURRICULUM LOOP GRID -->
+    <div id="daily-tracker" class="bg-slate-900 p-6 rounded-2xl border border-amber-500/30 space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div>
+                <h2 class="text-xl font-bold text-amber-400 flex items-center space-x-2">
+                    <i class="fas fa-fire text-amber-400"></i>
+                    <span>WEEK {{ week_number }} 5-DAY MICRO-CURRICULUM LOOP</span>
+                </h2>
+                <p class="text-xs text-slate-400 mt-1">
+                    Complete each consecutive day's micro-lesson, quiz, and report to advance your global 60-day streak engine.
+                </p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            {% for day in daily_progress_list %}
+            <div class="p-4 rounded-xl border flex flex-col justify-between transition-all duration-200 {% if day.is_unlocked %}bg-slate-950/80 border-amber-500/40 hover:border-amber-400{% else %}bg-slate-950/40 border-slate-800 opacity-60{% endif %}">
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-[10px] font-extrabold px-2 py-0.5 rounded {% if day.is_unlocked %}bg-amber-500/20 text-amber-300 border border-amber-500/30{% else %}bg-slate-800 text-slate-500{% endif %}">
+                            DAY {{ day.day_number }} (GLOBAL {{ day.global_day_number }})
+                        </span>
+                        {% if day.is_completed %}
+                            <span class="text-[10px] text-emerald-400 font-bold"><i class="fas fa-check-circle"></i> Passed</span>
+                        {% elif day.is_unlocked %}
+                            <span class="text-[10px] text-amber-400 font-bold"><i class="fas fa-unlock"></i> Ready</span>
+                        {% else %}
+                            <span class="text-[10px] text-slate-500 font-bold"><i class="fas fa-lock"></i> Locked</span>
+                        {% endif %}
+                    </div>
+                    <h3 class="font-bold text-xs text-white leading-snug mb-1 line-clamp-2">{{ day.title }}</h3>
+                    <p class="text-[11px] text-slate-400 line-clamp-2">{{ day.short_desc }}</p>
+                </div>
+
+                <div class="mt-4">
+                    {% if day.is_unlocked %}
+                        <a href="{% url 'day_detail' week_number day.day_number %}" class="w-full py-1.5 px-3 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition flex items-center justify-center space-x-1">
+                            <span>Study Day {{ day.day_number }}</span>
+                            <i class="fas fa-arrow-right text-[10px]"></i>
+                        </a>
+                    {% else %}
+                        <button disabled class="w-full py-1.5 px-3 rounded-lg bg-slate-800 text-slate-500 font-bold text-xs cursor-not-allowed">
+                            <i class="fas fa-lock mr-1 text-[10px]"></i> Locked
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
         </div>
     </div>
 
