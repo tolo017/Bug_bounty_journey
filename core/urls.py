@@ -20,6 +20,8 @@ urlpatterns = [
 
     path('portfolio-export/', views.portfolio_export_view, name='portfolio_export'),
 
+    path('api/youtube-search/', views.youtube_search_api_view, name='youtube_search_api'),
+
     # Interactive CTF Target Playground Endpoints
     path('lab-playground/week-<int:week_number>/target/', views.lab_playground_target_view, name='lab_playground_target'),
 ]
