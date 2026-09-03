@@ -1,0 +1,615 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Week {{ week_number }} Day {{ day_number }}: {{ day_data.title }} - Bug Bounty Mastery{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- Header Banner & Day Workspace Navigation -->
+    <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+            <div>
+                <div class="flex items-center space-x-3 mb-2">
+                    <span class="px-3 py-1 rounded-md text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                        GLOBAL DAY {{ global_day_number }} / 60
+                    </span>
+                    <span class="px-3 py-1 rounded-md text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                        WEEK {{ week_number }} DAY {{ day_number }}
+                    </span>
+                </div>
+                <h1 class="text-3xl font-extrabold text-white">
+                    WEEK {{ week_number }}: {{ day_data.title }}
+                </h1>
+                <p class="text-slate-400 text-sm mt-1">
+                    {{ day_data.short_desc }}
+                </p>
+            </div>
+
+            <div class="flex items-center space-x-3">
+                <a href="{% url 'week_detail' week_number %}" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold transition">
+                    <i class="fas fa-arrow-left mr-1"></i> Week {{ week_number }} Overview
+                </a>
+            </div>
+        </div>
+
+        <!-- Sticky Navigation Anchor Bar -->
+        <div class="bg-slate-950 p-2 rounded-xl border border-slate-800 flex overflow-x-auto space-x-2 text-xs font-medium sticky top-16 z-40">
+            <a href="#section-1" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-amber-500/20 text-slate-300 hover:text-amber-400 transition whitespace-nowrap">1. Analogy</a>
+            <a href="#section-2" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-amber-500/20 text-slate-300 hover:text-amber-400 transition whitespace-nowrap">2. Overview</a>
+            <a href="#section-3" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-amber-500/20 text-slate-300 hover:text-amber-400 transition whitespace-nowrap">3. Objectives</a>
+            <a href="#section-4" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-amber-500/20 text-slate-300 hover:text-amber-400 transition whitespace-nowrap">4. Hunter's Perspective</a>
+            <a href="#section-5" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-amber-500/20 text-slate-300 hover:text-amber-400 transition whitespace-nowrap">5. Root Cause</a>
+            <a href="#section-6" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-amber-500/20 text-slate-300 hover:text-amber-400 transition whitespace-nowrap">6. Code Audit</a>
+            <a href="#section-7" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-amber-500/20 text-slate-300 hover:text-amber-400 transition whitespace-nowrap">7. Payloads</a>
+            <a href="#section-8" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-amber-500/20 text-slate-300 hover:text-amber-400 transition whitespace-nowrap">8. Burp Masterclass</a>
+            <a href="#section-9" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-amber-500/20 text-slate-300 hover:text-amber-400 transition whitespace-nowrap">9. Red vs Blue</a>
+            <a href="#section-10" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-amber-500/20 text-slate-300 hover:text-amber-400 transition whitespace-nowrap">10. Textbooks</a>
+            <a href="#section-11" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-amber-500/20 text-slate-300 hover:text-amber-400 transition whitespace-nowrap">11. YouTube Search</a>
+            <a href="#section-12" class="px-3 py-1.5 rounded-lg bg-emerald-500 text-slate-950 font-bold hover:bg-emerald-400 transition whitespace-nowrap">12. CTF Playground</a>
+            <a href="#section-13" class="px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-bold hover:bg-indigo-500 transition whitespace-nowrap">13. Automation Suite</a>
+            <a href="#section-14" class="px-3 py-1.5 rounded-lg bg-purple-600 text-white font-bold hover:bg-purple-500 transition whitespace-nowrap">14. VDP & Portfolio Sync</a>
+        </div>
+    </div>
+
+    <!-- 14 DEEP FOUNDATION BLOCKS -->
+    <div class="space-y-8 text-slate-200">
+
+        <!-- 1. BEGINNER ANALOGY -->
+        <section id="section-1" class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+            <h2 class="text-xl font-bold text-amber-400 mb-3 flex items-center space-x-2">
+                <i class="fas fa-lightbulb"></i>
+                <span>1. BEGINNER ANALOGY (ELI5 Concept)</span>
+            </h2>
+            <div class="p-4 bg-slate-950 rounded-xl border border-amber-500/20 text-sm leading-relaxed text-slate-300">
+                {{ day_data.analogy|linebreaks }}
+            </div>
+        </section>
+
+        <!-- 2. LESSON OVERVIEW -->
+        <section id="section-2" class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+            <h2 class="text-xl font-bold text-cyan-400 mb-3 flex items-center space-x-2">
+                <i class="fas fa-book-open"></i>
+                <span>2. LESSON OVERVIEW</span>
+            </h2>
+            <div class="text-sm leading-relaxed text-slate-300 space-y-2">
+                {{ day_data.overview|linebreaks }}
+            </div>
+        </section>
+
+        <!-- 3. DAILY LEARNING OBJECTIVES -->
+        <section id="section-3" class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+            <h2 class="text-xl font-bold text-teal-400 mb-3 flex items-center space-x-2">
+                <i class="fas fa-bullseye"></i>
+                <span>3. DAILY LEARNING OBJECTIVES</span>
+            </h2>
+            <ul class="list-disc list-inside space-y-2 text-sm text-slate-300">
+                {% for obj in day_data.learning_objectives %}
+                    <li>{{ obj }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <!-- 4. THE HUNTER'S PERSPECTIVE -->
+        <section id="section-4" class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+            <h2 class="text-xl font-bold text-amber-400 mb-3 flex items-center space-x-2">
+                <i class="fas fa-crosshairs"></i>
+                <span>4. THE HUNTER'S PERSPECTIVE</span>
+            </h2>
+            <div class="text-sm leading-relaxed text-slate-300">
+                {{ day_data.hunters_perspective|linebreaks }}
+            </div>
+        </section>
+
+        <!-- 5. THE ROOT CAUSE -->
+        <section id="section-5" class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+            <h2 class="text-xl font-bold text-rose-400 mb-3 flex items-center space-x-2">
+                <i class="fas fa-bug"></i>
+                <span>5. THE ROOT CAUSE</span>
+            </h2>
+            <div class="text-sm leading-relaxed text-slate-300">
+                {{ day_data.root_cause|linebreaks }}
+            </div>
+        </section>
+
+        <!-- 6. CODE AUDIT MANUAL & EXPLORATION WORKSPACE (BLUEPRINT 1) -->
+        <section id="section-6" class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
+            <h2 class="text-xl font-bold text-purple-400 flex items-center space-x-2">
+                <i class="fas fa-code-branch"></i>
+                <span>🔍 6. Step-by-Step Code Audit Manual</span>
+            </h2>
+            <p class="text-sm text-slate-400">
+                Let's learn how to spot a security code leak like you're 12 years old! Think of code as a shared school notebook. If a student leaves their private lock combination written right in the margins of a public page, anyone who borrows the notebook can copy it. In software engineering, this is called 'Hardcoding Secrets'. Let's audit the raw code to trace exactly how this security failure looks in practice:
+            </p>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-4">
+                <div>
+                    <span class="text-xs font-bold text-rose-400 block mb-1">❌ THE VULNERABLE COMPONENT ENGINE</span>
+                    <pre class="bg-black p-3 rounded-lg text-xs font-mono text-rose-300 overflow-x-auto whitespace-pre-wrap leading-relaxed">{{ day_data.code_audit_manual }}</pre>
+                </div>
+
+                <div>
+                    <span class="text-xs font-bold text-emerald-400 block mb-1">🛠️ THE INDEPENDENT AUDITING PRACTICE SESSION</span>
+                    <p class="text-xs text-slate-400 mb-2"><strong>Instructions:</strong> Review the raw source block above. Identify the exact configuration array parameter that leaks system access data, and paste the leaking string sequence into the box to pass the manual audit check:</p>
+
+                    <div class="flex flex-col sm:flex-row items-center gap-2">
+                        <input type="text" id="audit-practice-input" placeholder="Paste leaking secret parameter or value string here..." class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs font-mono text-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                        <button onclick="validateAuditPractice()" class="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2.5 rounded-lg text-xs font-bold border border-slate-700 whitespace-nowrap">
+                            Submit Audit Choice
+                        </button>
+                    </div>
+                    <div id="audit-feedback" class="mt-2 text-xs hidden font-bold"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. PAYLOAD CRAFTING LOGIC & CONSTRUCTION MATRIX (BLUEPRINT 2) -->
+        <section id="section-7" class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
+            <h2 class="text-xl font-bold text-indigo-400 flex items-center space-x-2">
+                <i class="fas fa-terminal"></i>
+                <span>🛠️ 7. Payload Crafting Logic & Construction Matrix</span>
+            </h2>
+            <p class="text-sm text-slate-400">To construct your own exploits without relying on generic online copy-paste payload lists, you must systematically trace how your input characters are handled inside the server response profile. Follow this structural framework:</p>
+
+            <ul class="list-decimal list-inside text-xs text-slate-300 space-y-2 bg-slate-950 p-4 rounded-xl border border-slate-800">
+                <li><strong>Isolate Injection Context:</strong> Inspect the HTML/JS source code to see where your input string is reflected (e.g., inside an input value attribute, a raw text container, or a script variable array block).</li>
+                <li><strong>Test Breaking Characters:</strong> Inject control markers such as <code class="text-amber-400 bg-slate-900 px-1 py-0.5 rounded">"</code>, <code class="text-amber-400 bg-slate-900 px-1 py-0.5 rounded">'</code>, <code class="text-amber-400 bg-slate-900 px-1 py-0.5 rounded">;</code>, or <code class="text-amber-400 bg-slate-900 px-1 py-0.5 rounded">&lt;</code> to see if the application syntax breaks, causing a parsing exception or unexpected layout displacement.</li>
+                <li><strong>Analyze Sanitization Quirks:</strong> Verify if specific tokens are dropped, replaced, or stripped by the server firewall. If basic tags are removed, adjust your payload structure by switching to alternative event handlers or encoding strategies.</li>
+            </ul>
+
+            <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl space-y-3">
+                <span class="block text-xs font-black uppercase text-amber-500">🎯 Exploit Construction Practice Session</span>
+                <p class="text-xs text-slate-400"><strong>Challenge Scenario:</strong> The target input is reflected directly inside an unquoted JavaScript variable allocation: <code class="text-emerald-400 bg-slate-900 px-1 py-0.5 rounded">let profileName = 'USER_INPUT';</code>. Craft a payload that terminates the variable string, appends an arbitrary alert execution script, and comments out the trailing single quote cleanly:</p>
+                <div class="flex flex-col sm:flex-row items-center gap-2">
+                    <input type="text" id="payload-craft-input" placeholder="Craft your exact payload here..." class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs font-mono text-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                    <button onclick="validatePayloadCraft()" class="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2.5 rounded-lg text-xs font-bold border border-slate-700 whitespace-nowrap">
+                        Verify Payload Logic
+                    </button>
+                </div>
+                <div id="payload-feedback" class="text-xs hidden font-bold"></div>
+
+                <div class="pt-3 border-t border-slate-800">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2">Weaponized Payload Matrix:</span>
+                    <div class="space-y-2">
+                        {% for p in day_data.payload_logic.payloads %}
+                        <div class="p-3 bg-slate-900 rounded-lg border border-slate-800 font-mono text-xs text-emerald-400">
+                            {{ p }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. UNPUBLISHED BURP SUITE MASTERCLASS TECHS -->
+        <section id="section-8" class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+            <h2 class="text-xl font-bold text-orange-400 mb-3 flex items-center space-x-2">
+                <i class="fas fa-tools"></i>
+                <span>8. UNPUBLISHED BURP SUITE MASTERCLASS TECHS</span>
+            </h2>
+            <div class="text-sm leading-relaxed text-slate-300 space-y-2">
+                {{ day_data.burp_suite_masterclass|linebreaks }}
+            </div>
+        </section>
+
+        <!-- 9. DUAL-PERSPECTIVE EMULATION -->
+        <section id="section-9" class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-6">
+            <h2 class="text-xl font-bold text-white flex items-center space-x-2">
+                <i class="fas fa-shield-alt text-emerald-400"></i>
+                <span>9. DUAL-PERSPECTIVE EMULATION</span>
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- RED TEAM -->
+                <div class="bg-rose-950/20 border border-rose-500/30 p-5 rounded-xl">
+                    <h3 class="text-base font-bold text-rose-400 mb-2 flex items-center space-x-2">
+                        <i class="fas fa-skull"></i>
+                        <span>RED TEAM: Offensive Tactics & Exploitation</span>
+                    </h3>
+                    <div class="text-xs text-slate-300 leading-relaxed">
+                        {{ day_data.dual_perspective.red_team|linebreaks }}
+                    </div>
+                </div>
+
+                <!-- BLUE TEAM -->
+                <div class="bg-sky-950/20 border border-sky-500/30 p-5 rounded-xl">
+                    <h3 class="text-base font-bold text-sky-400 mb-2 flex items-center space-x-2">
+                        <i class="fas fa-user-shield"></i>
+                        <span>BLUE TEAM: Defensive Hardening & Log Auditing</span>
+                    </h3>
+                    <div class="text-xs text-slate-300 leading-relaxed">
+                        {{ day_data.dual_perspective.blue_team|linebreaks }}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10. TEXTBOOK CROSS-REFERENCE ENGINE -->
+        <section id="section-10" class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+            <h2 class="text-xl font-bold text-amber-400 mb-3 flex items-center space-x-2">
+                <i class="fas fa-book"></i>
+                <span>10. TEXTBOOK CROSS-REFERENCE ENGINE (ALL 7 CORE BOOKS)</span>
+            </h2>
+            <div class="space-y-4">
+                {% for book in day_data.textbook_cross_references %}
+                <div class="p-4 bg-slate-950 rounded-xl border border-slate-800">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
+                        <span class="font-bold text-sm text-emerald-300">{{ book.book_name }}</span>
+                        <span class="text-xs px-2 py-0.5 rounded bg-slate-800 text-slate-400 font-mono">{{ book.chapter_and_pages }}</span>
+                    </div>
+                    <div class="text-xs text-slate-300 leading-relaxed">
+                        <strong class="text-slate-400">Sub-Chapter:</strong> {{ book.sub_chapter }}<br>
+                        <strong class="text-slate-400">Author Workflow & Analysis:</strong> {{ book.analysis }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- 11. DYNAMIC MULTIMEDIA SEARCH MATRIX & GLOBAL DIRECTORY (BLUEPRINTS 3 & 4) -->
+        <section id="section-11" class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-6">
+            <div>
+                <h2 class="text-xl font-bold text-red-400 mb-2 flex items-center space-x-2">
+                    <i class="fab fa-youtube"></i>
+                    <span>🌐 11. Creator Video Workstation (Live YouTube Search Terminal)</span>
+                </h2>
+                <p class="text-xs text-slate-400 mb-4 leading-relaxed">Click these dynamic, topic-specific workspace links to query the live global YouTube ecosystem directly. This ensures you constantly discover the freshest, highest-rated technical walkthroughs, proof-of-concept demos, and expert analyses for today's exact focus areas:</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <a href="https://www.youtube.com/results?search_query={{ day_data.title|urlencode }}+bug+bounty" target="_blank" class="flex items-center justify-between bg-slate-950 border border-slate-800 p-3.5 rounded-xl hover:border-slate-600 transition text-sm font-bold text-slate-200">
+                        <span>🎬 Track A: {{ day_data.title }} Research & PoC Mappings</span>
+                        <span class="text-xs bg-rose-500/10 text-rose-400 border border-rose-500/20 px-2 py-1 rounded font-mono">Launch Search ↗️</span>
+                    </a>
+                    <a href="https://www.youtube.com/results?search_query={{ day_data.title|urlencode }}+exploitation+tutorial" target="_blank" class="flex items-center justify-between bg-slate-950 border border-slate-800 p-3.5 rounded-xl hover:border-slate-600 transition text-sm font-bold text-slate-200">
+                        <span>🎬 Track B: Real-World Payload Construction & Bypasses</span>
+                        <span class="text-xs bg-rose-500/10 text-rose-400 border border-rose-500/20 px-2 py-1 rounded font-mono">Launch Search ↗️</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Disclosed Case Studies & Global Directory (Blueprint 4) -->
+            <div class="pt-4 border-t border-slate-800 space-y-4">
+                <h3 class="text-base font-bold text-cyan-400 flex items-center space-x-2">
+                    <i class="fas fa-globe"></i>
+                    <span>📖 12. Real-World Case Studies & Public Hunting Grounds</span>
+                </h3>
+
+                <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl space-y-3">
+                    <span class="block text-xs font-black uppercase text-cyan-400 tracking-wider">🎯 Verified Disclosed Disclosures</span>
+                    {% for case in day_data.case_studies.reports %}
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        <strong>Case Study Profile ({{ case.target }} - {{ case.bounty }}):</strong> {{ case.summary }}
+                        <a href="https://hackerone.com/hacktivity" target="_blank" class="text-cyan-400 underline font-bold block mt-1 hover:text-cyan-300">🔗 Disclosed Reference Case: {{ case.title }} ↗️</a>
+                    </p>
+                    {% endfor %}
+                </div>
+
+                <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider">📍 Absolute Complete Global Hunting Directory</h4>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-2.5 text-xs font-bold">
+                    <div class="p-3 bg-slate-950 border border-slate-800 rounded-lg flex items-center justify-between">
+                        <span class="text-slate-200">HackerOne</span>
+                        <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">🟢 Beginner Friendly</span>
+                    </div>
+                    <div class="p-3 bg-slate-950 border border-slate-800 rounded-lg flex items-center justify-between">
+                        <span class="text-slate-200">Bugcrowd</span>
+                        <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">🟢 Beginner Friendly</span>
+                    </div>
+                    <div class="p-3 bg-slate-950 border border-slate-800 rounded-lg flex items-center justify-between">
+                        <span class="text-slate-200">OpenBugBounty</span>
+                        <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">🟢 Beginner Friendly</span>
+                    </div>
+                    <div class="p-3 bg-slate-950 border border-slate-800 rounded-lg flex items-center justify-between">
+                        <span class="text-slate-200">Intigriti</span>
+                        <span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-300 border border-slate-700">⚪ Intermediate</span>
+                    </div>
+                    <div class="p-3 bg-slate-950 border border-slate-800 rounded-lg flex items-center justify-between">
+                        <span class="text-slate-200">YesWeHack</span>
+                        <span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-300 border border-slate-700">⚪ Intermediate</span>
+                    </div>
+                    <div class="p-3 bg-slate-950 border border-slate-800 rounded-lg flex items-center justify-between">
+                        <span class="text-slate-200">Immunefi</span>
+                        <span class="px-2 py-0.5 rounded text-[10px] bg-rose-500/20 text-rose-400 border border-rose-500/30">💥 Expert Tier</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 12. INJECTION 1 & 2: RESTRUCTURED IN-APP INTERACTIVE PLAYGROUND ARENA -->
+        <section id="section-12" class="bg-slate-900 p-6 rounded-2xl border-2 border-emerald-500/40 space-y-6">
+            <h2 class="text-xl font-bold text-emerald-400 flex items-center space-x-2">
+                <i class="fas fa-gamepad"></i>
+                <span>🎮 12. In-App Self-Contained Interactive Playground Sandbox</span>
+            </h2>
+            <p class="text-xs text-slate-400 mb-4">Welcome to your live operational testing lab. Complete the guided blueprint walkthrough, crack the unguided terminal challenge, and pass the knowledge verification quiz to unlock your progression state.</p>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 space-y-6 shadow-inner">
+
+                <!-- TIER A: STEP-BY-STEP DETAILED GUIDED CTF WITH CODE VIEW (INJECTION 1) -->
+                <div class="border-b border-slate-800/60 pb-5">
+                    <span class="inline-block bg-cyan-500/10 text-cyan-400 text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 rounded mb-2">🕹️ MODULE A: GUIDED WALKTHROUGH WITH FILE COMPONENT</span>
+                    <div class="text-xs text-slate-300 space-y-2 leading-relaxed mb-3">
+                        <p><strong>Target File Workspace:</strong> Open and inspect the exposed core script architecture running live on the target workspace below:</p>
+
+                        <!-- LIVE EXPOSED FILE WORKSPACE COMPONENT VIEW -->
+                        <div class="bg-black border border-slate-800 rounded-xl p-3 font-mono text-[11px] text-slate-400 max-h-40 overflow-y-auto">
+                            <span class="text-slate-600 block border-b border-slate-900 pb-1 mb-1">📁 Repository Path: /public/assets/js/main.app.bundle.js</span>
+                            <div>(function() {</div>
+                            <div class="text-slate-500 pl-4">// TODO: Deprecate internal tracking metrics container before staging release</div>
+                            <div class="pl-4 text-cyan-400">window.appEnv = { tier: "stage-dev", flag: "{{ day_data.flag }}" };</div>
+                            <div>})();</div>
+                        </div>
+
+                        <p class="mt-2"><strong>Step-by-Step Guide:</strong> Locate line 4 of the exposed <code>main.app.bundle.js</code> static source file asset above. Extract the exposed value assigned to the <code>flag</code> variable parameter array string and paste it into the field below to verify completion.</p>
+                    </div>
+                    <input type="text" id="guided-flag-verify" placeholder="Enter the discovered guided flag signature here..." class="bg-slate-900 border border-slate-800 p-2 text-xs rounded-lg w-full font-mono text-cyan-300 focus:outline-none focus:border-cyan-500">
+                    <button onclick="checkGuidedModule('{{ day_data.flag }}')" class="mt-2 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs px-3 py-1.5 rounded border border-slate-700 transition">Verify Guided Phase</button>
+                </div>
+
+                <!-- TIER B: LIVE HANDS-ON UNGUIDED CTF WITH ACTIVE TARGET PANEL (INJECTION 2) -->
+                <div class="border-b border-slate-800/60 pb-5">
+                    <span class="inline-block bg-amber-500/10 text-amber-400 text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 rounded mb-2">🕹️ MODULE B: UNGUIDED AUTONOMOUS HACKING SANDBOX</span>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-3"><strong>Live Isolated Application Target:</strong> The container below models the real live environment configuration for today's lesson. You must write an assignment payload string to manipulate the global window states and force the sandbox application to output your verification token:</p>
+
+                    <!-- LIVE TARGET ENVIRONMENT SIMULATION CONTAINER -->
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 font-mono text-[11px] space-y-1 text-slate-300 mb-3">
+                        <div class="text-slate-500">// Target Endpoint Context Terminal Buffer</div>
+                        <div>const activeSessionState = { authenticated: false, role: window.userRole || "guest" };</div>
+                        <div>function runSecurityAuditCheck() {</div>
+                        <div class="pl-4">if (window.userRole === "root_sec_admin") {</div>
+                        <div class="pl-8 text-emerald-400">return "{{ day_data.flag }}";</div>
+                        <div class="pl-4">} return "Status Denied: Clearances insufficient.";</div>
+                        <div>}</div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                        <input type="text" id="console-injection-input" placeholder="Console command payload (e.g., window.userRole = 'root_sec_admin')" class="md:col-span-2 bg-slate-900 border border-slate-800 p-2 text-xs rounded-lg font-mono text-amber-400 focus:outline-none">
+                        <button onclick="runConsoleInjection('{{ day_data.flag }}')" class="bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded-lg text-xs font-bold px-3 py-2 transition">Inject into Sandbox</button>
+                    </div>
+                    <div id="console-terminal-out" class="hidden mt-2 bg-slate-900 border border-slate-800 p-2 rounded-lg font-mono text-[11px] text-slate-400"></div>
+
+                    <input type="text" id="unguided-flag-verify" placeholder="Enter the captured cryptographic flag here..." class="bg-slate-900 border border-slate-800 p-2 text-xs rounded-lg w-full font-mono text-amber-500 mt-3 focus:outline-none focus:border-amber-500">
+                    <button onclick="submitUnguidedFlag('{{ day_data.flag }}')" class="mt-2 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs px-4 py-2 rounded-lg transition shadow-md">Validate Day Exploitation</button>
+                </div>
+
+                <!-- TIER C: INDEPENDENT THEORY QUIZ CHECKPOINT -->
+                <div>
+                    <span class="inline-block bg-purple-500/10 text-purple-400 text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 rounded mb-2">🕹️ MODULE C: THEORETICAL RECONNAISSANCE CHECKPOINT</span>
+                    <form method="post" action="{% url 'submit_quiz' week_number day_number %}" class="space-y-3">
+                        {% csrf_token %}
+                        <div class="space-y-2 text-xs text-slate-300 bg-slate-900 p-4 rounded-xl border border-slate-800">
+                            <p class="font-semibold mb-1.5">{{ day_data.quiz.question }}</p>
+                            {% for opt in day_data.quiz.options %}
+                            <label class="block mt-1 cursor-pointer">
+                                <input type="radio" name="quiz_answer" value="{{ opt }}" required class="mr-2 text-emerald-500 focus:ring-emerald-500"> {{ opt }}
+                            </label>
+                            {% endfor %}
+                        </div>
+
+                        <button type="submit" class="mt-2 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs px-4 py-2 rounded-lg transition shadow-md">
+                            Submit Quiz Checkpoint
+                        </button>
+                    </form>
+
+                    {% if daily_progress.is_completed %}
+                    <div class="mt-3 p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-emerald-300 text-xs font-semibold flex items-center space-x-2">
+                        <i class="fas fa-check-circle text-emerald-400"></i>
+                        <span>Verification Complete! Global Day {{ global_day_number }} is marked completed.</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+        <!-- 13. INJECTION 3: COMPREHENSIVE PYTHON & BASH AUTOMATION DEVELOPMENT ENVIRONMENT -->
+        <section id="section-13" class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
+            <h2 class="text-xl font-bold text-cyan-400 flex items-center space-x-2">
+                <i class="fas fa-robot"></i>
+                <span>🤖 13. Automation Arena (Python & Bash Script Development Suite)</span>
+            </h2>
+            <p class="text-xs text-slate-400 mb-3 leading-relaxed"><strong>Script Writing Architecture:</strong> Learn to automate your processes step-by-step. To code a reconnaissance script, you must import request handler tools, structure standard connection hooks, parse the HTML body response lines using regular expressions, and output clean status records. Build and test your script inside the sandbox terminal below:</p>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 space-y-4">
+                <!-- PYTHON PIPELINE WORKSPACE -->
+                <div class="space-y-2">
+                    <span class="block text-xs font-bold text-cyan-400 font-mono">🐍 Track A: Python Exploitation Suite Testing Area</span>
+                    <textarea id="automation-terminal-editor" rows="4" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 font-mono text-xs text-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 leading-relaxed" placeholder="# Craft your automated Python reconnaissance script here...&#10;import requests&#10;&#10;target_url = 'http://localhost:8000/lab-playground/week-{{ week_number }}/target/'&#10;print('[*] Python engine initialized...')">{{ day_data.automation_scripts.python_script }}</textarea>
+                </div>
+
+                <!-- BASH PIPELINE WORKSPACE -->
+                <div class="space-y-2">
+                    <span class="block text-xs font-bold text-amber-500 font-mono">🐚 Track B: Bash Shell Scripting & Curl Testing Area</span>
+                    <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-800/80 text-xs text-slate-400 space-y-1 mb-2">
+                        <strong class="text-slate-300 font-bold block mb-1">🛠️ Bash Scripting Guide Checklist:</strong>
+                        <div>1. Begin your file with the explicit interpreter path directive: <code class="text-amber-400 font-mono">#!/bin/bash</code>.</div>
+                        <div>2. Use the network client tool <code class="text-amber-400 font-mono">curl -s "URL"</code> to query the target endpoint.</div>
+                        <div>3. Use string filtering commands like <code class="text-amber-400 font-mono">grep -o "FLAG"</code> to extract hidden attributes.</div>
+                    </div>
+                    <textarea id="bash-terminal-editor" rows="4" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 font-mono text-xs text-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-500 leading-relaxed" placeholder="#!/bin/bash&#10;# Craft your automated Bash shell script here...&#10;TARGET_URL='http://localhost:8000/lab-playground/week-{{ week_number }}/target/'&#10;echo '[*] Bash execution pipeline initialized...'"></textarea>
+                </div>
+
+                <button onclick="executeInAppTerminal()" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-xs px-4 py-2 rounded-lg transition flex items-center space-x-2">
+                    <i class="fas fa-terminal text-cyan-400"></i>
+                    <span>Execute Automation Scripts inside Virtual Terminal</span>
+                </button>
+
+                <!-- VIRTUAL EMULATED TERMINAL WINDOW (Marks complete if both match patterns) -->
+                <div id="virtual-linux-terminal" class="hidden bg-black border-2 border-slate-800 rounded-xl p-4 font-mono text-xs shadow-inner">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
+                        <span class="text-slate-500 font-bold text-[10px] tracking-wider uppercase">💻 Linux Virtual Environment Sandbox Terminal</span>
+                        <span id="terminal-badge" class="text-[9px] px-2 py-0.5 rounded font-bold"></span>
+                    </div>
+                    <div id="terminal-buffer" class="space-y-1"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 14. PROFESSIONAL VDP REPORT WORKSTATION & INJECTION 4: DAY-SPECIFIC AI PORTFOLIO SYNC -->
+        <section id="section-14" class="bg-slate-900 p-6 rounded-2xl border border-indigo-500/40 space-y-4">
+            <h2 class="text-xl font-bold text-indigo-400 flex items-center space-x-2">
+                <i class="fas fa-file-contract"></i>
+                <span>📝 14. Professional VDP Report Composition Portal</span>
+            </h2>
+            <p class="text-xs text-slate-300 leading-relaxed">
+                A Vulnerability Disclosure Program (VDP) defines the structured reporting pipeline for security teams. Submissions calculate system severity metrics by leveraging the Common Vulnerability Scoring System (CVSS v3.1/v4.0) vectors (mapping Attack Vector [AV], Complexity [AC], Privileges Required [PR], User Interaction [UI], Scope [S], Confidentiality [C], Integrity [I], and Availability [A]). Study the detailed professional template, and write your valid report below to unlock the portfolio synchronization module:
+            </p>
+
+            <div class="p-4 bg-slate-950 rounded-xl border border-slate-800 space-y-2">
+                <span class="text-xs font-extrabold uppercase text-indigo-400 block">### HIGH-DENSITY PROFESSIONAL VDP INCIDENT WRITE-UP TEMPLATE</span>
+                <p class="text-xs text-slate-300 font-mono leading-relaxed">
+                    DESCRIPTION: Information disclosure and structural target credential leakage isolated within frontend assets.<br>
+                    PROPER REPRODUCTION STEPS: 1. Run web browser proxy scope. 2. Fetch compile chunk bundles. 3. Parse strings matching internal variables.<br>
+                    TECHNICAL IMPACT: Full leakage of testing environments (CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N - Severity: 7.5 High).<br>
+                    REMEDIATION ADVICE: Extract raw production credential keys out of client compilation trees entirely.
+                </p>
+            </div>
+
+            <form method="post" action="{% url 'submit_daily_report' week_number day_number %}" class="space-y-4">
+                {% csrf_token %}
+                <textarea name="report_text" rows="8" placeholder="Format:
+### Title: Day {{ day_number }} Security Finding
+### Severity: High (CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N - 7.5)
+### Vulnerability Description:
+...
+### Impact:
+...
+### Proof of Concept (PoC):
+...
+### Remediation:
+..." required class="w-full p-4 bg-slate-950 border border-slate-800 rounded-lg text-xs font-mono text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 leading-relaxed">{{ daily_progress.report_submitted }}</textarea>
+
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <button type="submit" class="w-full sm:w-auto px-6 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition shadow-md shadow-indigo-600/20">
+                        Validate Report Structure & Trigger AI Portfolio Sync
+                    </button>
+                    {% if daily_progress.report_score > 0 %}
+                    <span class="text-xs font-bold text-indigo-400 px-3 py-1.5 bg-indigo-500/10 border border-indigo-500/20 rounded-lg">
+                        VDP Report Assessed Score: {{ daily_progress.report_score }}/100
+                    </span>
+                    {% endif %}
+                </div>
+            </form>
+
+            <!-- INJECTION 4: AI SUMMARY COMPILATION BUTTON ENGINE -->
+            <div class="pt-4 border-t border-slate-800 space-y-4">
+                <button onclick="triggerDaySpecificAiSync('Week {{ week_number }} Day {{ day_number }}: {{ day_data.title|escapejs }}')" class="px-5 py-2.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition shadow-md flex items-center space-x-2">
+                    <i class="fas fa-robot"></i>
+                    <span>🤖 Click to Generate Day-Specific AI Portfolio Summaries</span>
+                </button>
+
+                <div id="day-sync-output" class="hidden space-y-4 pt-2">
+                    <div>
+                        <span class="text-xs font-bold text-purple-300 block mb-1">📦 GitHub Repository Target Commit Summary Asset:</span>
+                        <textarea id="github-summary-box" rows="4" readonly class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 font-mono text-xs text-emerald-400 focus:outline-none leading-relaxed select-all"></textarea>
+                    </div>
+
+                    <div>
+                        <span class="text-xs font-bold text-blue-300 block mb-1">📣 Ready-To-Post LinkedIn Media Milestone Update:</span>
+                        <textarea id="linkedin-summary-box" rows="4" readonly class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 font-mono text-xs text-blue-300 focus:outline-none leading-relaxed select-all"></textarea>
+                    </div>
+
+                    <div class="pt-2">
+                        <a href="{% url 'portfolio_export' %}" class="inline-flex items-center space-x-2 px-5 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition shadow-md">
+                            <i class="fab fa-github text-sm"></i>
+                            <span>Push Commit to GitHub Repository</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+<script>
+function validateAuditPractice() {
+    const val = document.getElementById('audit-practice-input').value.trim();
+    const fb = document.getElementById('audit-feedback');
+    fb.classList.remove('hidden', 'text-rose-400', 'text-emerald-400');
+    if (val.length > 5) {
+        fb.classList.add('text-emerald-400');
+        fb.innerText = '✅ Audit Practice Passed! Leaking credential parameter successfully isolated.';
+    } else {
+        fb.classList.add('text-rose-400');
+        fb.innerText = '❌ Input too short. Locate and paste the secret string from the Python config code block.';
+    }
+}
+
+function validatePayloadCraft() {
+    const val = document.getElementById('payload-craft-input').value.trim();
+    const fb = document.getElementById('payload-feedback');
+    fb.classList.remove('hidden', 'text-rose-400', 'text-emerald-400');
+    if (val.includes("'") || val.includes("alert") || val.includes("//")) {
+        fb.classList.add('text-emerald-400');
+        fb.innerText = "✅ Valid Payload Logic! Breaking quote and execution comment sequence verified.";
+    } else {
+        fb.classList.add('text-rose-400');
+        fb.innerText = "❌ Incorrect payload. Include single quote termination and comment sequence e.g., ';alert(1);//";
+    }
+}
+
+function checkGuidedModule(correctFlag) {
+    const val = document.getElementById("guided-flag-verify").value.trim();
+    if (val === correctFlag) {
+        alert("🎉 Guided Phase Approved! Step 1 verification asset complete.");
+    } else {
+        alert("❌ Incorrect Guided flag parameter. Audit line 412 of the file asset template again.");
+    }
+}
+
+function runConsoleInjection(correctFlag) {
+    const input = document.getElementById("console-injection-input").value.trim();
+    const term = document.getElementById("console-terminal-out");
+    term.classList.remove("hidden");
+    const normalizedInput = input.replace(/\s+/g, '');
+    if (normalizedInput === "window.userRole='root_sec_admin'" || normalizedInput === 'window.userRole="root_sec_admin"') {
+        window.userRole = "root_sec_admin";
+        term.className = "mt-2 bg-slate-900 border border-emerald-500/30 p-2.5 rounded-lg font-mono text-[11px] text-emerald-400";
+        term.innerText = ">>> window.userRole updated successfully to 'root_sec_admin'\n>>> running processAdminCheck()...\n>>> Output: " + correctFlag;
+    } else {
+        term.className = "mt-2 bg-slate-900 border border-rose-500/30 p-2.5 rounded-lg font-mono text-[11px] text-rose-400";
+        term.innerText = ">>> Command Rejected: '" + input + "' syntax error or incorrect role definition.";
+    }
+}
+
+function submitUnguidedFlag(correctFlag) {
+    const val = document.getElementById("unguided-flag-verify").value.trim();
+    if (val === correctFlag) {
+        alert("🎉 Congratulations! Day Exploitation verified. Unguided CTF module passed.");
+    } else {
+        alert("❌ Incorrect flag footprint. Execute the console injection technique to uncover the secret string value.");
+    }
+}
+
+function executeInAppTerminal() {
+    const pyCode = document.getElementById("automation-terminal-editor").value;
+    const bashCode = document.getElementById("bash-terminal-editor").value;
+    const term = document.getElementById("virtual-linux-terminal");
+    const badge = document.getElementById("terminal-badge");
+    const buffer = document.getElementById("terminal-buffer");
+    term.classList.remove("hidden");
+    buffer.innerHTML = "";
+
+    const hasPython = pyCode.includes("import requests") && pyCode.includes("target_url");
+    const hasBash = bashCode.includes("#!/bin/bash") && (bashCode.includes("curl") || bashCode.includes("TARGET_URL"));
+
+    if (hasPython && hasBash) {
+        badge.className = "text-[9px] px-2 py-0.5 rounded font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+        badge.innerText = "SUCCESS: BASH & PYTHON RUNTIMES COMPLETED";
+        buffer.innerHTML = "root@master-playground:~# python3 tool.py && ./exploit.sh\n[*] Python engine executing asynchronous network requests...\n[*] Bash tracking pipeline spinning up curling processes...\n[+] All custom automation modules parsed successfully! AREA MARKED COMPLETE.";
+    } else {
+        badge.className = "text-[9px] px-2 py-0.5 rounded font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20";
+        badge.innerText = "FAILED: COMPILATION OR IMPORT DATA MISSING";
+        buffer.innerHTML = "root@master-playground:~# running diagnostics...\n[!] Error: Verify your script files. Ensure your Python window features 'import requests' and your Bash layout contains '#!/bin/bash' to pass verification steps.";
+    }
+}
+
+function triggerDaySpecificAiSync(activeDayTitle) {
+    const outputArea = document.getElementById("day-sync-output");
+    const ghBox = document.getElementById("github-summary-box");
+    const liBox = document.getElementById("linkedin-summary-box");
+
+    outputArea.classList.remove("hidden");
+    ghBox.value = `### Technical Portfolio Push: ${activeDayTitle}\n- Completed custom source code audit tracking vulnerabilities on the day's core asset.\n- Developed, configured, and tested independent multi-threaded Python and Bash network scanning tools.\n- Authored a comprehensive VDP incident disclosure report outlining precise reproduction metrics.`;
+    liBox.value = `🎯 Day Milestone Mastered: I've successfully completed all advanced red/blue team tracks for ${activeDayTitle}! Built custom exploit scripts in Python and Bash, and completed a professional security vulnerability report. Continuous progress on my 12-week hunting track! #Cybersecurity #GitHub #AppSec #BugBounty`;
+}
+</script>
+{% endblock %}
