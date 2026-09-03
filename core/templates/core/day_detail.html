@@ -171,8 +171,8 @@
                     <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2">Weaponized Payload Matrix:</span>
                     <div class="space-y-2">
                         {% for p in day_data.payload_logic.payloads %}
-                        <div class="p-3 bg-slate-900 rounded-lg border border-slate-800 font-mono text-xs text-emerald-400">
-                            {{ p }}
+                        <div class="p-3 bg-slate-900 rounded-lg border border-slate-800 flex items-center justify-between font-mono text-xs text-emerald-400">
+                            <span>{{ p }}</span>
                         </div>
                         {% endfor %}
                     </div>
@@ -313,60 +313,57 @@
             </div>
         </section>
 
-        <!-- 12. INJECTION 1 & 2: RESTRUCTURED IN-APP INTERACTIVE PLAYGROUND ARENA -->
+        <!-- 12. LIVE TARGET INFRASTRUCTURE FOR PLAYGROUND SANDBOX -->
         <section id="section-12" class="bg-slate-900 p-6 rounded-2xl border-2 border-emerald-500/40 space-y-6">
             <h2 class="text-xl font-bold text-emerald-400 flex items-center space-x-2">
                 <i class="fas fa-gamepad"></i>
                 <span>🎮 12. In-App Self-Contained Interactive Playground Sandbox</span>
             </h2>
-            <p class="text-xs text-slate-400 mb-4">Welcome to your live operational testing lab. Complete the guided blueprint walkthrough, crack the unguided terminal challenge, and pass the knowledge verification quiz to unlock your progression state.</p>
+            <p class="text-xs text-slate-400 mb-4">Welcome to your live operational testing lab. Launch the live deployment instance, crack the unguided terminal challenge, and pass the knowledge verification quiz to unlock your progression state.</p>
 
             <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 space-y-6 shadow-inner">
 
-                <!-- TIER A: STEP-BY-STEP DETAILED GUIDED CTF WITH CODE VIEW (INJECTION 1) -->
+                <!-- TIER A: STEP-BY-STEP DETAILED GUIDED CTF WITH LIVE EXTERNAL TARGET -->
                 <div class="border-b border-slate-800/60 pb-5">
-                    <span class="inline-block bg-cyan-500/10 text-cyan-400 text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 rounded mb-2">🕹️ MODULE A: GUIDED WALKTHROUGH WITH FILE COMPONENT</span>
+                    <span class="inline-block bg-cyan-500/10 text-cyan-400 text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 rounded mb-2">🕹️ MODULE A: DETAILED GUIDED CTF WORKSPACE</span>
                     <div class="text-xs text-slate-300 space-y-2 leading-relaxed mb-3">
-                        <p><strong>Target File Workspace:</strong> Open and inspect the exposed core script architecture running live on the target workspace below:</p>
+                        <p><strong>The Mission Target:</strong> We are analyzing a live frontend deployment instance to extract hidden API routes and environmental configuration tokens from public scripts.</p>
 
-                        <!-- LIVE EXPOSED FILE WORKSPACE COMPONENT VIEW -->
-                        <div class="bg-black border border-slate-800 rounded-xl p-3 font-mono text-[11px] text-slate-400 max-h-40 overflow-y-auto">
-                            <span class="text-slate-600 block border-b border-slate-900 pb-1 mb-1">📁 Repository Path: /public/assets/js/main.app.bundle.js</span>
-                            <div>(function() {</div>
-                            <div class="text-slate-500 pl-4">// TODO: Deprecate internal tracking metrics container before staging release</div>
-                            <div class="pl-4 text-cyan-400">window.appEnv = { tier: "stage-dev", flag: "{{ day_data.flag }}" };</div>
-                            <div>})();</div>
+                        <!-- REAL DEPLOYMENT TARGET INTERACTION BUTTON -->
+                        <div class="my-3 flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                            <a href="{% url 'lab_playground_target' week_number %}" target="_blank" class="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-black px-4 py-2.5 rounded-xl text-xs transition shadow-md tracking-wider">
+                                🎯 LAUNCH LIVE GUIDED TARGET INSTANCE ↗
+                            </a>
+                            <span class="block text-[10px] text-slate-400">Clicking opens the live target in a new window. Use your browser DevTools (<code class="text-cyan-400">F12</code>) to inspect it.</span>
                         </div>
 
-                        <p class="mt-2"><strong>Step-by-Step Guide:</strong> Locate line 4 of the exposed <code>main.app.bundle.js</code> static source file asset above. Extract the exposed value assigned to the <code>flag</code> variable parameter array string and paste it into the field below to verify completion.</p>
+                        <p class="mt-2"><strong>Step-by-Step Instructions:</strong>
+                            <br>1. Launch the target instance above.
+                            <br>2. Open your Network / Elements tab, reload the page, and open the source bundle assets.
+                            <br>3. Inspect the exposed developer initialization dictionary and configuration strings.
+                            <br>4. Extract the active string value assigned to the <code>flag</code> parameter and paste it below.
+                        </p>
                     </div>
-                    <input type="text" id="guided-flag-verify" placeholder="Enter the discovered guided flag signature here..." class="bg-slate-900 border border-slate-800 p-2 text-xs rounded-lg w-full font-mono text-cyan-300 focus:outline-none focus:border-cyan-500">
+                    <input type="text" id="guided-flag-verify" placeholder="Enter the captured live guided flag here..." class="bg-slate-900 border border-slate-800 p-2 text-xs rounded-lg w-full font-mono text-cyan-300 focus:outline-none focus:border-cyan-500">
                     <button onclick="checkGuidedModule('{{ day_data.flag }}')" class="mt-2 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs px-3 py-1.5 rounded border border-slate-700 transition">Verify Guided Phase</button>
                 </div>
 
-                <!-- TIER B: LIVE HANDS-ON UNGUIDED CTF WITH ACTIVE TARGET PANEL (INJECTION 2) -->
+                <!-- TIER B: LIVE AUTONOMOUS UNGUIDED CTF TARGET CHALLENGE -->
                 <div class="border-b border-slate-800/60 pb-5">
                     <span class="inline-block bg-amber-500/10 text-amber-400 text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 rounded mb-2">🕹️ MODULE B: UNGUIDED AUTONOMOUS HACKING SANDBOX</span>
-                    <p class="text-xs text-slate-400 leading-relaxed mb-3"><strong>Live Isolated Application Target:</strong> The container below models the real live environment configuration for today's lesson. You must write an assignment payload string to manipulate the global window states and force the sandbox application to output your verification token:</p>
+                    <div class="text-xs text-slate-300 space-y-2 leading-relaxed mb-3">
+                        <p><strong>Live Exploitation Target:</strong> This is a completely unguided operational test tracking today's specific lesson topic. You must launch the target web node, analyze its live frontend behavior independently, bypass its restrictions, and extract the cryptographic flag token from the environment.</p>
 
-                    <!-- LIVE TARGET ENVIRONMENT SIMULATION CONTAINER -->
-                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 font-mono text-[11px] space-y-1 text-slate-300 mb-3">
-                        <div class="text-slate-500">// Target Endpoint Context Terminal Buffer</div>
-                        <div>const activeSessionState = { authenticated: false, role: window.userRole || "guest" };</div>
-                        <div>function runSecurityAuditCheck() {</div>
-                        <div class="pl-4">if (window.userRole === "root_sec_admin") {</div>
-                        <div class="pl-8 text-emerald-400">return "{{ day_data.flag }}";</div>
-                        <div class="pl-4">} return "Status Denied: Clearances insufficient.";</div>
-                        <div>}</div>
+                        <!-- REAL DEPLOYMENT TARGET INTERACTION BUTTON -->
+                        <div class="my-3 flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                            <a href="{% url 'lab_playground_target' week_number %}" target="_blank" class="inline-flex items-center gap-2 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-black px-4 py-2.5 rounded-xl text-xs transition shadow-md tracking-wider">
+                                🔥 LAUNCH LIVE UNGUIDED TARGET INSTANCE ↗
+                            </a>
+                            <span class="block text-[10px] text-slate-400">This is a live, sandboxed application server. Interact with the parameters or console properties to trigger the exploit flag.</span>
+                        </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
-                        <input type="text" id="console-injection-input" placeholder="Console command payload (e.g., window.userRole = 'root_sec_admin')" class="md:col-span-2 bg-slate-900 border border-slate-800 p-2 text-xs rounded-lg font-mono text-amber-400 focus:outline-none">
-                        <button onclick="runConsoleInjection('{{ day_data.flag }}')" class="bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded-lg text-xs font-bold px-3 py-2 transition">Inject into Sandbox</button>
-                    </div>
-                    <div id="console-terminal-out" class="hidden mt-2 bg-slate-900 border border-slate-800 p-2 rounded-lg font-mono text-[11px] text-slate-400"></div>
-
-                    <input type="text" id="unguided-flag-verify" placeholder="Enter the captured cryptographic flag here..." class="bg-slate-900 border border-slate-800 p-2 text-xs rounded-lg w-full font-mono text-amber-500 mt-3 focus:outline-none focus:border-amber-500">
+                    <input type="text" id="unguided-flag-verify" placeholder="Enter the captured cryptographic flag here..." class="bg-slate-900 border border-slate-800 p-2 text-xs rounded-lg w-full font-mono text-amber-500 focus:outline-none focus:border-amber-500">
                     <button onclick="submitUnguidedFlag('{{ day_data.flag }}')" class="mt-2 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs px-4 py-2 rounded-lg transition shadow-md">Validate Day Exploitation</button>
                 </div>
 
@@ -549,33 +546,18 @@ function validatePayloadCraft() {
 function checkGuidedModule(correctFlag) {
     const val = document.getElementById("guided-flag-verify").value.trim();
     if (val === correctFlag) {
-        alert("🎉 Guided Phase Approved! Step 1 verification asset complete.");
+        alert("Guided Phase Approved! Step 1 verification asset complete.");
     } else {
-        alert("❌ Incorrect Guided flag parameter. Audit line 412 of the file asset template again.");
-    }
-}
-
-function runConsoleInjection(correctFlag) {
-    const input = document.getElementById("console-injection-input").value.trim();
-    const term = document.getElementById("console-terminal-out");
-    term.classList.remove("hidden");
-    const normalizedInput = input.replace(/\s+/g, '');
-    if (normalizedInput === "window.userRole='root_sec_admin'" || normalizedInput === 'window.userRole="root_sec_admin"') {
-        window.userRole = "root_sec_admin";
-        term.className = "mt-2 bg-slate-900 border border-emerald-500/30 p-2.5 rounded-lg font-mono text-[11px] text-emerald-400";
-        term.innerText = ">>> window.userRole updated successfully to 'root_sec_admin'\n>>> running processAdminCheck()...\n>>> Output: " + correctFlag;
-    } else {
-        term.className = "mt-2 bg-slate-900 border border-rose-500/30 p-2.5 rounded-lg font-mono text-[11px] text-rose-400";
-        term.innerText = ">>> Command Rejected: '" + input + "' syntax error or incorrect role definition.";
+        alert("Incorrect flag parameter. Audit the live target's file logs again.");
     }
 }
 
 function submitUnguidedFlag(correctFlag) {
     const val = document.getElementById("unguided-flag-verify").value.trim();
     if (val === correctFlag) {
-        alert("🎉 Congratulations! Day Exploitation verified. Unguided CTF module passed.");
+        alert("Congratulations! Day Exploitation verified. Live Unguided CTF module passed.");
     } else {
-        alert("❌ Incorrect flag footprint. Execute the console injection technique to uncover the secret string value.");
+        alert("Incorrect flag footprint. Exploit the active target console variable structures to expose the real flag.");
     }
 }
 
