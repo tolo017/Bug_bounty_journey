@@ -313,7 +313,7 @@
             </div>
         </section>
 
-        <!-- 12. INJECTION 1: RESTRUCTURED IN-APP INTERACTIVE PLAYGROUND ARENA -->
+        <!-- 12. INJECTION 1 & 2: RESTRUCTURED IN-APP INTERACTIVE PLAYGROUND ARENA -->
         <section id="section-12" class="bg-slate-900 p-6 rounded-2xl border-2 border-emerald-500/40 space-y-6">
             <h2 class="text-xl font-bold text-emerald-400 flex items-center space-x-2">
                 <i class="fas fa-gamepad"></i>
@@ -323,42 +323,45 @@
 
             <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 space-y-6 shadow-inner">
 
-                <!-- TIER A: STEP-BY-STEP DETAILED GUIDED CTF -->
+                <!-- TIER A: STEP-BY-STEP DETAILED GUIDED CTF WITH CODE VIEW (INJECTION 1) -->
                 <div class="border-b border-slate-800/60 pb-5">
-                    <span class="inline-block bg-cyan-500/10 text-cyan-400 text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 rounded mb-2">🕹️ MODULE A: DETAILED GUIDED WALKTHROUGH</span>
-                    <div class="text-xs text-slate-300 space-y-2 leading-relaxed">
-                        <p><strong>The Mission Target:</strong> We are targeting an endpoint that leaks operational environment details via front-end bundle code assets.</p>
-                        <p><strong>Step 1 (Inspection):</strong> Open your web browser's Developer Tools network inspection pane (<code class="text-cyan-400 bg-slate-900 px-1">F12</code>) to view incoming application files.</p>
-                        <p><strong>Step 2 (Analysis):</strong> Locate the static web asset named <code class="text-cyan-400 bg-slate-900 px-1">main.app.bundle.js</code>. Scroll past the minified compression headers down to line 412.</p>
-                        <p><strong>Step 3 (Extraction):</strong> Notice that the production build environment has left a hidden master parameter exposed. Observe the variable string: <code class="text-emerald-400 font-mono bg-slate-900 px-1 py-0.5 rounded">window.appEnv = { tier: "stage-dev", flag: "{{ day_data.flag }}" };</code></p>
+                    <span class="inline-block bg-cyan-500/10 text-cyan-400 text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 rounded mb-2">🕹️ MODULE A: GUIDED WALKTHROUGH WITH FILE COMPONENT</span>
+                    <div class="text-xs text-slate-300 space-y-2 leading-relaxed mb-3">
+                        <p><strong>Target File Workspace:</strong> Open and inspect the exposed core script architecture running live on the target workspace below:</p>
+
+                        <!-- LIVE EXPOSED FILE WORKSPACE COMPONENT VIEW -->
+                        <div class="bg-black border border-slate-800 rounded-xl p-3 font-mono text-[11px] text-slate-400 max-h-40 overflow-y-auto">
+                            <span class="text-slate-600 block border-b border-slate-900 pb-1 mb-1">📁 Repository Path: /public/assets/js/main.app.bundle.js</span>
+                            <div>(function() {</div>
+                            <div class="text-slate-500 pl-4">// TODO: Deprecate internal tracking metrics container before staging release</div>
+                            <div class="pl-4 text-cyan-400">window.appEnv = { tier: "stage-dev", flag: "{{ day_data.flag }}" };</div>
+                            <div>})();</div>
+                        </div>
+
+                        <p class="mt-2"><strong>Step-by-Step Guide:</strong> Locate line 4 of the exposed <code>main.app.bundle.js</code> static source file asset above. Extract the exposed value assigned to the <code>flag</code> variable parameter array string and paste it into the field below to verify completion.</p>
                     </div>
-                    <div class="mt-3 bg-slate-900 p-3 rounded-lg border border-slate-800 font-mono text-[11px] text-slate-400">
-                        [SYSTEM CODES LOG] -> Target Bundle fully loaded inside in-app sandbox environment.
-                    </div>
-                    <input type="text" id="guided-flag-verify" placeholder="Enter the discovered guided flag signature here..." class="bg-slate-900 border border-slate-800 p-2 text-xs rounded-lg w-full font-mono text-cyan-300 mt-2 focus:outline-none focus:border-cyan-500">
+                    <input type="text" id="guided-flag-verify" placeholder="Enter the discovered guided flag signature here..." class="bg-slate-900 border border-slate-800 p-2 text-xs rounded-lg w-full font-mono text-cyan-300 focus:outline-none focus:border-cyan-500">
                     <button onclick="checkGuidedModule('{{ day_data.flag }}')" class="mt-2 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs px-3 py-1.5 rounded border border-slate-700 transition">Verify Guided Phase</button>
                 </div>
 
-                <!-- TIER B: LIVE HANDS-ON UNGUIDED CTF CHALLENGE (NOT A QUIZ) -->
+                <!-- TIER B: LIVE HANDS-ON UNGUIDED CTF WITH ACTIVE TARGET PANEL (INJECTION 2) -->
                 <div class="border-b border-slate-800/60 pb-5">
                     <span class="inline-block bg-amber-500/10 text-amber-400 text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 rounded mb-2">🕹️ MODULE B: UNGUIDED AUTONOMOUS HACKING SANDBOX</span>
-                    <p class="text-xs text-slate-400 leading-relaxed mb-3"><strong>Operational Scenario:</strong> The live target application environment below contains an interactive client-side asset console buffer. Audit the system responses, track down the active data parameters, bypass the access control logic, and capture the real cryptographic flag:</p>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-3"><strong>Live Isolated Application Target:</strong> The container below models the real live environment configuration for today's lesson. You must write an assignment payload string to manipulate the global window states and force the sandbox application to output your verification token:</p>
 
-                    <!-- Live Code Execution Panel Simulator -->
-                    <div class="bg-black border border-slate-800 rounded-xl p-4 font-mono text-[11px] space-y-1 text-slate-300 mb-3 max-h-40 overflow-y-auto">
-                        <div class="text-slate-500">// Live Target Console Data Matrix Object Browser</div>
-                        <div>const targetEndpointMap = { "root": "/index.html", "api": "/v2/public-metrics" };</div>
-                        <div>function processAdminCheck() {</div>
-                        <div class="pl-4">let userRole = "guest_anonymous";</div>
-                        <div class="pl-4 text-rose-400">// EXPLOIT POI: Overwriting window.userRole via console state triggers flag generation</div>
+                    <!-- LIVE TARGET ENVIRONMENT SIMULATION CONTAINER -->
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 font-mono text-[11px] space-y-1 text-slate-300 mb-3">
+                        <div class="text-slate-500">// Target Endpoint Context Terminal Buffer</div>
+                        <div>const activeSessionState = { authenticated: false, role: window.userRole || "guest" };</div>
+                        <div>function runSecurityAuditCheck() {</div>
                         <div class="pl-4">if (window.userRole === "root_sec_admin") {</div>
                         <div class="pl-8 text-emerald-400">return "{{ day_data.flag }}";</div>
-                        <div class="pl-4">} return "Access Denied: Role must be root_sec_admin";</div>
+                        <div class="pl-4">} return "Status Denied: Clearances insufficient.";</div>
                         <div>}</div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
-                        <input type="text" id="console-injection-input" placeholder="Console command (e.g., window.userRole = 'root_sec_admin')" class="md:col-span-2 bg-slate-900 border border-slate-800 p-2 text-xs rounded-lg font-mono text-amber-400 focus:outline-none">
+                        <input type="text" id="console-injection-input" placeholder="Console command payload (e.g., window.userRole = 'root_sec_admin')" class="md:col-span-2 bg-slate-900 border border-slate-800 p-2 text-xs rounded-lg font-mono text-amber-400 focus:outline-none">
                         <button onclick="runConsoleInjection('{{ day_data.flag }}')" class="bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded-lg text-xs font-bold px-3 py-2 transition">Inject into Sandbox</button>
                     </div>
                     <div id="console-terminal-out" class="hidden mt-2 bg-slate-900 border border-slate-800 p-2 rounded-lg font-mono text-[11px] text-slate-400"></div>
@@ -396,7 +399,7 @@
             </div>
         </section>
 
-        <!-- 13. INJECTION 2: INTERACTIVE AUTOMATION SCRIPTS DEV SUITE TERMINAL -->
+        <!-- 13. INJECTION 3: COMPREHENSIVE PYTHON & BASH AUTOMATION DEVELOPMENT ENVIRONMENT -->
         <section id="section-13" class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
             <h2 class="text-xl font-bold text-cyan-400 flex items-center space-x-2">
                 <i class="fas fa-robot"></i>
@@ -405,33 +408,41 @@
             <p class="text-xs text-slate-400 mb-3 leading-relaxed"><strong>Script Writing Architecture:</strong> Learn to automate your processes step-by-step. To code a reconnaissance script, you must import request handler tools, structure standard connection hooks, parse the HTML body response lines using regular expressions, and output clean status records. Build and test your script inside the sandbox terminal below:</p>
 
             <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 space-y-4">
-                <!-- Step-by-Step Writing Guide Panel -->
-                <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-800/80 text-xs text-slate-400 space-y-1">
-                    <strong class="text-slate-300 font-bold block mb-1">🛠️ Python Automation Guide Checklist:</strong>
-                    <div>1. Use <code class="text-emerald-400 font-mono">import requests</code> to manage your application protocol network calls.</div>
-                    <div>2. Use <code class="text-emerald-400 font-mono">target_url = 'http://localhost:8000/lab-playground/...'</code> targeting the active endpoint.</div>
-                    <div>3. Add string verification matches like <code class="text-emerald-400 font-mono">if 'FLAG' in response.text: print('Flag Discovered!')</code>.</div>
+                <!-- PYTHON PIPELINE WORKSPACE -->
+                <div class="space-y-2">
+                    <span class="block text-xs font-bold text-cyan-400 font-mono">🐍 Track A: Python Exploitation Suite Testing Area</span>
+                    <textarea id="automation-terminal-editor" rows="4" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 font-mono text-xs text-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 leading-relaxed" placeholder="# Craft your automated Python reconnaissance script here...&#10;import requests&#10;&#10;target_url = 'http://localhost:8000/lab-playground/week-{{ week_number }}/target/'&#10;print('[*] Python engine initialized...')">{{ day_data.automation_scripts.python_script }}</textarea>
                 </div>
 
-                <!-- Live Interactive Code Testing Suite Interface -->
-                <textarea id="automation-terminal-editor" rows="6" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 font-mono text-xs text-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 leading-relaxed" placeholder="# Craft your automated Python reconnaissance script here...&#10;import requests&#10;&#10;target_url = 'http://localhost:8000/lab-playground/week-{{ week_number }}/target/'&#10;print('[*] Script testing initialized...')">{{ day_data.automation_scripts.python_script }}</textarea>
+                <!-- BASH PIPELINE WORKSPACE -->
+                <div class="space-y-2">
+                    <span class="block text-xs font-bold text-amber-500 font-mono">🐚 Track B: Bash Shell Scripting & Curl Testing Area</span>
+                    <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-800/80 text-xs text-slate-400 space-y-1 mb-2">
+                        <strong class="text-slate-300 font-bold block mb-1">🛠️ Bash Scripting Guide Checklist:</strong>
+                        <div>1. Begin your file with the explicit interpreter path directive: <code class="text-amber-400 font-mono">#!/bin/bash</code>.</div>
+                        <div>2. Use the network client tool <code class="text-amber-400 font-mono">curl -s "URL"</code> to query the target endpoint.</div>
+                        <div>3. Use string filtering commands like <code class="text-amber-400 font-mono">grep -o "FLAG"</code> to extract hidden attributes.</div>
+                    </div>
+                    <textarea id="bash-terminal-editor" rows="4" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 font-mono text-xs text-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-500 leading-relaxed" placeholder="#!/bin/bash&#10;# Craft your automated Bash shell script here...&#10;TARGET_URL='http://localhost:8000/lab-playground/week-{{ week_number }}/target/'&#10;echo '[*] Bash execution pipeline initialized...'"></textarea>
+                </div>
+
                 <button onclick="executeInAppTerminal()" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-xs px-4 py-2 rounded-lg transition flex items-center space-x-2">
-                    <i class="fas fa-play text-emerald-400"></i>
-                    <span>Execute Automation Script inside Virtual Terminal</span>
+                    <i class="fas fa-terminal text-cyan-400"></i>
+                    <span>Execute Automation Scripts inside Virtual Terminal</span>
                 </button>
 
-                <!-- VIRTUAL EMULATED TERMINAL WINDOW -->
-                <div id="virtual-linux-terminal" class="hidden bg-black border border-slate-800 rounded-xl p-4 font-mono text-xs space-y-2">
-                    <div class="flex items-center justify-between border-b border-slate-800 pb-2">
-                        <span class="text-slate-400 font-bold">💻 Linux Virtual Environment Sandbox Terminal</span>
-                        <span id="terminal-badge" class="text-[9px] px-2 py-0.5 rounded font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">SUCCESS: RUNTIME COMPLETED</span>
+                <!-- VIRTUAL EMULATED TERMINAL WINDOW (Marks complete if both match patterns) -->
+                <div id="virtual-linux-terminal" class="hidden bg-black border-2 border-slate-800 rounded-xl p-4 font-mono text-xs shadow-inner">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
+                        <span class="text-slate-500 font-bold text-[10px] tracking-wider uppercase">💻 Linux Virtual Environment Sandbox Terminal</span>
+                        <span id="terminal-badge" class="text-[9px] px-2 py-0.5 rounded font-bold"></span>
                     </div>
-                    <div id="terminal-buffer" class="text-slate-300 leading-relaxed whitespace-pre-wrap"></div>
+                    <div id="terminal-buffer" class="space-y-1"></div>
                 </div>
             </div>
         </section>
 
-        <!-- 14. PROFESSIONAL VDP REPORT WORKSTATION -->
+        <!-- 14. PROFESSIONAL VDP REPORT WORKSTATION & INJECTION 4: DAY-SPECIFIC AI PORTFOLIO SYNC -->
         <section id="section-14" class="bg-slate-900 p-6 rounded-2xl border border-indigo-500/40 space-y-4">
             <h2 class="text-xl font-bold text-indigo-400 flex items-center space-x-2">
                 <i class="fas fa-file-contract"></i>
@@ -477,11 +488,31 @@
                 </div>
             </form>
 
-            <div class="pt-3 border-t border-slate-800">
-                <a href="{% url 'portfolio_export' %}" class="inline-flex items-center space-x-2 px-5 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition shadow-md">
-                    <i class="fab fa-github text-sm"></i>
-                    <span>Portfolio Synchronization Workstation</span>
-                </a>
+            <!-- INJECTION 4: AI SUMMARY COMPILATION BUTTON ENGINE -->
+            <div class="pt-4 border-t border-slate-800 space-y-4">
+                <button onclick="triggerDaySpecificAiSync('Week {{ week_number }} Day {{ day_number }}: {{ day_data.title|escapejs }}')" class="px-5 py-2.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition shadow-md flex items-center space-x-2">
+                    <i class="fas fa-robot"></i>
+                    <span>🤖 Click to Generate Day-Specific AI Portfolio Summaries</span>
+                </button>
+
+                <div id="day-sync-output" class="hidden space-y-4 pt-2">
+                    <div>
+                        <span class="text-xs font-bold text-purple-300 block mb-1">📦 GitHub Repository Target Commit Summary Asset:</span>
+                        <textarea id="github-summary-box" rows="4" readonly class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 font-mono text-xs text-emerald-400 focus:outline-none leading-relaxed select-all"></textarea>
+                    </div>
+
+                    <div>
+                        <span class="text-xs font-bold text-blue-300 block mb-1">📣 Ready-To-Post LinkedIn Media Milestone Update:</span>
+                        <textarea id="linkedin-summary-box" rows="4" readonly class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 font-mono text-xs text-blue-300 focus:outline-none leading-relaxed select-all"></textarea>
+                    </div>
+
+                    <div class="pt-2">
+                        <a href="{% url 'portfolio_export' %}" class="inline-flex items-center space-x-2 px-5 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition shadow-md">
+                            <i class="fab fa-github text-sm"></i>
+                            <span>Push Commit to GitHub Repository</span>
+                        </a>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -549,22 +580,36 @@ function submitUnguidedFlag(correctFlag) {
 }
 
 function executeInAppTerminal() {
-    const code = document.getElementById("automation-terminal-editor").value;
+    const pyCode = document.getElementById("automation-terminal-editor").value;
+    const bashCode = document.getElementById("bash-terminal-editor").value;
     const term = document.getElementById("virtual-linux-terminal");
     const badge = document.getElementById("terminal-badge");
     const buffer = document.getElementById("terminal-buffer");
     term.classList.remove("hidden");
     buffer.innerHTML = "";
 
-    if (code.includes("import requests") && code.includes("target_url")) {
+    const hasPython = pyCode.includes("import requests") && pyCode.includes("target_url");
+    const hasBash = bashCode.includes("#!/bin/bash") && (bashCode.includes("curl") || bashCode.includes("TARGET_URL"));
+
+    if (hasPython && hasBash) {
         badge.className = "text-[9px] px-2 py-0.5 rounded font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
-        badge.innerText = "SUCCESS: RUNTIME COMPLETED";
-        buffer.innerHTML = "root@master-playground:~# python3 recon_automation.py\n[*] Initializing Python system automation sockets...\n[*] Target connection established with endpoint configuration parameters.\n[+] Request successful. Asset parsed completely. Verification status: MODULE MARKED COMPLETE.";
+        badge.innerText = "SUCCESS: BASH & PYTHON RUNTIMES COMPLETED";
+        buffer.innerHTML = "root@master-playground:~# python3 tool.py && ./exploit.sh\n[*] Python engine executing asynchronous network requests...\n[*] Bash tracking pipeline spinning up curling processes...\n[+] All custom automation modules parsed successfully! AREA MARKED COMPLETE.";
     } else {
         badge.className = "text-[9px] px-2 py-0.5 rounded font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20";
-        badge.innerText = "FAILED: RUNTIME STRUCTURAL ERROR";
-        buffer.innerHTML = "root@master-playground:~# python3 recon_automation.py\nTraceback (most recent call last):\n  File 'recon_automation.py', line 3, in <module>\nExecution Error: Your code must explicitly utilize 'import requests' and establish a 'target_url' context configuration to satisfy core automation milestones.";
+        badge.innerText = "FAILED: COMPILATION OR IMPORT DATA MISSING";
+        buffer.innerHTML = "root@master-playground:~# running diagnostics...\n[!] Error: Verify your script files. Ensure your Python window features 'import requests' and your Bash layout contains '#!/bin/bash' to pass verification steps.";
     }
+}
+
+function triggerDaySpecificAiSync(activeDayTitle) {
+    const outputArea = document.getElementById("day-sync-output");
+    const ghBox = document.getElementById("github-summary-box");
+    const liBox = document.getElementById("linkedin-summary-box");
+
+    outputArea.classList.remove("hidden");
+    ghBox.value = `### Technical Portfolio Push: ${activeDayTitle}\n- Completed custom source code audit tracking vulnerabilities on the day's core asset.\n- Developed, configured, and tested independent multi-threaded Python and Bash network scanning tools.\n- Authored a comprehensive VDP incident disclosure report outlining precise reproduction metrics.`;
+    liBox.value = `🎯 Day Milestone Mastered: I've successfully completed all advanced red/blue team tracks for ${activeDayTitle}! Built custom exploit scripts in Python and Bash, and completed a professional security vulnerability report. Continuous progress on my 12-week hunting track! #Cybersecurity #GitHub #AppSec #BugBounty`;
 }
 </script>
 {% endblock %}
