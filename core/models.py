@@ -13,6 +13,8 @@ class UserProfile(models.Model):
     current_day = models.IntegerField(default=1)
     github_pat = models.CharField(max_length=255, blank=True, default='')
     github_repo = models.CharField(max_length=255, blank=True, default='')
+    student_github_profile_url = models.URLField(max_length=500, blank=True, default='')
+    student_linkedin_profile_url = models.URLField(max_length=500, blank=True, default='')
 
     # Server-Side Streak Counter Engine
     current_streak = models.IntegerField(default=0)

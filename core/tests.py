@@ -100,3 +100,15 @@ class CorePlatformTests(TestCase):
         for w in range(1, 13):
             res = self.client.get(reverse('lab_playground_target', kwargs={'week_number': w}))
             self.assertIn(res.status_code, [200, 401, 404])
+
+    def test_portfolio_export_and_youtube_search_api_views(self):
+        self.client.login(username='teststudent', password='password123')
+
+        # Test Portfolio Export view GET
+        export_res = self.client.get(reverse('portfolio_export'))
+        self.assertEqual(export_res.status_code, 200)
+
+        # Test YouTube Search API view GET
+        yt_res = self.client.get(reverse('youtube_search_api') + '?query=XSS')
+        self.assertEqual(yt_res.status_code, 200)
+        self.assertIn('results', yt_res.json())

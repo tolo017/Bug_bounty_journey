@@ -1,3 +1,4 @@
+import urllib.parse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
@@ -381,8 +382,10 @@ def portfolio_export_view(request):
         if action == 'save_config':
             profile.github_pat = request.POST.get('github_pat', '').strip()
             profile.github_repo = request.POST.get('github_repo', '').strip()
+            profile.student_github_profile_url = request.POST.get('student_github_profile_url', '').strip()
+            profile.student_linkedin_profile_url = request.POST.get('student_linkedin_profile_url', '').strip()
             profile.save()
-            messages.success(request, "GitHub repository configuration updated.")
+            messages.success(request, "Portfolio profile links and GitHub repository configuration updated successfully.")
         elif action == 'sync_github':
             if not profile.github_repo:
                 messages.error(request, "Please set a valid GitHub repository first.")
@@ -400,8 +403,9 @@ def portfolio_export_view(request):
                     lesson = get_week_data(w)
                     prog = UserWeekProgress.objects.filter(user=request.user, week_number=w).first()
                     status = "COMPLETED" if (prog and prog.lab_b_completed) else ("UNLOCKED" if (prog and prog.is_unlocked) else "LOCKED")
-                    if lesson:
-                        full_markdown += f"### Week {w}: {lesson['title']} [{status}]\n- **Analogy:** {lesson['analogy']}\n- **Root Cause:** {lesson['root_cause'][:200]}...\n- **Flag Status:** {prog.lab_b_flag_submitted if (prog and prog.lab_b_completed) else 'Pending'}\n- **Report Score:** {prog.report_score if prog else 0}/100\n\n"
+                    if lesson and 'days' in lesson and 1 in lesson['days']:
+                        day1 = lesson['days'][1]
+                        full_markdown += f"### Week {w}: {lesson['title']} [{status}]\n- **Analogy:** {day1.get('analogy', '')}\n- **Root Cause:** {day1.get('root_cause', '')[:200]}...\n- **Flag Status:** {prog.lab_b_flag_submitted if (prog and prog.lab_b_completed) else 'Pending'}\n- **Report Score:** {prog.report_score if prog else 0}/100\n\n"
 
                 repo = profile.github_repo.strip('/')
                 pat = profile.github_pat.strip()
@@ -485,15 +489,17 @@ Completed Modules:
         prog = UserWeekProgress.objects.filter(user=request.user, week_number=w).first()
         status = "COMPLETED" if (prog and prog.lab_b_completed) else ("UNLOCKED" if (prog and prog.is_unlocked) else "LOCKED")
 
-        if lesson:
+        if lesson and 'days' in lesson and 1 in lesson['days']:
+            day1 = lesson['days'][1]
+            py_code = day1.get('automation_scripts', {}).get('python_script', '')[:250]
             github_markdown += f"""### Week {w}: {lesson['title']} [{status}]
-- **Analogy:** {lesson['analogy']}
-- **Root Cause:** {lesson['root_cause'][:200]}...
+- **Analogy:** {day1.get('analogy', '')}
+- **Root Cause:** {day1.get('root_cause', '')[:200]}...
 - **Flag Status:** {prog.lab_b_flag_submitted if (prog and prog.lab_b_completed) else 'Pending'}
 - **Report Score:** {prog.report_score if prog else 0}/100
 
 ```python
-{lesson['automation_scripts']['python_script'][:250]}...
+{py_code}...
 ```
 
 ---
