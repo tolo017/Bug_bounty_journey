@@ -368,22 +368,36 @@
                     <button onclick="submitUnguidedFlag('{{ day_data.playground.unguided_flag_solution }}')" class="mt-2 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs px-5 py-2.5 rounded-lg transition duration-200 shadow-md">Validate Day Exploitation</button>
                 </div>
 
-                <!-- TIER C: INDEPENDENT THEORY QUIZ CHECKPOINT -->
+                <!-- TIER C: INDEPENDENT THEORY QUIZ CHECKPOINT (UPGRADED 2-QUESTION MATRIX) -->
                 <div>
-                    <span class="inline-block bg-purple-500/10 text-purple-400 text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 rounded mb-2">🕹️ MODULE C: THEORETICAL RECONNAISSANCE CHECKPOINT</span>
-                    <form method="post" action="{% url 'submit_quiz' week_number day_number %}" class="space-y-3">
+                    <span class="inline-block bg-purple-500/10 text-purple-400 text-[10px] font-black tracking-widest uppercase px-2.5 py-1 rounded-md border border-purple-500/20 mb-3 shadow-sm">
+                        🕹️ MODULE C: THEORETICAL KNOWLEDGE CHECKPOINT
+                    </span>
+                    <form method="post" action="{% url 'submit_quiz' week_number day_number %}" class="space-y-4">
                         {% csrf_token %}
+
+                        <!-- Question 1 Block -->
                         <div class="space-y-2 text-xs text-slate-300 bg-slate-900 p-4 rounded-xl border border-slate-800">
-                            <p class="font-semibold mb-1.5">{{ day_data.quiz.question }}</p>
-                            {% for opt in day_data.quiz.options %}
-                            <label class="block mt-1 cursor-pointer">
-                                <input type="radio" name="quiz_answer" value="{{ opt }}" required class="mr-2 text-emerald-500 focus:ring-emerald-500"> {{ opt }}
+                            <p class="font-bold text-slate-200 mb-2">{{ day_data.quiz.q1_question }}</p>
+                            {% for opt in day_data.quiz.q1_options %}
+                            <label class="block mt-1.5 p-2 bg-slate-950 rounded-lg border border-slate-800 hover:border-purple-500/50 cursor-pointer transition">
+                                <input type="radio" name="quiz_answer_1" value="{{ opt }}" required class="mr-2 text-purple-500 focus:ring-purple-500"> {{ opt }}
                             </label>
                             {% endfor %}
                         </div>
 
-                        <button type="submit" class="mt-2 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs px-4 py-2 rounded-lg transition shadow-md">
-                            Submit Quiz Checkpoint
+                        <!-- Question 2 Block -->
+                        <div class="space-y-2 text-xs text-slate-300 bg-slate-900 p-4 rounded-xl border border-slate-800">
+                            <p class="font-bold text-slate-200 mb-2">{{ day_data.quiz.q2_question }}</p>
+                            {% for opt in day_data.quiz.q2_options %}
+                            <label class="block mt-1.5 p-2 bg-slate-950 rounded-lg border border-slate-800 hover:border-purple-500/50 cursor-pointer transition">
+                                <input type="radio" name="quiz_answer_2" value="{{ opt }}" required class="mr-2 text-purple-500 focus:ring-purple-500"> {{ opt }}
+                            </label>
+                            {% endfor %}
+                        </div>
+
+                        <button type="submit" class="mt-2 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs px-5 py-2.5 rounded-lg transition shadow-md">
+                            Submit 2-Question Quiz Checkpoint
                         </button>
                     </form>
 

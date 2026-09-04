@@ -181,14 +181,20 @@ def submit_quiz_view(request, week_number, day_number):
     if request.method != 'POST':
         return redirect('day_detail', week_number=week_number, day_number=day_number)
 
-    submitted_answer = request.POST.get('quiz_answer', '').strip()
-    lesson = get_week_data(week_number)
+    ans1 = request.POST.get('quiz_answer_1', '').strip()
+    ans2 = request.POST.get('quiz_answer_2', '').strip()
+    ans_single = request.POST.get('quiz_answer', '').strip()
 
+    lesson = get_week_data(week_number)
     if not lesson or 'days' not in lesson or day_number not in lesson['days']:
         return redirect('dashboard')
 
     day_data = lesson['days'][day_number]
-    correct_answer = day_data.get('quiz', {}).get('correct_answer', '').strip()
+    quiz_info = day_data.get('quiz', {})
+
+    q1_correct = quiz_info.get('q1_correct', quiz_info.get('correct_answer', '')).strip()
+    q2_correct = quiz_info.get('q2_correct', '').strip()
+
     global_day = (week_number - 1) * 5 + day_number
 
     d_prog, _ = UserDailyProgress.objects.get_or_create(
@@ -197,7 +203,10 @@ def submit_quiz_view(request, week_number, day_number):
         defaults={'week_number': week_number, 'day_number': day_number}
     )
 
-    if submitted_answer.lower() == correct_answer.lower():
+    is_q1_ok = (ans1.lower() == q1_correct.lower()) or (ans_single.lower() == q1_correct.lower())
+    is_q2_ok = (ans2.lower() == q2_correct.lower()) if q2_correct else True
+
+    if is_q1_ok and is_q2_ok:
         d_prog.is_completed = True
         d_prog.quiz_score = 100
         d_prog.completed_at = timezone.now()

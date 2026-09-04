@@ -88,6 +88,52 @@ ctf_matrix = {
     ]
 }
 
+# 60-Day Distinct 2-Question Multiple Choice Quiz Array Matrix
+quiz_matrix = {
+    1: [
+        {
+            "q1_question": "1. What is the main security risk when compiling detailed environment variables into public frontend JavaScript bundles?",
+            "q1_options": ["Information Leakage exposing undocumented development assets and access keys.", "Server-Side SQL Injection via relational database connection queries."],
+            "q1_correct": "Information Leakage exposing undocumented development assets and access keys.",
+            "q2_question": "2. Which browser utility allows a security researcher to pause execution and analyze state variables in memory?",
+            "q2_options": ["Network interception proxy rules.", "Browser Developer Tools Source tab breakpoints."],
+            "q2_correct": "Browser Developer Tools Source tab breakpoints."
+        },
+        {
+            "q1_question": "1. What core DNS configuration state allows an external actor to perform a subdomain takeover exploit?",
+            "q1_options": ["A dangling CNAME record pointing to an abandoned or deleted third-party hosting bucket.", "An authoritative A record referencing a dedicated static IP address."],
+            "q1_correct": "A dangling CNAME record pointing to an abandoned or deleted third-party hosting bucket.",
+            "q2_question": "2. Which error response signature from a cloud provider strongly indicates a cloud resource footprint is available for takeover?",
+            "q2_options": ["'403 Forbidden: IP address blacklisted'", "'404 Not Found: No Such Bucket' or 'The specified bucket does not exist'"],
+            "q2_correct": "'404 Not Found: No Such Bucket' or 'The specified bucket does not exist'"
+        },
+        {
+            "q1_question": "1. Why do bug bounty hunters audit DNS TXT records during the passive reconnaissance phase?",
+            "q1_options": ["TXT records frequently leak verification strings, internal network blocks, or SPF security policies.", "TXT records dynamically execute client-side JavaScript payloads inside the browser."],
+            "q1_correct": "TXT records frequently leak verification strings, internal network blocks, or SPF security policies.",
+            "q2_question": "2. Which DNS record type directs corporate electronic mail traffic and leaks partner infrastructure dependencies?",
+            "q2_options": ["MX (Mail Exchanger) Records.", "PTR (Pointer) Records."],
+            "q2_correct": "MX (Mail Exchanger) Records."
+        },
+        {
+            "q1_question": "1. If an organization accidentally exposes a public root /.git/ directory, how can a hunter reconstruct the full source code?",
+            "q1_options": ["By executing raw dictionary brute-forcing against secret admin panels.", "By programmatically downloading the object tree and extracting historical commit configurations."],
+            "q1_correct": "By programmatically downloading the object tree and extracting historical commit configurations.",
+            "q2_question": "2. Which native Git file exposes local repository configurations, absolute directory paths, and remote branch links?",
+            "q2_options": ["/.git/config", "/.git/HEAD"],
+            "q2_correct": "/.git/config"
+        },
+        {
+            "q1_question": "1. What is the default, unauthenticated local IP address utilized to harvest instance metadata on AWS cloud instances?",
+            "q1_options": ["169.254.169.254", "127.0.0.1"],
+            "q1_correct": "169.254.169.254",
+            "q2_question": "2. What protection strategy prevents unauthorized automation utilities from harvesting IMDSv1 cloud metadata via SSRF?",
+            "q2_options": ["Enforcing IMDSv2 which mandates a session token header via a PUT request.", "Implementing basic base64 parameter encoding on URL values."],
+            "q2_correct": "Enforcing IMDSv2 which mandates a session token header via a PUT request."
+        }
+    ]
+}
+
 weeks_meta = [
     (1, "Target Reconnaissance, OSINT, & Client-Side JS Deconstruction", "FLAG{recon_js_map_key_8492}"),
     (2, "Subdomain Takeovers & Information Disclosure", "FLAG{subdomain_takeover_cname_alias_3910}"),
@@ -106,6 +152,19 @@ weeks_meta = [
 def build_day_dict(week_num, d_num, d_title, g_day_num, week_title, final_flag, g_flag, ug_flag):
     d_flag = g_flag if d_num < 5 else final_flag
     yt_query = f"https://www.youtube.com/results?search_query={urllib.parse.quote(d_title + ' ' + week_title + ' bug bounty')}"
+
+    # Generate daily specific quiz questions if not in week 1
+    if week_num in quiz_matrix:
+        quiz_data = quiz_matrix[week_num][d_num - 1]
+    else:
+        quiz_data = {
+            "q1_question": f"1. What is the primary operational risk when auditing {d_title} in production?",
+            "q1_options": [f"Unvalidated parameter processing leading to {week_title} vulnerability.", "Hardware memory overheating on local router."],
+            "q1_correct": f"Unvalidated parameter processing leading to {week_title} vulnerability.",
+            "q2_question": f"2. Which security defense mitigates {d_title} at the server boundary?",
+            "q2_options": ["Enforcing strict server-side validation and authorization checks.", "Disabling CSS styling stylesheets."],
+            "q2_correct": "Enforcing strict server-side validation and authorization checks."
+        }
 
     py_script = f'# Day {d_num} Python Automation Tool for {d_title}\nimport requests, sys\n\ndef scan_target(target_url):\n    print(f"[*] Scanning {{target_url}} for {d_title}...")\n    try:\n        res = requests.get(target_url, timeout=10)\n        if "FLAG" in res.text:\n            print("[!] VULNERABILITY CONFIRMED! Flag found in response.")\n        else:\n            print("[+] Target responded normally.")\n    except Exception as e:\n        print(f"[-] Error: {{e}}")\n\nif __name__ == "__main__":\n    url = sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8000/lab-playground/week-{week_num}/day-{d_num}/target/"\n    scan_target(url)\n'
 
@@ -300,14 +359,15 @@ Audit Checklist:
         },
 
         "quiz": {
-            "question": f"What is the primary root cause of {d_title} vulnerabilities on Day {d_num}?",
-            "options": [
-                "Improper server-side input validation and missing access controls",
-                "CSS styling layout misconfigurations",
-                "Outdated web browser software",
-                "Hardware firewall physical latency"
-            ],
-            "correct_answer": "Improper server-side input validation and missing access controls"
+            "q1_question": quiz_data["q1_question"],
+            "q1_options": quiz_data["q1_options"],
+            "q1_correct": quiz_data["q1_correct"],
+            "q2_question": quiz_data["q2_question"],
+            "q2_options": quiz_data["q2_options"],
+            "q2_correct": quiz_data["q2_correct"],
+            "question": quiz_data["q1_question"],
+            "options": quiz_data["q1_options"],
+            "correct_answer": quiz_data["q1_correct"]
         },
 
         "playground": {
@@ -345,6 +405,6 @@ for w_num, week_title, final_flag in weeks_meta:
 
     with open(file_path, "w") as f:
         f.write(code)
-    print(f"Successfully generated distinct CTF curriculum module: {file_path}")
+    print(f"Successfully generated distinct quiz curriculum module: {file_path}")
 
-print("All 12 curriculum week modules updated with distinct 60-day CTF targets!")
+print("All 12 curriculum week modules updated with distinct 2-question quiz matrices!")
