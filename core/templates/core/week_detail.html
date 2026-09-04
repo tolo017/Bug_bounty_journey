@@ -1,0 +1,99 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Week {{ week_number }}: {{ lesson.title }} - Bug Bounty Mastery{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- Header Banner -->
+    <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+            <div>
+                <span class="px-3 py-1 rounded-md text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase tracking-wider">
+                    MODULE {{ week_number }}
+                </span>
+                <h1 class="text-3xl font-extrabold text-white mt-2">
+                    WEEK {{ week_number }}: {{ lesson.title }}
+                </h1>
+                <p class="text-slate-400 text-sm mt-1">
+                    {{ lesson.short_desc }}
+                </p>
+            </div>
+
+            <div class="flex items-center space-x-3">
+                <a href="{% url 'dashboard' %}" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold transition">
+                    <i class="fas fa-arrow-left mr-1"></i> Dashboard
+                </a>
+            </div>
+        </div>
+
+        <!-- Distinct Active Day Tabs -->
+        <div>
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-3">Select Active Day Module:</span>
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                {% for day in daily_progress_list %}
+                    {% if day.is_unlocked %}
+                        <a href="{% url 'day_detail' week_number day.day_number %}" class="p-4 rounded-xl border flex flex-col items-center justify-center transition-all duration-200 bg-amber-500/10 border-amber-500/40 hover:bg-amber-500/20 text-amber-300 shadow-md">
+                            <span class="text-xs font-extrabold uppercase">DAY {{ day.day_number }}</span>
+                            <span class="text-[10px] text-slate-400 mt-0.5 line-clamp-1 text-center">{{ day.title }}</span>
+                        </a>
+                    {% else %}
+                        <div class="p-4 rounded-xl border border-slate-800 bg-slate-950/40 opacity-50 flex flex-col items-center justify-center cursor-not-allowed">
+                            <span class="text-xs font-bold text-slate-500 uppercase flex items-center space-x-1">
+                                <i class="fas fa-lock text-[10px] mr-1"></i> DAY {{ day.day_number }}
+                            </span>
+                            <span class="text-[10px] text-slate-600 mt-0.5">Locked</span>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- 5-Day Modules Overview Cards -->
+    <div class="space-y-6">
+        <h2 class="text-xl font-bold text-white flex items-center space-x-2">
+            <i class="fas fa-list-ol text-emerald-400"></i>
+            <span>5-Day Daily Modules Breakdown</span>
+        </h2>
+
+        <div class="grid grid-cols-1 gap-4">
+            {% for day in daily_progress_list %}
+            <div class="p-5 bg-slate-900 rounded-xl border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="space-y-1">
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2.5 py-0.5 rounded text-[10px] font-extrabold bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                            DAY {{ day.day_number }} (GLOBAL DAY {{ day.global_day_number }})
+                        </span>
+                        {% if day.is_completed %}
+                            <span class="text-xs text-emerald-400 font-bold"><i class="fas fa-check-circle"></i> Completed</span>
+                        {% elif day.is_unlocked %}
+                            <span class="text-xs text-amber-400 font-bold"><i class="fas fa-unlock"></i> Unlocked</span>
+                        {% else %}
+                            <span class="text-xs text-slate-500 font-bold"><i class="fas fa-lock"></i> Locked</span>
+                        {% endif %}
+                    </div>
+                    <h3 class="font-bold text-white text-base">{{ day.title }}</h3>
+                    <p class="text-xs text-slate-400">{{ day.short_desc }}</p>
+                </div>
+
+                <div>
+                    {% if day.is_unlocked %}
+                        <a href="{% url 'day_detail' week_number day.day_number %}" class="px-5 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition flex items-center space-x-1 shadow-md">
+                            <span>Open Day Module</span>
+                            <i class="fas fa-arrow-right text-[10px]"></i>
+                        </a>
+                    {% else %}
+                        <button disabled class="px-5 py-2 rounded-lg bg-slate-800 text-slate-500 font-bold text-xs cursor-not-allowed flex items-center space-x-1">
+                            <i class="fas fa-lock text-[10px]"></i>
+                            <span>Requires Day {{ day.day_number|add:"-1" }}</span>
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}
