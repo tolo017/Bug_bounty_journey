@@ -313,7 +313,7 @@
             </div>
         </section>
 
-        <!-- 12. HIGH-ENERGY INTERACTIVE PLAYGROUND SANDBOX -->
+        <!-- 12. HIGH-ENERGY INTERACTIVE PLAYGROUND SANDBOX WITH DUAL-TARGET SCENARIOS -->
         <section id="section-12" class="bg-slate-900 p-6 rounded-2xl border-2 border-emerald-500/40 space-y-6">
             <h2 class="text-xl font-bold text-emerald-400 flex items-center space-x-2">
                 <i class="fas fa-gamepad"></i>
@@ -323,41 +323,65 @@
 
             <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 space-y-6 shadow-inner">
 
-                <!-- TIER A: STEP-BY-STEP DETAILED GUIDED CTF WITH ACTIVE ANIMATED BUTTONS -->
+                <!-- TIER A: SCENARIO 1 - STEP-BY-STEP DETAILED GUIDED CTF WORKSPACE -->
                 <div class="border-b border-slate-800/60 pb-6">
                     <span class="inline-flex items-center gap-1.5 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 text-cyan-400 text-[10px] font-black tracking-widest uppercase px-2.5 py-1 rounded-md border border-cyan-500/20 mb-3 shadow-sm">
-                        <span class="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse"></span> 🕹️ MODULE A: DETAILED GUIDED CTF WORKSPACE
+                        <span class="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse"></span> 🕹️ MODULE A: DETAILED GUIDED CTF WORKSPACE (SCENARIO 1)
                     </span>
                     <div class="text-xs text-slate-300 space-y-3 leading-relaxed mb-4">
-                        <p><strong>The Operational Target:</strong> We are actively auditing a deployment instance to map unlinked internal routes and locate hardcoded credentials hidden inside frontend files.</p>
+                        <p><strong>Scenario 1 Target Workspace:</strong> Open and inspect the exposed core script architecture running live on the target workspace below:</p>
+
+                        <!-- LIVE EXPOSED SCENARIO 1 FILE WORKSPACE -->
+                        <div class="bg-black border border-slate-800 rounded-xl p-3 font-mono text-[11px] text-slate-400 max-h-40 overflow-y-auto">
+                            <span class="text-slate-600 block border-b border-slate-900 pb-1 mb-1">📁 Repository Path: {{ day_data.playground.guided_path }}</span>
+                            <div>(function() {</div>
+                            <div class="text-slate-500 pl-4">// Scenario 1 Target File Asset</div>
+                            <div class="pl-4 text-cyan-400">window.appEnv = { tier: "stage-dev", flag: "{{ day_data.playground.guided_flag_solution }}" };</div>
+                            <div>})();</div>
+                        </div>
 
                         <!-- HIGH-ENERGY INTERACTIVE LIVE BUTTON -->
                         <div class="my-3">
                             <a href="{% url 'lab_playground_daily_target' week_number day_number %}" target="_blank" class="group inline-flex items-center gap-3 bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-600 hover:to-indigo-700 text-white font-black px-5 py-3 rounded-xl text-xs transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-xl hover:shadow-cyan-500/10 tracking-wider uppercase">
-                                🚀 Launch Active Guided Target Instance
+                                🚀 Launch Active Guided Target Instance (Scenario 1)
                                 <span class="transition-transform duration-300 group-hover:translate-x-1 font-mono text-cyan-200">➔</span>
                             </a>
                             <span class="block text-[10px] text-slate-500 mt-1.5">Clicking opens the deployment framework securely in an isolated tab workspace. Use browser inspection toolsets to find the target data variables.</span>
                         </div>
 
-                        <p class="mt-2 text-slate-400"><strong>Step-by-Step Task Checklist:</strong> Review the live deployment instance, isolate the target configurations, extract the string value assigned to the flag key, and enter it below:</p>
+                        <p class="mt-2 text-slate-400 whitespace-pre-line"><strong>Step-by-Step Task Checklist:</strong>
+{{ day_data.playground.guided_steps }}</p>
                     </div>
                     <input type="text" id="guided-flag-verify" placeholder="Paste the captured live guided flag here..." class="bg-slate-900 border border-slate-800 p-2.5 text-xs rounded-xl w-full font-mono text-cyan-300 focus:outline-none focus:border-cyan-500 transition shadow-inner">
                     <button onclick="checkGuidedModule('{{ day_data.playground.guided_flag_solution }}')" class="mt-2 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs px-4 py-2 rounded-lg border border-slate-700 transition duration-200 shadow-md">Verify Guided Challenge</button>
                 </div>
 
-                <!-- TIER B: LIVE AUTONOMOUS UNGUIDED CTF TARGET WITH STYLED BUTTONS -->
+                <!-- TIER B: SCENARIO 2 - LIVE AUTONOMOUS UNGUIDED CTF TARGET WORKSPACE -->
                 <div class="border-b border-slate-800/60 pb-6 mt-6">
                     <span class="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-500/10 to-orange-500/10 text-amber-400 text-[10px] font-black tracking-widest uppercase px-2.5 py-1 rounded-md border border-amber-500/20 mb-3 shadow-sm">
-                        <span class="w-1.5 h-1.5 bg-amber-400 rounded-full animate-ping"></span> 🕹️ MODULE B: UNGUIDED AUTONOMOUS HACKING SANDBOX
+                        <span class="w-1.5 h-1.5 bg-amber-400 rounded-full animate-ping"></span> 🕹️ MODULE B: UNGUIDED AUTONOMOUS HACKING SANDBOX (SCENARIO 2)
                     </span>
                     <div class="text-xs text-slate-300 space-y-3 leading-relaxed mb-4">
-                        <p><strong>Live Exploitation Workspace:</strong> This is a challenging, unguided testing lab covering today's precise security concept. Launch the live sandboxed network link below, audit its properties, construct your bypass strategy, and capture the cryptographic flag variable:</p>
+                        <p><strong>Scenario 2 Exploitation Target:</strong> This is a challenging, unguided testing lab covering today's precise security concept on a distinct backend asset. Launch the live sandboxed network link below, audit its parameters independently, construct your bypass strategy, and capture the cryptographic flag variable:</p>
+
+                        <!-- LIVE EXPOSED SCENARIO 2 FILE WORKSPACE -->
+                        <div class="bg-black border border-slate-800 rounded-xl p-3 font-mono text-[11px] text-slate-400 max-h-40 overflow-y-auto mb-3">
+                            <span class="text-slate-600 block border-b border-slate-900 pb-1 mb-1">📁 Repository Target Path: {{ day_data.playground.unguided_path }}</span>
+                            <div class="text-slate-500">// Scenario 2 Target Terminal Buffer</div>
+                            <div>const activeSessionState = { authenticated: false, role: window.userRole || "guest" };</div>
+                            <div>function runSecurityAuditCheck() {</div>
+                            <div class="pl-4">if (window.userRole === "root_sec_admin") {</div>
+                            <div class="pl-8 text-emerald-400">return "{{ day_data.playground.unguided_flag_solution }}";</div>
+                            <div class="pl-4">} return "Status Denied: Clearances insufficient.";</div>
+                            <div>}</div>
+                        </div>
+
+                        <p class="text-xs text-amber-400"><strong>Tactical Objective:</strong> {{ day_data.playground.unguided_objective }}</p>
 
                         <!-- HIGH-ENERGY INTERACTIVE LIVE BUTTON -->
                         <div class="my-3">
                             <a href="{% url 'lab_playground_daily_target' week_number day_number %}" target="_blank" class="group inline-flex items-center gap-3 bg-gradient-to-r from-amber-500 via-orange-600 to-rose-600 hover:from-amber-600 hover:to-rose-700 text-white font-black px-5 py-3 rounded-xl text-xs transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-xl hover:shadow-amber-500/10 tracking-wider uppercase">
-                                🔥 Deploy Live Autonomous Hacking Sandbox
+                                🔥 Deploy Live Autonomous Hacking Sandbox (Scenario 2)
                                 <span class="transition-transform duration-300 group-hover:rotate-45 font-mono text-amber-200">☄️</span>
                             </a>
                             <span class="block text-[10px] text-slate-500 mt-1.5">This runs on a separate staging container. Exploit the console properties natively to unlock the solution parameter.</span>
@@ -368,7 +392,7 @@
                     <button onclick="submitUnguidedFlag('{{ day_data.playground.unguided_flag_solution }}')" class="mt-2 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs px-5 py-2.5 rounded-lg transition duration-200 shadow-md">Validate Day Exploitation</button>
                 </div>
 
-                <!-- TIER C: INDEPENDENT THEORY QUIZ CHECKPOINT (UPGRADED 2-QUESTION MATRIX) -->
+                <!-- TIER C: INDEPENDENT THEORY QUIZ CHECKPOINT -->
                 <div>
                     <span class="inline-block bg-purple-500/10 text-purple-400 text-[10px] font-black tracking-widest uppercase px-2.5 py-1 rounded-md border border-purple-500/20 mb-3 shadow-sm">
                         🕹️ MODULE C: THEORETICAL KNOWLEDGE CHECKPOINT

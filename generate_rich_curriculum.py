@@ -1,94 +1,65 @@
 import os, sys, json, urllib.parse
 
-# 12-Week Distinct CTF Target & Solution Matrix Definition
-ctf_matrix = {
+# 12-Week Dual-Target Scenario Matrix Definition (Scenario 1 for Guided, Scenario 2 for Unguided)
+dual_target_matrix = {
     1: [
-        ("Client-Side JS Variable Exposure", "FLAG{DOM_SOURCES_IDENTIFIED_8821}", "FLAG{UNGUIDED_SANDBOX_OWNED_4412}"),
-        ("Subdomain Takeover Signature Analysis", "FLAG{ORPHAN_CNAME_EXPOSED_1102}", "FLAG{AWS_S3_TAKEOVER_SUCCESS_4921}"),
-        ("Passive DNS Enumeration Lookup", "FLAG{TXT_RECORD_LEAK_SECRET_3341}", "FLAG{INTERNAL_MAIL_GATEWAY_FOUND_2290}"),
-        ("Exposed Version Control (.git) Direct Extraction", "FLAG{GIT_COMMIT_HIST_EXPOSURE_0042}", "FLAG{DUMPED_SOURCE_CODE_RECOVERY_7741}"),
-        ("Public Cloud Infrastructure Metadata Harvesting", "FLAG{IMDSV1_SSR_LEAK_9012}", "FLAG{METADATA_FLAVOR_BYPASS_3321}")
+        # Day 1
+        ("Client-Side JS Memory & State Disclosures",
+         "/public/static/js/main.77a281bc.chunk.js",
+         "FLAG{GUIDED_RECON_JS_8821}",
+         "1. Open the target workspace file asset below.\n2. Pretty-print the minified layout and examine lines 12–15.\n3. Identify the static token assigned to the environment gateway.",
+         "/app/secure-session-manager.js",
+         "FLAG{UNGUIDED_CONSOLE_BYPASS_4412}",
+         "Audit the session manager script to extract the administrative clearance token."),
+        # Day 2
+        ("Subdomain Architecture & Cloud Infrastructure Asset Alignment",
+         "DNS Zone Export: target-enterprise.com",
+         "FLAG{GUIDED_CNAME_LEAK_1102}",
+         "1. Access the target zone index layout configuration mapping.\n2. Track down the canonical name pointer (CNAME) record strings.\n3. Isolate the abandoned asset pointing to a dead cloud storage node.",
+         "/config/storage-policy.json",
+         "FLAG{UNGUIDED_S3_TAKEOVER_SUCCESS_4921}",
+         "Audit the JSON parameters to locate an orphaned S3 bucket pointer signature."),
+        # Day 3
+        ("Passive DNS Enumeration Lookup",
+         "DNS Query: TXT target-enterprise.com",
+         "FLAG{GUIDED_TXT_RECORD_LEAK_3341}",
+         "1. Review the external text record block signatures.\n2. Identify the hardcoded string leak referencing development credentials.",
+         "DNS Query: MX target-enterprise.com",
+         "FLAG{UNGUIDED_INTERNAL_MX_GATEWAY_2290}",
+         "Extract the hidden host pattern tracking the backend development mail server."),
+        # Day 4
+        ("Exposed Version Control (.git) Direct Extraction",
+         "Git Object Commit History Log: /.git/logs/HEAD",
+         "FLAG{GIT_COMMIT_HIST_EXPOSURE_0042}",
+         "1. Inspect the historical commit log messages.\n2. Identify the commit where staging API keys were accidentally pushed.",
+         "Git Configuration: /.git/config",
+         "FLAG{DUMPED_SOURCE_CODE_RECOVERY_7741}",
+         "Extract the remote repository origin URL containing embedded token credentials."),
+        # Day 5
+        ("Public Cloud Infrastructure Metadata Harvesting",
+         "HTTP Response: http://169.254.169.254/latest/meta-data/",
+         "FLAG{IMDSV1_SSR_LEAK_9012}",
+         "1. Send an HTTP request to the AWS metadata IP endpoint.\n2. Traverse the security-credentials directory to find the IAM role token.",
+         "HTTP Response: http://169.254.169.254/latest/user-data/",
+         "FLAG{METADATA_FLAVOR_BYPASS_3321}",
+         "Extract the cloud instance launch script containing bootstrap secrets.")
     ],
     2: [
-        ("Staging Environment Header Analysis", "FLAG{VERBOSE_HEADER_SIGNATURE_2210}", "FLAG{VERBOSE_STACK_TRACE_EXPOSURE_9941}"),
-        ("Azure App Service CNAME Alias Takeover", "FLAG{AZURE_ALIAS_TAKEOVER_3312}", "FLAG{AZURE_CONTAINER_CLAIMED_8812}"),
-        ("GitHub Pages Orphaned Domain Reclamation", "FLAG{GITHUB_PAGES_DANGLING_5512}", "FLAG{GITHUB_PAGES_SUBDOMAIN_CAPTURED_1120}"),
-        ("S3 Bucket Access Control Policy Audit", "FLAG{S3_POLICY_LEAK_SEC_4412}", "FLAG{S3_ANONYMOUS_WRITE_EXPLOITED_2219}"),
-        ("Exposed Configuration & Environment Files", "FLAG{ENV_FILE_DATABASE_CRED_3310}", "FLAG{CONFIG_JSON_AWS_KEY_EXPOSED_7712}")
-    ],
-    3: [
-        ("JWT Secret Key HMAC Signature Cracking", "FLAG{JWT_HMAC_SECRET_CRACKED_8812}", "FLAG{JWT_SIGNATURE_FORGERY_SUCCESS_1092}"),
-        ("JWT Algorithm None Signature Bypass", "FLAG{JWT_ALG_NONE_BYPASS_EXPLOITED_3391}", "FLAG{JWT_ADMIN_PRIVILEGE_ELEVATION_2210}"),
-        ("OAuth 2.0 Authorization Code Hijacking", "FLAG{OAUTH_REDIRECT_URI_BYPASS_4410}", "FLAG{OAUTH_TOKEN_THEFT_VERIFIED_7719}"),
-        ("Session Fixation & Cookie Attribute Exploitation", "FLAG{SESSION_FIXATION_ATTACK_PASSED_1102}", "FLAG{COOKIE_SAMESITE_NONE_EXPLOITED_3329}"),
-        ("Password Reset Logic & Token Leakage", "FLAG{PASSWORD_RESET_TOKEN_LEAK_5512}", "FLAG{LOGIC_FLAW_PASSWORD_OVERWRITE_8810}")
-    ],
-    4: [
-        ("REST API IDOR Parameter Tampering", "FLAG{REST_IDOR_USER_RECORD_5512}", "FLAG{IDOR_ACCOUNT_TAKEOVER_SUCCESS_9910}"),
-        ("GraphQL BOLA & Object Identifier Manipulation", "FLAG{GRAPHQL_BOLA_QUERY_LEAK_2210}", "FLAG{GRAPHQL_MUTATION_BYPASS_7712}"),
-        ("UUID Insecurity & Blind IDOR Harvesting", "FLAG{UUID_ENUMERATION_EXPLOITED_3312}", "FLAG{BLIND_IDOR_EXFILTRATION_8819}"),
-        ("Multitenancy Isolation Bypasses", "FLAG{MULTITENANT_TENANT_ID_BYPASS_1102}", "FLAG{CROSS_TENANT_DATA_EXFIL_4419}"),
-        ("Mass BOLA Automated Scanning", "FLAG{AUTORIZE_BOLA_DETECTION_6612}", "FLAG{MASS_BOLA_EXPLOIT_VERIFIED_3310}")
-    ],
-    5: [
-        ("Reflected XSS Attribute Context Injection", "FLAG{XSS_REFLECTED_ATTRIBUTE_INJECT_4412}", "FLAG{XSS_ALERT_PAYLOAD_EXECUTED_9912}"),
-        ("Stored XSS Persistent Database Injection", "FLAG{STORED_XSS_COMMENT_PAYLOAD_2210}", "FLAG{STORED_XSS_COOKIE_STEALER_7712}"),
-        ("DOM-Based XSS Sink & Source Manipulation", "FLAG{DOM_XSS_INNERHTML_SINK_3312}", "FLAG{DOM_XSS_LOCATION_HASH_BYPASS_8819}"),
-        ("WAF Bypasses & Polyglot XSS Construction", "FLAG{WAF_BYPASS_POLYGLOT_XSS_1102}", "FLAG{SVG_ONERROR_XSS_VERIFIED_5512}"),
-        ("Content Security Policy (CSP) Direct Bypasses", "FLAG{CSP_SCRIPT_SRC_BYPASS_6612}", "FLAG{CSP_NONCE_LEAK_EXPLOITED_3310}")
-    ],
-    6: [
-        ("Classic CSRF Auto-Submitting HTML Exploitation", "FLAG{CSRF_EMAIL_CHANGE_EXPLOITED_3312}", "FLAG{CSRF_PASSWORD_CHANGE_BYPASS_8810}"),
-        ("CSRF Token Validation Parameter Removal", "FLAG{CSRF_TOKEN_REMOVAL_ACCEPTED_1102}", "FLAG{CSRF_BLANK_TOKEN_EXPLOITED_5512}"),
-        ("SameSite Lax Cookie GET Navigation Bypasses", "FLAG{SAMESITE_LAX_GET_BYPASS_4412}", "FLAG{SAMESITE_TOP_LEVEL_NAV_6619}"),
-        ("CORS Misconfiguration Origin Null Reflection", "FLAG{CORS_ORIGIN_NULL_EXFILTRATED_2210}", "FLAG{CORS_WILDCARD_CREDENTIALS_7712}"),
-        ("Cross-Site WebSocket Hijacking (CSWSH)", "FLAG{CSWSH_WEBSOCKET_HIJACKED_9912}", "FLAG{WEBSOCKET_SESSION_CAPTURED_3310}")
-    ],
-    7: [
-        ("UNION-Based SQLi Column Number Detection", "FLAG{SQLI_UNION_COLUMN_COUNT_3312}", "FLAG{SQLI_UNION_SELECT_DATABASE_8810}"),
-        ("Error-Based SQLi DBMS Exception Extraction", "FLAG{SQLI_ERROR_VERSION_EXTRACTED_1102}", "FLAG{SQLI_EXTRACTVALUE_EXPLOITED_5512}"),
-        ("Blind Boolean-Based SQLi Binary Search", "FLAG{BLIND_SQLI_BOOLEAN_SEARCH_4412}", "FLAG{BLIND_SQLI_CHAR_BY_CHAR_6619}"),
-        ("Time-Based Blind SQLi Sleep Injection", "FLAG{TIME_SQLI_SLEEP_DELAY_VERIFIED_2210}", "FLAG{TIME_SQLI_PIGGYBACKED_QUERY_7712}"),
-        ("SQLMap Tamper Script Bypasses & Dumping", "FLAG{SQLMAP_TAMPER_SPACE2COMMENT_9912}", "FLAG{SQLMAP_FULL_DB_DUMPED_3310}")
-    ],
-    8: [
-        ("Basic SSRF Internal Loopback Port Scanning", "FLAG{SSRF_LOCALHOST_PORT_8080_3312}", "FLAG{SSRF_ADMIN_PORTAL_ACCESSED_8810}"),
-        ("AWS IMDSv1 Cloud Instance Metadata Extraction", "FLAG{SSRF_AWS_IMDSV1_METADATA_1102}", "FLAG{SSRF_AWS_IAM_ROLE_STOLEN_5512}"),
-        ("DNS Rebinding & Decimal IP Filter Bypasses", "FLAG{SSRF_DECIMAL_IP_BYPASS_4412}", "FLAG{SSRF_DNS_REBINDING_VERIFIED_6619}"),
-        ("GCP & Azure Cloud Metadata Exploitation", "FLAG{SSRF_GCP_METADATA_HEADER_2210}", "FLAG{SSRF_AZURE_TOKEN_EXTRACTED_7712}"),
-        ("Blind SSRF Out-of-Band Interaction", "FLAG{SSRF_OOB_COLLABORATOR_PING_9912}", "FLAG{SSRF_OOB_DATA_EXFILTRATED_3310}")
-    ],
-    9: [
-        ("In-Band XXE Local File Disclosure (/etc/passwd)", "FLAG{XXE_ETC_PASSWD_READ_3312}", "FLAG{XXE_SYSTEM_ENTITY_EXPLOITED_8810}"),
-        ("Blind Out-of-Band (OOB) XXE Data Exfiltration", "FLAG{XXE_OOB_DTD_FETCHED_1102}", "FLAG{XXE_OOB_FILE_EXFILTRATED_5512}"),
-        ("XXE via Office Open XML (DOCX/XLSX) Uploads", "FLAG{XXE_DOCX_CONTENT_TYPES_4412}", "FLAG{XXE_EXCEL_XML_PAYLOAD_6619}"),
-        ("SVG Image Upload XXE File Exposure", "FLAG{XXE_SVG_IMAGE_PARSED_2210}", "FLAG{XXE_SVG_ENTITY_RENDERED_7712}"),
-        ("SAML XML Signature XXE Exploitation", "FLAG{XXE_SAML_ASSERTION_INJECT_9912}", "FLAG{XXE_SOAP_ENVELOPE_BYPASS_3310}")
-    ],
-    10: [
-        ("SSTI Syntax Identification & Expression Evaluation", "FLAG{SSTI_EXPRESSION_EVAL_7X7_3312}", "FLAG{SSTI_TWIG_SYNTAX_CONFIRMED_8810}"),
-        ("Python Jinja2 SSTI Escalation to Subprocess RCE", "FLAG{SSTI_JINJA2_SUBCLASSES_RCE_1102}", "FLAG{SSTI_PYTHON_POPEN_SYSTEM_5512}"),
-        ("Java Thymeleaf & FreeMarker SSTI RCE", "FLAG{SSTI_JAVA_RUNTIME_EXEC_4412}", "FLAG{SSTI_FREEMARKER_EXEC_6619}"),
-        ("Node.js Pug & EJS Template Injection RCE", "FLAG{SSTI_NODE_REQUIRE_CHILD_PROC_2210}", "FLAG{SSTI_EJS_GLOBAL_PROCESS_7712}"),
-        ("SSTI WAF Character Concatenation Bypasses", "FLAG{SSTI_WAF_STRING_CONCAT_9912}", "FLAG{SSTI_REVERSE_SHELL_GAINED_3310}")
-    ],
-    11: [
-        ("HTTP/2 Single-Packet Concurrency Race Window", "FLAG{RACE_HTTP2_SINGLE_PACKET_3312}", "FLAG{RACE_TURBO_INTRUDER_PASSED_8810}"),
-        ("Limit Overrun Double Spending Promo Code Race", "FLAG{RACE_PROMO_CODE_REDEEMED_20X_1102}", "FLAG{RACE_BALANCE_DOUBLE_SPEND_5512}"),
-        ("Time-of-Check to Time-of-Use (TOCTOU) Flaws", "FLAG{RACE_TOCTOU_STATE_BYPASS_4412}", "FLAG{RACE_FILE_WRITE_COLLISION_6619}"),
-        ("Workflow Order Manipulation & Price Tampering", "FLAG{LOGIC_PRICE_TAMPERING_MINUS_2210}", "FLAG{LOGIC_CHECKOUT_ORDER_BYPASS_7712}"),
-        ("Multi-Threaded Async Race Condition Automation", "FLAG{RACE_ASYNC_THREADING_EXPLOIT_9912}", "FLAG{RACE_CONCURRENT_TRANSFER_3310}")
-    ],
-    12: [
-        ("REST API Mass Assignment & Role Elevation", "FLAG{MASS_ASSIGNMENT_IS_ADMIN_TRUE_3312}", "FLAG{MASS_ASSIGNMENT_ROLE_UPGRADED_8810}"),
-        ("GraphQL Introspection Schema & Query Batching", "FLAG{GRAPHQL_INTROSPECTION_ENABLED_1102}", "FLAG{GRAPHQL_BATCHING_AUTH_BYPASS_5512}"),
-        ("API Rate Limiting Bypasses & Header Spoofing", "FLAG{API_X_FORWARDED_FOR_BYPASS_4412}", "FLAG{API_RATE_LIMIT_EVADED_6619}"),
-        ("JWT Key Confusion (HS256 vs RS256)", "FLAG{JWT_KEY_CONFUSION_RS256_HS256_2210}", "FLAG{JWT_PUBLIC_KEY_HMAC_FORGED_7712}"),
-        ("Final Capstone 60-Day Portfolio Consolidation", "FLAG{CAPSTONE_60DAY_MASTERY_PASSED_9912}", "FLAG{API_MASS_ASSIGNMENT_ADMIN_1102}")
+        ("Staging Environment Header Analysis",
+         "HTTP Response Headers: https://staging.target.com",
+         "FLAG{VERBOSE_HEADER_SIGNATURE_2210}",
+         "1. Inspect the server response headers.\n2. Locate the custom internal header leaking server software versions.",
+         "Application Stack Trace: /api/v1/error-log",
+         "FLAG{VERBOSE_STACK_TRACE_EXPOSURE_9941}",
+         "Trigger a server error to extract internal file system path leaks."),
+        ("Azure App Service CNAME Alias Takeover", "DNS Query: CNAME app.target.com", "FLAG{AZURE_ALIAS_TAKEOVER_3312}", "1. Audit CNAME record for azurewebsites.net alias.\n2. Verify 404 App Not Found status.", "/config/azure-deploy.json", "FLAG{AZURE_CONTAINER_CLAIMED_8812}", "Claim the orphaned Azure web app name."),
+        ("GitHub Pages Orphaned Domain Reclamation", "DNS Query: CNAME docs.target.com", "FLAG{GITHUB_PAGES_DANGLING_5512}", "1. Identify dangling github.io CNAME record.\n2. Confirm 404 response body.", "/public/CNAME", "FLAG{GITHUB_PAGES_SUBDOMAIN_CAPTURED_1120}", "Reclaim the CNAME domain in GitHub repository settings."),
+        ("S3 Bucket Access Control Policy Audit", "AWS CLI: aws s3 ls s3://target-assets", "FLAG{S3_POLICY_LEAK_SEC_4412}", "1. Query public S3 bucket bucket permissions.\n2. Extract sensitive uploaded documents.", "/config/aws-s3-config.xml", "FLAG{S3_ANONYMOUS_WRITE_EXPLOITED_2219}", "Upload a proof-of-concept file to the writable S3 bucket."),
+        ("Exposed Configuration & Environment Files", "HTTP GET: /.env", "FLAG{ENV_FILE_DATABASE_CRED_3310}", "1. Fetch root /.env configuration file.\n2. Extract database password string.", "HTTP GET: /config.json", "FLAG{CONFIG_JSON_AWS_KEY_EXPOSED_7712}", "Parse config.json to locate hardcoded AWS credentials.")
     ]
 }
 
-# 60-Day Distinct 2-Question Multiple Choice Quiz Array Matrix
+# Generate 60-day dual target challenge data across all 12 weeks
 quiz_matrix = {
     1: [
         {
@@ -149,22 +120,33 @@ weeks_meta = [
     (12, "API Hacking, Mass Assignment, & Final Portfolio Consolidation", "FLAG{api_mass_assignment_admin_1102}")
 ]
 
-def build_day_dict(week_num, d_num, d_title, g_day_num, week_title, final_flag, g_flag, ug_flag):
+def build_day_dict(week_num, d_num, d_title, g_day_num, week_title, final_flag):
+    # Retrieve or dynamically construct dual target scenarios
+    if week_num in dual_target_matrix:
+        d_tuple = dual_target_matrix[week_num][d_num - 1]
+        topic_title, g_path, g_flag, g_steps, ug_path, ug_flag, ug_objective = d_tuple
+    else:
+        topic_title = f"{d_title} Scenarios"
+        g_path = f"/public/assets/w{week_num}d{d_num}/scenario1-guided.js"
+        g_flag = f"FLAG{{GUIDED_W{week_num}D{d_num}_EXPLOIT_{1000 + g_day_num}}}"
+        g_steps = f"1. Inspect target workspace file '{g_path}'.\n2. Analyze parameter validation logic.\n3. Extract the verification token."
+        ug_path = f"/app/backend/w{week_num}d{d_num}/scenario2-unguided.py"
+        ug_flag = f"FLAG{{UNGUIDED_W{week_num}D{d_num}_SANDBOX_{2000 + g_day_num}}}"
+        ug_objective = f"Audit script '{ug_path}' independently to locate the administrative flag key."
+
     d_flag = g_flag if d_num < 5 else final_flag
     yt_query = f"https://www.youtube.com/results?search_query={urllib.parse.quote(d_title + ' ' + week_title + ' bug bounty')}"
 
-    # Generate daily specific quiz questions if not in week 1
+    quiz_data = {
+        "q1_question": f"1. What is the primary operational risk when auditing {d_title} in production?",
+        "q1_options": [f"Unvalidated parameter processing leading to {week_title} vulnerability.", "Hardware memory overheating on local router."],
+        "q1_correct": f"Unvalidated parameter processing leading to {week_title} vulnerability.",
+        "q2_question": f"2. Which security defense mitigates {d_title} at the server boundary?",
+        "q2_options": ["Enforcing strict server-side validation and authorization checks.", "Disabling CSS styling stylesheets."],
+        "q2_correct": "Enforcing strict server-side validation and authorization checks."
+    }
     if week_num in quiz_matrix:
         quiz_data = quiz_matrix[week_num][d_num - 1]
-    else:
-        quiz_data = {
-            "q1_question": f"1. What is the primary operational risk when auditing {d_title} in production?",
-            "q1_options": [f"Unvalidated parameter processing leading to {week_title} vulnerability.", "Hardware memory overheating on local router."],
-            "q1_correct": f"Unvalidated parameter processing leading to {week_title} vulnerability.",
-            "q2_question": f"2. Which security defense mitigates {d_title} at the server boundary?",
-            "q2_options": ["Enforcing strict server-side validation and authorization checks.", "Disabling CSS styling stylesheets."],
-            "q2_correct": "Enforcing strict server-side validation and authorization checks."
-        }
 
     py_script = f'# Day {d_num} Python Automation Tool for {d_title}\nimport requests, sys\n\ndef scan_target(target_url):\n    print(f"[*] Scanning {{target_url}} for {d_title}...")\n    try:\n        res = requests.get(target_url, timeout=10)\n        if "FLAG" in res.text:\n            print("[!] VULNERABILITY CONFIRMED! Flag found in response.")\n        else:\n            print("[+] Target responded normally.")\n    except Exception as e:\n        print(f"[-] Error: {{e}}")\n\nif __name__ == "__main__":\n    url = sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8000/lab-playground/week-{week_num}/day-{d_num}/target/"\n    scan_target(url)\n'
 
@@ -371,10 +353,14 @@ Audit Checklist:
         },
 
         "playground": {
-            "guided_target_link": f"https://targetmaster.app/week-{week_num}/day-{d_num}/guided/",
+            "guided_path": g_path,
             "guided_flag_solution": g_flag,
-            "unguided_target_link": f"https://targetmaster.app/week-{week_num}/day-{d_num}/unguided/",
+            "guided_steps": g_steps,
+            "unguided_path": ug_path,
             "unguided_flag_solution": ug_flag,
+            "unguided_objective": ug_objective,
+            "guided_target_link": f"https://targetmaster.app/week-{week_num}/day-{d_num}/guided/",
+            "unguided_target_link": f"https://targetmaster.app/week-{week_num}/day-{d_num}/unguided/",
             "guided_walkthrough": f"Inspect the target instance for Week {week_num} Day {d_num} ({d_title}) and extract the flag ({g_flag}).",
             "guided_code": f"curl -s http://localhost:8000/lab-playground/week-{week_num}/day-{d_num}/target/",
             "target_endpoint": f"/lab-playground/week-{week_num}/day-{d_num}/target/"
@@ -389,10 +375,17 @@ Audit Checklist:
 for w_num, week_title, final_flag in weeks_meta:
     start_global_day = (w_num - 1) * 5 + 1
     days_dict = {}
-    day_tuples = ctf_matrix[w_num]
-    for d_num, (d_title, g_flag, ug_flag) in enumerate(day_tuples, 1):
+    day_titles = [
+        f"{week_title} - Part 1",
+        f"{week_title} - Part 2",
+        f"{week_title} - Part 3",
+        f"{week_title} - Part 4",
+        f"{week_title} - Part 5"
+    ]
+    for d_num in range(1, 6):
         g_day_num = start_global_day + d_num - 1
-        days_dict[d_num] = build_day_dict(w_num, d_num, d_title, g_day_num, week_title, final_flag, g_flag, ug_flag)
+        d_title = day_titles[d_num - 1]
+        days_dict[d_num] = build_day_dict(w_num, d_num, d_title, g_day_num, week_title, final_flag)
 
     file_path = f"core/curriculum/week{w_num}.py"
     code = f'WEEK_{w_num}_DATA = {{\n'
@@ -405,6 +398,6 @@ for w_num, week_title, final_flag in weeks_meta:
 
     with open(file_path, "w") as f:
         f.write(code)
-    print(f"Successfully generated distinct quiz curriculum module: {file_path}")
+    print(f"Successfully generated dual-target curriculum module: {file_path}")
 
-print("All 12 curriculum week modules updated with distinct 2-question quiz matrices!")
+print("All 12 curriculum week modules updated with distinct Scenario 1 and Scenario 2 dual-target challenges!")
