@@ -111,7 +111,7 @@
             </div>
         </section>
 
-        <!-- 6. CODE AUDIT MANUAL & EXPLORATION WORKSPACE (BLUEPRINT 1) -->
+        <!-- 6. CODE AUDIT MANUAL & EXPLORATION WORKSPACE -->
         <section id="section-6" class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
             <h2 class="text-xl font-bold text-purple-400 flex items-center space-x-2">
                 <i class="fas fa-code-branch"></i>
@@ -142,7 +142,7 @@
             </div>
         </section>
 
-        <!-- 7. PAYLOAD CRAFTING LOGIC & CONSTRUCTION MATRIX (BLUEPRINT 2) -->
+        <!-- 7. PAYLOAD CRAFTING LOGIC & CONSTRUCTION MATRIX -->
         <section id="section-7" class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
             <h2 class="text-xl font-bold text-indigo-400 flex items-center space-x-2">
                 <i class="fas fa-terminal"></i>
@@ -245,7 +245,7 @@
             </div>
         </section>
 
-        <!-- 11. DYNAMIC MULTIMEDIA SEARCH MATRIX & GLOBAL DIRECTORY (BLUEPRINTS 3 & 4) -->
+        <!-- 11. DYNAMIC MULTIMEDIA SEARCH MATRIX & GLOBAL DIRECTORY -->
         <section id="section-11" class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-6">
             <div>
                 <h2 class="text-xl font-bold text-red-400 mb-2 flex items-center space-x-2">
@@ -266,7 +266,7 @@
                 </div>
             </div>
 
-            <!-- Disclosed Case Studies & Global Directory (Blueprint 4) -->
+            <!-- Disclosed Case Studies & Global Directory -->
             <div class="pt-4 border-t border-slate-800 space-y-4">
                 <h3 class="text-base font-bold text-cyan-400 flex items-center space-x-2">
                     <i class="fas fa-globe"></i>
@@ -313,7 +313,7 @@
             </div>
         </section>
 
-        <!-- 12. LIVE TARGET INFRASTRUCTURE FOR PLAYGROUND SANDBOX -->
+        <!-- 12. HIGH-ENERGY INTERACTIVE PLAYGROUND SANDBOX -->
         <section id="section-12" class="bg-slate-900 p-6 rounded-2xl border-2 border-emerald-500/40 space-y-6">
             <h2 class="text-xl font-bold text-emerald-400 flex items-center space-x-2">
                 <i class="fas fa-gamepad"></i>
@@ -323,48 +323,49 @@
 
             <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 space-y-6 shadow-inner">
 
-                <!-- TIER A: STEP-BY-STEP DETAILED GUIDED CTF WITH LIVE EXTERNAL TARGET -->
-                <div class="border-b border-slate-800/60 pb-5">
-                    <span class="inline-block bg-cyan-500/10 text-cyan-400 text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 rounded mb-2">🕹️ MODULE A: DETAILED GUIDED CTF WORKSPACE</span>
-                    <div class="text-xs text-slate-300 space-y-2 leading-relaxed mb-3">
-                        <p><strong>The Mission Target:</strong> We are analyzing a live frontend deployment instance to extract hidden API routes and environmental configuration tokens from public scripts.</p>
+                <!-- TIER A: STEP-BY-STEP DETAILED GUIDED CTF WITH ACTIVE ANIMATED BUTTONS -->
+                <div class="border-b border-slate-800/60 pb-6">
+                    <span class="inline-flex items-center gap-1.5 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 text-cyan-400 text-[10px] font-black tracking-widest uppercase px-2.5 py-1 rounded-md border border-cyan-500/20 mb-3 shadow-sm">
+                        <span class="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse"></span> 🕹️ MODULE A: DETAILED GUIDED CTF WORKSPACE
+                    </span>
+                    <div class="text-xs text-slate-300 space-y-3 leading-relaxed mb-4">
+                        <p><strong>The Operational Target:</strong> We are actively auditing a deployment instance to map unlinked internal routes and locate hardcoded credentials hidden inside frontend files.</p>
 
-                        <!-- REAL DEPLOYMENT TARGET INTERACTION BUTTON -->
-                        <div class="my-3 flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                            <a href="{% url 'lab_playground_daily_target' week_number day_number %}" target="_blank" class="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-black px-4 py-2.5 rounded-xl text-xs transition shadow-md tracking-wider">
-                                🎯 LAUNCH LIVE GUIDED TARGET INSTANCE ↗
+                        <!-- HIGH-ENERGY INTERACTIVE LIVE BUTTON -->
+                        <div class="my-3">
+                            <a href="{% url 'lab_playground_daily_target' week_number day_number %}" target="_blank" class="group inline-flex items-center gap-3 bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-600 hover:to-indigo-700 text-white font-black px-5 py-3 rounded-xl text-xs transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-xl hover:shadow-cyan-500/10 tracking-wider uppercase">
+                                🚀 Launch Active Guided Target Instance
+                                <span class="transition-transform duration-300 group-hover:translate-x-1 font-mono text-cyan-200">➔</span>
                             </a>
-                            <span class="block text-[10px] text-slate-400">Clicking opens the live target in a new window. Use your browser DevTools (<code class="text-cyan-400">F12</code>) to inspect it.</span>
+                            <span class="block text-[10px] text-slate-500 mt-1.5">Clicking opens the deployment framework securely in an isolated tab workspace. Use browser inspection toolsets to find the target data variables.</span>
                         </div>
 
-                        <p class="mt-2"><strong>Step-by-Step Instructions:</strong>
-                            <br>1. Launch the target instance above.
-                            <br>2. Open your Network / Elements tab, reload the page, and open the source bundle assets.
-                            <br>3. Inspect the exposed developer initialization dictionary and configuration strings.
-                            <br>4. Extract the active string value assigned to the <code>flag</code> parameter and paste it below.
-                        </p>
+                        <p class="mt-2 text-slate-400"><strong>Step-by-Step Task Checklist:</strong> Review the live deployment instance, isolate the target configurations, extract the string value assigned to the flag key, and enter it below:</p>
                     </div>
-                    <input type="text" id="guided-flag-verify" placeholder="Enter the captured live guided flag here..." class="bg-slate-900 border border-slate-800 p-2 text-xs rounded-lg w-full font-mono text-cyan-300 focus:outline-none focus:border-cyan-500">
-                    <button onclick="checkGuidedModule('{{ day_data.flag }}')" class="mt-2 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs px-3 py-1.5 rounded border border-slate-700 transition">Verify Guided Phase</button>
+                    <input type="text" id="guided-flag-verify" placeholder="Paste the captured live guided flag here..." class="bg-slate-900 border border-slate-800 p-2.5 text-xs rounded-xl w-full font-mono text-cyan-300 focus:outline-none focus:border-cyan-500 transition shadow-inner">
+                    <button onclick="checkGuidedModule('{{ day_data.playground.guided_flag_solution }}')" class="mt-2 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs px-4 py-2 rounded-lg border border-slate-700 transition duration-200 shadow-md">Verify Guided Challenge</button>
                 </div>
 
-                <!-- TIER B: LIVE AUTONOMOUS UNGUIDED CTF TARGET CHALLENGE -->
-                <div class="border-b border-slate-800/60 pb-5">
-                    <span class="inline-block bg-amber-500/10 text-amber-400 text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 rounded mb-2">🕹️ MODULE B: UNGUIDED AUTONOMOUS HACKING SANDBOX</span>
-                    <div class="text-xs text-slate-300 space-y-2 leading-relaxed mb-3">
-                        <p><strong>Live Exploitation Target:</strong> This is a completely unguided operational test tracking today's specific lesson topic. You must launch the target web node, analyze its live frontend behavior independently, bypass its restrictions, and extract the cryptographic flag token from the environment.</p>
+                <!-- TIER B: LIVE AUTONOMOUS UNGUIDED CTF TARGET WITH STYLED BUTTONS -->
+                <div class="border-b border-slate-800/60 pb-6 mt-6">
+                    <span class="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-500/10 to-orange-500/10 text-amber-400 text-[10px] font-black tracking-widest uppercase px-2.5 py-1 rounded-md border border-amber-500/20 mb-3 shadow-sm">
+                        <span class="w-1.5 h-1.5 bg-amber-400 rounded-full animate-ping"></span> 🕹️ MODULE B: UNGUIDED AUTONOMOUS HACKING SANDBOX
+                    </span>
+                    <div class="text-xs text-slate-300 space-y-3 leading-relaxed mb-4">
+                        <p><strong>Live Exploitation Workspace:</strong> This is a challenging, unguided testing lab covering today's precise security concept. Launch the live sandboxed network link below, audit its properties, construct your bypass strategy, and capture the cryptographic flag variable:</p>
 
-                        <!-- REAL DEPLOYMENT TARGET INTERACTION BUTTON -->
-                        <div class="my-3 flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                            <a href="{% url 'lab_playground_daily_target' week_number day_number %}" target="_blank" class="inline-flex items-center gap-2 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-black px-4 py-2.5 rounded-xl text-xs transition shadow-md tracking-wider">
-                                🔥 LAUNCH LIVE UNGUIDED TARGET INSTANCE ↗
+                        <!-- HIGH-ENERGY INTERACTIVE LIVE BUTTON -->
+                        <div class="my-3">
+                            <a href="{% url 'lab_playground_daily_target' week_number day_number %}" target="_blank" class="group inline-flex items-center gap-3 bg-gradient-to-r from-amber-500 via-orange-600 to-rose-600 hover:from-amber-600 hover:to-rose-700 text-white font-black px-5 py-3 rounded-xl text-xs transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-xl hover:shadow-amber-500/10 tracking-wider uppercase">
+                                🔥 Deploy Live Autonomous Hacking Sandbox
+                                <span class="transition-transform duration-300 group-hover:rotate-45 font-mono text-amber-200">☄️</span>
                             </a>
-                            <span class="block text-[10px] text-slate-400">This is a live, sandboxed application server. Interact with the parameters or console properties to trigger the exploit flag.</span>
+                            <span class="block text-[10px] text-slate-500 mt-1.5">This runs on a separate staging container. Exploit the console properties natively to unlock the solution parameter.</span>
                         </div>
                     </div>
 
-                    <input type="text" id="unguided-flag-verify" placeholder="Enter the captured cryptographic flag here..." class="bg-slate-900 border border-slate-800 p-2 text-xs rounded-lg w-full font-mono text-amber-500 focus:outline-none focus:border-amber-500">
-                    <button onclick="submitUnguidedFlag('{{ day_data.flag }}')" class="mt-2 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs px-4 py-2 rounded-lg transition shadow-md">Validate Day Exploitation</button>
+                    <input type="text" id="unguided-flag-verify" placeholder="Enter the captured cryptographic flag here..." class="bg-slate-900 border border-slate-800 p-2.5 text-xs rounded-xl w-full font-mono text-amber-400 focus:outline-none focus:border-amber-500 transition shadow-inner">
+                    <button onclick="submitUnguidedFlag('{{ day_data.playground.unguided_flag_solution }}')" class="mt-2 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs px-5 py-2.5 rounded-lg transition duration-200 shadow-md">Validate Day Exploitation</button>
                 </div>
 
                 <!-- TIER C: INDEPENDENT THEORY QUIZ CHECKPOINT -->
@@ -396,7 +397,7 @@
             </div>
         </section>
 
-        <!-- 13. INJECTION 3: COMPREHENSIVE PYTHON & BASH AUTOMATION DEVELOPMENT ENVIRONMENT -->
+        <!-- 13. COMPREHENSIVE PYTHON & BASH AUTOMATION DEVELOPMENT ENVIRONMENT -->
         <section id="section-13" class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
             <h2 class="text-xl font-bold text-cyan-400 flex items-center space-x-2">
                 <i class="fas fa-robot"></i>
@@ -408,7 +409,7 @@
                 <!-- PYTHON PIPELINE WORKSPACE -->
                 <div class="space-y-2">
                     <span class="block text-xs font-bold text-cyan-400 font-mono">🐍 Track A: Python Exploitation Suite Testing Area</span>
-                    <textarea id="automation-terminal-editor" rows="4" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 font-mono text-xs text-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 leading-relaxed" placeholder="# Craft your automated Python reconnaissance script here...&#10;import requests&#10;&#10;target_url = 'http://localhost:8000/lab-playground/week-{{ week_number }}/target/'&#10;print('[*] Python engine initialized...')">{{ day_data.automation_scripts.python_script }}</textarea>
+                    <textarea id="automation-terminal-editor" rows="4" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 font-mono text-xs text-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 leading-relaxed" placeholder="# Craft your automated Python reconnaissance script here...&#10;import requests&#10;&#10;target_url = 'http://localhost:8000/lab-playground/week-{{ week_number }}/day-{{ day_number }}/target/'&#10;print('[*] Python engine initialized...')">{{ day_data.automation_scripts.python_script }}</textarea>
                 </div>
 
                 <!-- BASH PIPELINE WORKSPACE -->
@@ -420,7 +421,7 @@
                         <div>2. Use the network client tool <code class="text-amber-400 font-mono">curl -s "URL"</code> to query the target endpoint.</div>
                         <div>3. Use string filtering commands like <code class="text-amber-400 font-mono">grep -o "FLAG"</code> to extract hidden attributes.</div>
                     </div>
-                    <textarea id="bash-terminal-editor" rows="4" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 font-mono text-xs text-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-500 leading-relaxed" placeholder="#!/bin/bash&#10;# Craft your automated Bash shell script here...&#10;TARGET_URL='http://localhost:8000/lab-playground/week-{{ week_number }}/target/'&#10;echo '[*] Bash execution pipeline initialized...'"></textarea>
+                    <textarea id="bash-terminal-editor" rows="4" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 font-mono text-xs text-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-500 leading-relaxed" placeholder="#!/bin/bash&#10;# Craft your automated Bash shell script here...&#10;TARGET_URL='http://localhost:8000/lab-playground/week-{{ week_number }}/day-{{ day_number }}/target/'&#10;echo '[*] Bash execution pipeline initialized...'"></textarea>
                 </div>
 
                 <button onclick="executeInAppTerminal()" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-xs px-4 py-2 rounded-lg transition flex items-center space-x-2">
@@ -428,7 +429,7 @@
                     <span>Execute Automation Scripts inside Virtual Terminal</span>
                 </button>
 
-                <!-- VIRTUAL EMULATED TERMINAL WINDOW (Marks complete if both match patterns) -->
+                <!-- VIRTUAL EMULATED TERMINAL WINDOW -->
                 <div id="virtual-linux-terminal" class="hidden bg-black border-2 border-slate-800 rounded-xl p-4 font-mono text-xs shadow-inner">
                     <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
                         <span class="text-slate-500 font-bold text-[10px] tracking-wider uppercase">💻 Linux Virtual Environment Sandbox Terminal</span>
@@ -439,7 +440,7 @@
             </div>
         </section>
 
-        <!-- 14. PROFESSIONAL VDP REPORT WORKSTATION & INJECTION 4: DAY-SPECIFIC AI PORTFOLIO SYNC -->
+        <!-- 14. PROFESSIONAL VDP REPORT WORKSTATION & DAY-SPECIFIC AI PORTFOLIO SYNC -->
         <section id="section-14" class="bg-slate-900 p-6 rounded-2xl border border-indigo-500/40 space-y-4">
             <h2 class="text-xl font-bold text-indigo-400 flex items-center space-x-2">
                 <i class="fas fa-file-contract"></i>
@@ -485,7 +486,7 @@
                 </div>
             </form>
 
-            <!-- INJECTION 4: AI SUMMARY COMPILATION BUTTON ENGINE -->
+            <!-- AI SUMMARY COMPILATION BUTTON ENGINE -->
             <div class="pt-4 border-t border-slate-800 space-y-4">
                 <button onclick="triggerDaySpecificAiSync('Week {{ week_number }} Day {{ day_number }}: {{ day_data.title|escapejs }}')" class="px-5 py-2.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition shadow-md flex items-center space-x-2">
                     <i class="fas fa-robot"></i>
@@ -544,7 +545,6 @@ function validatePayloadCraft() {
 }
 
 function checkGuidedModule(correctFlag) {
-    // Standardize both inputs by removing outer whitespaces and converting to uppercase
     const studentInput = document.getElementById("guided-flag-verify").value.trim().toUpperCase();
     const cleanTargetFlag = correctFlag.trim().toUpperCase();
 
@@ -556,7 +556,6 @@ function checkGuidedModule(correctFlag) {
 }
 
 function submitUnguidedFlag(correctFlag) {
-    // Standardize both inputs by removing outer whitespaces and converting to uppercase
     const studentInput = document.getElementById("unguided-flag-verify").value.trim().toUpperCase();
     const cleanTargetFlag = correctFlag.trim().toUpperCase();
 
